@@ -1,0 +1,22 @@
+{
+    "name": "develodesign/module-punchout",
+    "description": "Develo design Magento 2 Punchout Module",
+    "type": "magento2-module",
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "Develo Design",
+            "email": "luke@develodesign.co.uk"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Develodesign\\Punchout\\": ""
+        }
+    }
+}
