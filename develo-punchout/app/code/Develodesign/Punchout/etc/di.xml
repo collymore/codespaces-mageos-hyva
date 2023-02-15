@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+	<preference for="Develodesign\Punchout\Api\PunchoutGroupRepositoryInterface" type="Develodesign\Punchout\Model\PunchoutGroupRepository"/>
+	<preference for="Develodesign\Punchout\Api\Data\PunchoutGroupInterface" type="Develodesign\Punchout\Model\PunchoutGroup"/>
+	<preference for="Develodesign\Punchout\Api\Data\PunchoutGroupSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+	<virtualType name="Develodesign\Punchout\Model\ResourceModel\PunchoutGroup\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+		<arguments>
+			<argument name="mainTable" xsi:type="string">develodesign_punchout_punchoutgroup</argument>
+			<argument name="resourceModel" xsi:type="string">Develodesign\Punchout\Model\ResourceModel\PunchoutGroup\Collection</argument>
+		</arguments>
+	</virtualType>
+	<type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+		<arguments>
+			<argument name="collections" xsi:type="array">
+				<item name="develodesign_punchout_punchoutgroup_listing_data_source" xsi:type="string">Develodesign\Punchout\Model\ResourceModel\PunchoutGroup\Grid\Collection</item>
+			</argument>
+		</arguments>
+	</type>
+</config>

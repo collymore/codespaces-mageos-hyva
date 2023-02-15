@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+	<route url="/V1/develodesign-punchout/punchoutgroup" method="POST">
+		<service class="Develodesign\Punchout\Api\PunchoutGroupRepositoryInterface" method="save"/>
+		<resources>
+			<resource ref="Develodesign_Punchout::PunchoutGroup_save"/>
+		</resources>
+	</route>
+	<route url="/V1/develodesign-punchout/punchoutgroup/search" method="GET">
+		<service class="Develodesign\Punchout\Api\PunchoutGroupRepositoryInterface" method="getList"/>
+		<resources>
+			<resource ref="Develodesign_Punchout::PunchoutGroup_view"/>
+		</resources>
+	</route>
+	<route url="/V1/develodesign-punchout/punchoutgroup/:punchoutgroupId" method="GET">
+		<service class="Develodesign\Punchout\Api\PunchoutGroupRepositoryInterface" method="get"/>
+		<resources>
+			<resource ref="Develodesign_Punchout::PunchoutGroup_view"/>
+		</resources>
+	</route>
+	<route url="/V1/develodesign-punchout/punchoutgroup/:punchoutgroupId" method="PUT">
+		<service class="Develodesign\Punchout\Api\PunchoutGroupRepositoryInterface" method="save"/>
+		<resources>
+			<resource ref="Develodesign_Punchout::PunchoutGroup_update"/>
+		</resources>
+	</route>
+	<route url="/V1/develodesign-punchout/punchoutgroup/:punchoutgroupId" method="DELETE">
+		<service class="Develodesign\Punchout\Api\PunchoutGroupRepositoryInterface" method="deleteById"/>
+		<resources>
+			<resource ref="Develodesign_Punchout::PunchoutGroup_delete"/>
+		</resources>
+	</route>
+</routes>

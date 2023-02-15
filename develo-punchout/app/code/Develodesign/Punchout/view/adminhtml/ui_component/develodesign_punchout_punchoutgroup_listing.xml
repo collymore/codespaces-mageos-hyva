@@ -1,0 +1,311 @@
+<?xml version="1.0" ?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+	<argument name="data" xsi:type="array">
+		<item name="js_config" xsi:type="array">
+			<item name="provider" xsi:type="string">develodesign_punchout_punchoutgroup_listing.develodesign_punchout_punchoutgroup_listing_data_source</item>
+		</item>
+	</argument>
+	<settings>
+		<spinner>develodesign_punchout_punchoutgroup_columns</spinner>
+		<deps>
+			<dep>develodesign_punchout_punchoutgroup_listing.develodesign_punchout_punchoutgroup_listing_data_source</dep>
+		</deps>
+		<buttons>
+			<button name="add">
+				<url path="*/*/new"/>
+				<class>primary</class>
+				<label translate="true">Add New Punchout Group</label>
+			</button>
+			<button name="import">
+				<url path="*/*/import"/>
+				<class>primary</class>
+				<label translate="true">Import File</label>
+			</button>
+		</buttons>
+	</settings>
+	<dataSource name="develodesign_punchout_punchoutgroup_listing_data_source" component="Magento_Ui/js/grid/provider">
+		<settings>
+			<storageConfig>
+				<param name="indexField" xsi:type="string">punchoutgroup_id</param>
+			</storageConfig>
+			<updateUrl path="mui/index/render"/>
+		</settings>
+		<aclResource>Develodesign_Punchout::PunchoutGroup</aclResource>
+		<dataProvider name="develodesign_punchout_punchoutgroup_listing_data_source" class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+			<settings>
+				<requestFieldName>id</requestFieldName>
+				<primaryFieldName>punchoutgroup_id</primaryFieldName>
+			</settings>
+		</dataProvider>
+	</dataSource>
+	<listingToolbar name="listing_top">
+		<settings>
+			<sticky>true</sticky>
+		</settings>
+		<bookmark name="bookmarks"/>
+		<columnsControls name="columns_controls"/>
+		<filters name="listing_filters"/>
+		<paging name="listing_paging"/>
+	</listingToolbar>
+	<columns name="develodesign_punchout_punchoutgroup_columns">
+		<settings>
+			<editorConfig>
+				<param name="selectProvider" xsi:type="string">develodesign_punchout_punchoutgroup_listing.develodesign_punchout_punchoutgroup_listing.develodesign_punchout_punchoutgroup_columns.ids</param>
+				<param name="enabled" xsi:type="boolean">true</param>
+				<param name="indexField" xsi:type="string">punchoutgroup_id</param>
+				<param name="clientConfig" xsi:type="array">
+					<item name="saveUrl" xsi:type="url" path="develodesign_punchout/PunchoutGroup/inlineEdit"/>
+					<item name="validateBeforeSave" xsi:type="boolean">false</item>
+				</param>
+			</editorConfig>
+			<childDefaults>
+				<param name="fieldAction" xsi:type="array">
+					<item name="provider" xsi:type="string">develodesign_punchout_punchoutgroup_listing.develodesign_punchout_punchoutgroup_listing.develodesign_punchout_punchoutgroup_columns_editor</item>
+					<item name="target" xsi:type="string">startEdit</item>
+					<item name="params" xsi:type="array">
+						<item name="0" xsi:type="string">${ $.$data.rowIndex }</item>
+						<item name="1" xsi:type="boolean">true</item>
+					</item>
+				</param>
+			</childDefaults>
+		</settings>
+		<selectionsColumn name="ids">
+			<settings>
+				<indexField>punchoutgroup_id</indexField>
+			</settings>
+		</selectionsColumn>
+		<column name="punchoutgroup_id" sortOrder="1">
+			<settings>
+				<filter>text</filter>
+				<sorting>asc</sorting>
+				<label translate="true">ID</label>
+			</settings>
+		</column>
+		<column name="group_name" sortOrder="5">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">Name</label>
+				<editor>
+					<editorType>text</editorType>
+					<validation>
+						<rule name="required-entry" xsi:type="boolean">false</rule>
+					</validation>
+				</editor>
+			</settings>
+		</column>
+		<column name="status" sortOrder="10" component="Magento_Ui/js/grid/columns/select">
+			<settings>
+				<filter>select</filter>
+				<label translate="true">Status</label>
+				<editor>
+					<editorType>text</editorType>
+					<validation>
+						<rule name="required-entry" xsi:type="boolean">false</rule>
+					</validation>
+				</editor>
+				<options>
+					<option name="0" xsi:type="array">
+						<item name="value" xsi:type="number">1</item>
+						<item name="label" xsi:type="string" translate="true">Enabled</item>
+					</option>
+					<option name="1" xsi:type="array">
+						<item name="value" xsi:type="number">0</item>
+						<item name="label" xsi:type="string" translate="true">Disabled</item>
+					</option>
+				</options>
+				<dataType>select</dataType>
+			</settings>
+		</column>
+		<column name="group_email" sortOrder="15">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">Email</label>
+				<editor>
+					<editorType>text</editorType>
+					<validation>
+						<rule name="required-entry" xsi:type="boolean">false</rule>
+					</validation>
+				</editor>
+			</settings>
+		</column>
+		<column name="is_parent" sortOrder="20" component="Magento_Ui/js/grid/columns/select">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">Is Parent</label>
+				<editor>
+					<editorType>select</editorType>
+					<validation>
+						<rule name="required-entry" xsi:type="boolean">false</rule>
+					</validation>
+				</editor>
+				<options class="Magento\Config\Model\Config\Source\Yesno"/>
+				<dataType>select</dataType>
+			</settings>
+		</column>
+		<column name="shared_secret" sortOrder="25">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">Shared Secret</label>
+				<editor>
+					<editorType>text</editorType>
+					<validation>
+						<rule name="required-entry" xsi:type="boolean">false</rule>
+					</validation>
+				</editor>
+			</settings>
+		</column>
+		<column name="duns_identity" sortOrder="30">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">Duns Identity</label>
+				<editor>
+					<editorType>text</editorType>
+					<validation>
+						<rule name="required-entry" xsi:type="boolean">false</rule>
+					</validation>
+				</editor>
+			</settings>
+		</column>
+		<column name="ariba_network_id" sortOrder="35">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">Ariba Network ID</label>
+				<editor>
+					<editorType>text</editorType>
+					<validation>
+						<rule name="required-entry" xsi:type="boolean">false</rule>
+					</validation>
+				</editor>
+			</settings>
+		</column>
+		<column name="business_unit" sortOrder="35">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">Business Unit</label>
+				<editor>
+					<editorType>text</editorType>
+					<validation>
+						<rule name="required-entry" xsi:type="boolean">false</rule>
+					</validation>
+				</editor>
+			</settings>
+		</column>
+		<column name="oci_username" sortOrder="40">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">OCI Username</label>
+				<editor>
+					<editorType>text</editorType>
+					<validation>
+						<rule name="required-entry" xsi:type="boolean">false</rule>
+					</validation>
+				</editor>
+			</settings>
+		</column>
+		<column name="oci_password" sortOrder="45">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">OCI Password</label>
+				<editor>
+					<editorType>text</editorType>
+					<validation>
+						<rule name="required-entry" xsi:type="boolean">false</rule>
+					</validation>
+				</editor>
+			</settings>
+		</column>
+		<column name="parent_punchout_group" sortOrder="50" component="Magento_Ui/js/grid/columns/select">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">Assigned Parent</label>
+				<options class="Develodesign\Punchout\Model\Config\Source\ParentPunchoutGroups"/>
+				<editor>
+					<editorType>select</editorType>
+					<validation>
+						<rule name="required-entry" xsi:type="boolean">false</rule>
+					</validation>
+				</editor>
+				<dataType>select</dataType>
+			</settings>
+		</column>
+		<column name="street" sortOrder="55">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">Street</label>
+				<editor>
+					<editorType>text</editorType>
+					<validation>
+						<rule name="required-entry" xsi:type="boolean">false</rule>
+					</validation>
+				</editor>
+			</settings>
+		</column>
+		<column name="city" sortOrder="60">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">City</label>
+				<editor>
+					<editorType>text</editorType>
+					<validation>
+						<rule name="required-entry" xsi:type="boolean">false</rule>
+					</validation>
+				</editor>
+			</settings>
+		</column>
+		<column name="postcode" sortOrder="65">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">Postcode</label>
+				<editor>
+					<editorType>text</editorType>
+					<validation>
+						<rule name="required-entry" xsi:type="boolean">false</rule>
+					</validation>
+				</editor>
+			</settings>
+		</column>
+		<column name="country_id" sortOrder="70">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">Country</label>
+				<editor>
+					<editorType>text</editorType>
+					<validation>
+						<rule name="required-entry" xsi:type="boolean">false</rule>
+					</validation>
+				</editor>
+			</settings>
+		</column>
+		<column name="region" sortOrder="75">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">Region</label>
+				<editor>
+					<editorType>text</editorType>
+					<validation>
+						<rule name="required-entry" xsi:type="boolean">false</rule>
+					</validation>
+				</editor>
+			</settings>
+		</column>
+		<column name="telephone" sortOrder="80">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">Telephone</label>
+				<editor>
+					<editorType>text</editorType>
+					<validation>
+						<rule name="required-entry" xsi:type="boolean">false</rule>
+					</validation>
+				</editor>
+			</settings>
+		</column>
+		<actionsColumn name="actions" class="Develodesign\Punchout\Ui\Component\Listing\Column\PunchoutGroupActions" sortOrder="99">
+			<settings>
+				<indexField>punchoutgroup_id</indexField>
+				<resizeEnabled>false</resizeEnabled>
+				<resizeDefaultWidth>107</resizeDefaultWidth>
+			</settings>
+		</actionsColumn>
+	</columns>
+</listing>

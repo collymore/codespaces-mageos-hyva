@@ -1,0 +1,37 @@
+<?xml version="1.0" ?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+	<table name="develodesign_punchout_punchoutgroup" resource="default" engine="innodb" comment="develodesign_punchout_punchoutgroup Table">
+		<column xsi:type="int" name="punchoutgroup_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity Id"/>
+		<constraint xsi:type="primary" referenceId="PRIMARY">
+			<column name="punchoutgroup_id"/>
+		</constraint>
+		<column name="group_name" nullable="false" xsi:type="varchar" comment="Group Name" length="255"/>
+		<column name="status" nullable="false" xsi:type="smallint" comment="Status, enabled or disabled" default="1" identity="false"/>
+		<column name="is_parent" nullable="true" xsi:type="smallint" comment="Punchout Group Is Parent Flag" default="0" identity="false"/>
+		<column name="group_email" nullable="false" xsi:type="varchar" comment="Punchout Group Email" length="255"/>
+		<index referenceId="DEVELODESIGN_PUNCHOUT_PUNCHOUTGROUP_GROUP_EMAIL" indexType="btree">
+			<column name="group_email"/>
+		</index>
+		<column name="shared_secret" nullable="true" xsi:type="varchar" comment="CXML Shared Secret " length="255"/>
+		<column name="duns_identity" nullable="true" xsi:type="varchar" comment="CXML Duns Identity" length="255"/>
+		<column name="ariba_network_id" nullable="true" xsi:type="varchar" comment="CXML Ariba Network Id" length="255"/>
+		<column name="business_unit" nullable="true" xsi:type="varchar" comment="CXML Business Unit" length="255"/>
+		<column name="oci_username" nullable="true" xsi:type="varchar" comment="OCI Username" length="255"/>
+		<column name="oci_password" nullable="true" xsi:type="varchar" comment="OCI Password" length="255"/>
+		<column name="parent_punchout_group" nullable="true" xsi:type="int" comment="Parent Punchout Group" identity="false"/>
+		<column name="street" nullable="false" xsi:type="varchar" comment="Street" length="255"/>
+		<column name="city" nullable="false" xsi:type="varchar" comment="City" length="255"/>
+		<column name="country_id" nullable="false" xsi:type="varchar" comment="Country ID" length="4"/>
+		<column name="region" nullable="true" xsi:type="varchar" comment="region" length="255"/>
+		<column name="postcode" nullable="false" xsi:type="varchar" comment="Postcode" length="255"/>
+		<column name="telephone" nullable="true" xsi:type="varchar" comment="Telephone" length="255"/>
+		<column name="created_at" nullable="false" xsi:type="timestamp" comment="Punchout Group Created at" default="CURRENT_TIMESTAMP"/>
+		<index referenceId="DEVELODESIGN_PUNCHOUT_PUNCHOUTGROUP_CREATED_AT" indexType="btree">
+			<column name="created_at"/>
+		</index>
+		<column name="updated_at" nullable="true" xsi:type="timestamp" comment="Punchout Group Updated at" default="CURRENT_TIMESTAMP" on_update="true"/>
+		<index referenceId="DEVELODESIGN_PUNCHOUT_PUNCHOUTGROUP_UPDATED_AT" indexType="btree">
+			<column name="updated_at"/>
+		</index>
+	</table>
+</schema>
