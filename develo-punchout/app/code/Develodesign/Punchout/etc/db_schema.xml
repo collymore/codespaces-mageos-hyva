@@ -34,4 +34,7 @@
 			<column name="updated_at"/>
 		</index>
 	</table>
+	<table name="customer_entity">
+		<column name="punchout_group" nullable="true" xsi:type="int"  length="null" unsigned="true" identity="false" comment="Punchout Group Identifier"/>
+	</table>
 </schema>
