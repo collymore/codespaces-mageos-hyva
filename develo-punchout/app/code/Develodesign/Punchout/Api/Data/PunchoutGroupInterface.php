@@ -17,6 +17,8 @@ interface PunchoutGroupInterface
 
     const IS_PARENT = 'is_parent';
     const PARENT_PUNCHOUT_GROUP = 'parent_punchout_group';
+
+    const MAGENTO_CUSTOMER_GROUP = 'magento_customer_group';
     const SHARED_SECRET = 'shared_secret';
     const DUNS_IDENTITY = 'duns_identity';
     const ARIBA_NETWORK_ID = 'ariba_network_id';
@@ -226,6 +228,19 @@ interface PunchoutGroupInterface
      * @return \Develodesign\Punchout\PunchoutGroup\Api\Data\PunchoutGroupInterface
      */
     public function setParentPunchoutGroup($parentPunchoutGroup);
+    
+    /**
+     * Get magento_customer_group
+     * @return string|null
+     */
+    public function getMagentoCustomerGroup();
+    
+    /**
+     * Set magento_customer_group
+     * @param string $magentoCustomerGroup
+     * @return \Develodesign\Punchout\PunchoutGroup\Api\Data\PunchoutGroupInterface
+     */
+    public function setMagentoCustomerGroup($magentoCustomerGroup);
 
     /**
      * Get street

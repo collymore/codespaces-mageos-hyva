@@ -38,7 +38,7 @@ class PunchoutGroup extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractS
             }
             
         }
-        
+
         return $this->_options;
     }
 }

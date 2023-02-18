@@ -228,6 +228,20 @@
 				<dataType>select</dataType>
 			</settings>
 		</column>
+		<column name="magento_customer_group" sortOrder="52" component="Magento_Ui/js/grid/columns/select">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">Assigned Customer Group</label>
+				<options class="Magento\Customer\Ui\Component\Listing\Column\Group\Options"/>
+				<editor>
+					<editorType>select</editorType>
+					<validation>
+						<rule name="required-entry" xsi:type="boolean">true</rule>
+					</validation>
+				</editor>
+				<dataType>select</dataType>
+			</settings>
+		</column>
 		<column name="street" sortOrder="55">
 			<settings>
 				<filter>text</filter>

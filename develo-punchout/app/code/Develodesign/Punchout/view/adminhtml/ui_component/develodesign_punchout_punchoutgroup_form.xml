@@ -231,6 +231,29 @@
 				</select>
 			</formElements>
 		</field>
+		<field name="magento_customer_group" formElement="select" sortOrder="105">
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="source" xsi:type="string">PunchoutGroup</item>
+					<item name="default" xsi:type="number">1</item>
+				</item>
+			</argument>
+			<settings>
+				<dataType>text</dataType>
+				<label translate="true">Assigned Customer Group</label>
+				<dataScope>magento_customer_group</dataScope>
+				<validation>
+					<rule name="required-entry" xsi:type="boolean">true</rule>
+				</validation>
+			</settings>
+			<formElements>
+			<select>
+				<settings>
+					<options class="Magento\Customer\Ui\Component\Listing\Column\Group\Options"/>
+				</settings>
+			</select>
+		</formElements>
+		</field>
 		<field name="street" formElement="input" sortOrder="110">
 			<argument name="data" xsi:type="array">
 				<item name="config" xsi:type="array">

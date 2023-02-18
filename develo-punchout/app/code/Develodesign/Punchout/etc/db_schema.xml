@@ -19,6 +19,7 @@
 		<column name="oci_username" nullable="true" xsi:type="varchar" comment="OCI Username" length="255"/>
 		<column name="oci_password" nullable="true" xsi:type="varchar" comment="OCI Password" length="255"/>
 		<column name="parent_punchout_group" nullable="true" xsi:type="int" comment="Parent Punchout Group" identity="false"/>
+		<column name="magento_customer_group" nullable="true" xsi:type="int" comment="Assigned Magento Customer Group" default="1" identity="false"/>
 		<column name="street" nullable="false" xsi:type="varchar" comment="Street" length="255"/>
 		<column name="city" nullable="false" xsi:type="varchar" comment="City" length="255"/>
 		<column name="country_id" nullable="false" xsi:type="varchar" comment="Country ID" length="4"/>

@@ -200,6 +200,22 @@ class PunchoutGroup extends AbstractModel implements PunchoutGroupInterface
     /**
      * @inheritDoc
      */
+    public function getMagentoCustomerGroup()
+    {
+        return $this->getData(self::MAGENTO_CUSTOMER_GROUP);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setMagentoCustomerGroup($magentoCustomerGroup)
+    {
+        return $this->setData(self::MAGENTO_CUSTOMER_GROUP, $magentoCustomerGroup);
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getStreet()
     {
         return $this->getData(self::STREET);
