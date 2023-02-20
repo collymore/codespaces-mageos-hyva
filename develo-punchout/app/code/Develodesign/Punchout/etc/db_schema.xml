@@ -38,4 +38,22 @@
 	<table name="customer_entity">
 		<column name="punchout_group" nullable="true" xsi:type="int"  length="null" unsigned="true" identity="false" comment="Punchout Group Identifier"/>
 	</table>
+	<table name="develodesign_punchout_punchoutsetuprequest" resource="default" engine="innodb" comment="develodesign_punchout_punchoutsetuprequest Table">
+		<column xsi:type="int" name="setup_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity Id"/>
+		<constraint xsi:type="primary" referenceId="PRIMARY">
+			<column name="setup_id"/>
+		</constraint>
+		<column name="customer_id" nullable="false" xsi:type="int" comment="ID of the customer making the request" unsigned="true"/>
+		<index referenceId="DEVELODESIGN_PUNCHOUT_PUNCHOUTSETUPREQUEST_CUSTOMER_ID" indexType="btree">
+			<column name="customer_id"/>
+		</index>
+		<column name="payload_id" nullable="false" xsi:type="varchar" comment="Payload Id of the incoming request" length="255"/>
+		<column name="sender_identity" nullable="false" xsi:type="varchar" comment="Senders Identity of the incoming request" length="255"/>
+		<column name="return_url" nullable="true" xsi:type="varchar" comment="Return URL of the incoming request" length="255"/>
+		<column name="buyer_cookie" nullable="true" xsi:type="varchar" comment="Buyer Cookie of the incoming request" length="255"/>
+		<column name="access_token" nullable="true" xsi:type="varchar" comment="Unique access token for verification of the proxy request" length="255"/>
+		<column name="expiry_date" nullable="true" xsi:type="datetime" comment="Expiry date of the generated token "/>
+		<column name="po_number" nullable="true" xsi:type="varchar" comment="PO number of the order is raised" length="255"/>
+		<column name="order_status" nullable="true" xsi:type="varchar" comment="Order status of the order raised" length="255"/>
+	</table>
 </schema>

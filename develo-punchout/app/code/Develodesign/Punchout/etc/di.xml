@@ -16,4 +16,7 @@
 			</argument>
 		</arguments>
 	</type>
+	<preference for="Develodesign\Punchout\Api\PunchoutSetupRequestRepositoryInterface" type="Develodesign\Punchout\Model\PunchoutSetupRequestRepository"/>
+	<preference for="Develodesign\Punchout\Api\Data\PunchoutSetupRequestInterface" type="Develodesign\Punchout\Model\PunchoutSetupRequest"/>
+	<preference for="Develodesign\Punchout\Api\Data\PunchoutSetupRequestSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
 </config>
