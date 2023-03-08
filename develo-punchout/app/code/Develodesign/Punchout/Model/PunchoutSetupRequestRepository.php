@@ -27,7 +27,7 @@ class PunchoutSetupRequestRepository implements PunchoutSetupRequestRepositoryIn
     protected $punchoutSetupRequestCollectionFactory;
 
     /**
-     * @var PunchoutSetupRequestInterfaceFactory
+     * @var PunchoutSetupRequestInterface
      */
     protected $punchoutSetupRequestFactory;
 
@@ -45,7 +45,7 @@ class PunchoutSetupRequestRepository implements PunchoutSetupRequestRepositoryIn
      * @var CollectionProcessorInterface
      */
     protected $collectionProcessor;
-
+    
     /**
      * @param ResourcePunchoutSetupRequest $resource
      * @param PunchoutSetupRequestInterfaceFactory $punchoutSetupRequestFactory

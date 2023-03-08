@@ -14,21 +14,15 @@ class PunchoutSetupRequest extends AbstractModel implements PunchoutSetupRequest
     {
         $this->_init(\Develodesign\Punchout\Model\ResourceModel\PunchoutSetupRequest::class);
     }
-
-    /**
-     * @inheritDoc
-     */
-    public function getPunchoutsetuprequestId()
+    
+    public function getSetupId()
     {
-        return $this->getData(self::SETUP_ID);
+        // TODO: Implement getSetupId() method.
     }
-
-    /**
-     * @inheritDoc
-     */
-    public function setPunchoutsetuprequestId($setupId)
+    
+    public function setSetupId($setupId)
     {
-        return $this->setData(self::SETUP_ID, $setupId);
+        // TODO: Implement setSetupId() method.
     }
 
     /**
@@ -174,4 +168,6 @@ class PunchoutSetupRequest extends AbstractModel implements PunchoutSetupRequest
     {
         return $this->setData(self::ORDER_STATUS, $orderStatus);
     }
+
+    
 }

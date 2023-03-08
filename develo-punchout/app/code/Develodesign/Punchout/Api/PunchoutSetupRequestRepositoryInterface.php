@@ -6,7 +6,9 @@ interface PunchoutSetupRequestRepositoryInterface
 {
     /**
      * Save PunchoutSetupRequest
+     *
      * @param \Develodesign\Punchout\Api\Data\PunchoutSetupRequestInterface $punchoutSetupRequest
+     *
      * @return \Develodesign\Punchout\Api\Data\PunchoutSetupRequestInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -16,7 +18,9 @@ interface PunchoutSetupRequestRepositoryInterface
 
     /**
      * Retrieve PunchoutSetupRequest
+     *
      * @param string $setupId
+     *
      * @return \Develodesign\Punchout\Api\Data\PunchoutSetupRequestInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -34,7 +38,9 @@ interface PunchoutSetupRequestRepositoryInterface
 
     /**
      * Delete PunchoutSetupRequest
+     *
      * @param \Develodesign\Punchout\Api\Data\PunchoutSetupRequestInterface $punchoutSetupRequest
+     *
      * @return bool true on success
      * @throws \Magento\Framework\Exception\LocalizedException
      */
