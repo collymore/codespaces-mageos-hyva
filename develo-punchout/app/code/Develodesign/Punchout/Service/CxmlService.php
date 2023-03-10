@@ -67,4 +67,38 @@ class CxmlService
         }
         return $aribaNetworkId;
     }
+
+    public function getExtrinsicData($extrinsic)
+    {
+        $result = [];
+        foreach ($extrinsic as $ext) {
+            $key = (string)$ext->getAttribute('name');
+            $value = (string)$ext;
+            $result[$key] = $value;
+        }
+        return $result;
+    }
+
+   
+
+    public function isCreate($cxmlData)
+    {
+        return $cxmlData->Request->PunchOutSetupRequest->getAttribute('operation') === 'create';
+    }
+
+    public function fetchEmail($extrinsicData, $cxmlData)
+    {
+        $useEmail = '';
+        if (isset($extrinsicData['UserEmail']) && !empty($extrinsicData['UserEmail'])) {
+            $useEmail = $extrinsicData['UserEmail'];
+        } elseif (isset($cxmlData->Request->PunchOutSetupRequest->Contact->Email) && !empty($cxmlData->Request->PunchOutSetupRequest->Contact->Email)) {
+            $useEmail = (string)$cxmlData->Request->PunchOutSetupRequest->Contact->Email;
+        }
+        return $useEmail;
+    }
+    
+    private function createEmail()
+    {
+    
+    }
 }
