@@ -7,7 +7,7 @@ use RuntimeException;
 
 class CxmlService
 {
-    public function parseXmlResponse($rawRequestBody)
+    public function parseXmlResponse($rawRequestBody): Element|\SimpleXMLElement
     {
         $libxml = libxml_use_internal_errors(true);
         $xml = simplexml_load_string($rawRequestBody, Element::class);
@@ -21,7 +21,7 @@ class CxmlService
         return $xml;
     }
 
-    public function validateSetupRequest(Element $cxmlData)
+    public function validateSetupRequest(Element $cxmlData): array
     {
         $errors = ['error' => false];
         if ($cxmlData->getAttribute('payloadID') === null) {
@@ -55,7 +55,7 @@ class CxmlService
         return $errors;
     }
 
-    public function getAribaNetworkId()
+    public function getAribaNetworkId(): false|string
     {
         $aribaNetworkId = false;
         if (isset($cxmlData->Header->Sender->Credential['domain']) && stripos(strtolower((string)$cxmlData->Header->Sender->Credential['domain']), 'AribaNetwork') !== false) {
@@ -68,7 +68,7 @@ class CxmlService
         return $aribaNetworkId;
     }
 
-    public function getExtrinsicData($extrinsic)
+    public function getExtrinsicData($extrinsic): array
     {
         $result = [];
         foreach ($extrinsic as $ext) {
@@ -79,26 +79,64 @@ class CxmlService
         return $result;
     }
 
-   
-
-    public function isCreate($cxmlData)
+    public function isCreate($cxmlData): bool
     {
         return $cxmlData->Request->PunchOutSetupRequest->getAttribute('operation') === 'create';
     }
 
-    public function fetchEmail($extrinsicData, $cxmlData)
+    /**
+     * @throws \Zend_Validate_Exception
+     */
+    public function fetchEmail($extrinsicData, $cxmlData): string
     {
         $useEmail = '';
-        if (isset($extrinsicData['UserEmail']) && !empty($extrinsicData['UserEmail'])) {
+        if (isset($extrinsicData['UserEmail']) && !empty($extrinsicData['UserEmail']) && \Zend_Validate::is(value:$extrinsicData['UserEmail'],classBaseName:'EmailAddress'
+        )) {
             $useEmail = $extrinsicData['UserEmail'];
-        } elseif (isset($cxmlData->Request->PunchOutSetupRequest->Contact->Email) && !empty($cxmlData->Request->PunchOutSetupRequest->Contact->Email)) {
+        } elseif (isset($cxmlData->Request->PunchOutSetupRequest->Contact->Email) && !empty($cxmlData->Request->PunchOutSetupRequest->Contact->Email)
+            && \Zend_Validate::is(
+                $extrinsicData['UserEmail'],
+                classBaseName:'EmailAddress'
+            )) {
             $useEmail = (string)$cxmlData->Request->PunchOutSetupRequest->Contact->Email;
         }
         return $useEmail;
     }
     
-    private function createEmail()
+    /**
+     * @throws \Zend_Validate_Exception
+     */
+    public function createEmail($extrinsicData, $cxmlData, $punchoutGroupEmail): string
     {
-    
+        $domain = substr($punchoutGroupEmail, strpos($punchoutGroupEmail, '@') + 1);
+        if(isset($extrinsicData['FirstName'],$extrinsicData['LastName'])){
+            $name = sprintf('%s_%s@',$extrinsicData['FirstName'],$extrinsicData['LastName']);
+        }elseif (isset($extrinsicData['UniqueName'])){
+            $name = $extrinsicData['UniqueName'];
+        } else if(isset($cxmlData->Request->PunchOutSetupRequest->Contact->Name)){
+            $name = (string)$cxmlData->Request->PunchOutSetupRequest->Contact->Name;
+        }else {
+            $name = uniqid('',false);
+        }
+        $email = sprintf('%s%s',$name,$domain);
+        if(\Zend_Validate::is($email, classBaseName:'EmailAddress')) {
+            return $email;
+        }
+        return  sprintf('%s_%s',$name,$punchoutGroupEmail);
     }
+    
+    public function getFirstLastName($extrinsicData)
+    {
+        $data = [];
+        if(isset($extrinsicData['FirstName'],$extrinsicData['LastName'])){
+            $data['first_name'] = $extrinsicData['FirstName'];
+            $data['last_name'] = $extrinsicData['LastName'];
+        }else{
+            $data['first_name'] = 'Punchout';
+            $data['last_name'] =  'User';
+        }
+        return $data;
+    }
+    
+    
 }

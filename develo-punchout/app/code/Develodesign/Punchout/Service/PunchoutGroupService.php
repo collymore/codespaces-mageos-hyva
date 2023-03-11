@@ -41,7 +41,7 @@ namespace Develodesign\Punchout\Service;
         {
             $loadTypes = ['secret', 'identity', 'ariba_network'];
             $matchingPunchoutGroup = [];
-
+          
             // Loop through each load type.
             foreach ($loadTypes as $loadType) {
                 switch ($loadType) {
