@@ -16,10 +16,11 @@ namespace Develodesign\Punchout\Service;
             $this->punchoutGroupCollection = $punchoutGroupCollection;
         }
     
-        private function loadPunchOutGroupBySecret($sharedSecret): \Magento\Framework\DataObject
+        private function loadPunchOutGroupBySecret($sharedSecret,$dunsIdentity): \Magento\Framework\DataObject
         {
             return $this->punchoutGroupCollection->create()
                 ->addFieldToFilter('shared_secret', ['eq' => $sharedSecret])
+                ->addFieldToFilter('duns_identity', ['eq' => $dunsIdentity])
                 ->getFirstItem();
         }
     
@@ -46,7 +47,7 @@ namespace Develodesign\Punchout\Service;
             foreach ($loadTypes as $loadType) {
                 switch ($loadType) {
                     case 'secret':
-                        $matchingPunchoutGroup = $this->loadPunchOutGroupBySecret($sharedSecret);
+                        $matchingPunchoutGroup = $this->loadPunchOutGroupBySecret($sharedSecret,$dunsIdentity);
                         break;
                     case 'identity':
                         $matchingPunchoutGroup = $this->loadPunchOutGroupByDunsIdentity($dunsIdentity);
