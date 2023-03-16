@@ -95,7 +95,7 @@ class CxmlService
             $useEmail = $extrinsicData['UserEmail'];
         } elseif (isset($cxmlData->Request->PunchOutSetupRequest->Contact->Email) && !empty($cxmlData->Request->PunchOutSetupRequest->Contact->Email)
             && \Zend_Validate::is(
-                $extrinsicData['UserEmail'],
+                $cxmlData->Request->PunchOutSetupRequest->Contact->Email,
                 classBaseName:'EmailAddress'
             )) {
             $useEmail = (string)$cxmlData->Request->PunchOutSetupRequest->Contact->Email;
