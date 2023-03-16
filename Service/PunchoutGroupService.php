@@ -3,6 +3,7 @@
 namespace Develodesign\Punchout\Service;
 
     use Develodesign\Punchout\Model\ResourceModel\PunchoutGroup\CollectionFactory;
+    use Magento\Framework\DataObject;
 
     class PunchoutGroupService
     {
@@ -16,7 +17,7 @@ namespace Develodesign\Punchout\Service;
             $this->punchoutGroupCollection = $punchoutGroupCollection;
         }
     
-        private function loadPunchOutGroupBySecret($sharedSecret,$dunsIdentity): \Magento\Framework\DataObject
+        private function loadPunchOutGroupBySecretDuns($sharedSecret,$dunsIdentity): \Magento\Framework\DataObject
         {
             return $this->punchoutGroupCollection->create()
                 ->addFieldToFilter('shared_secret', ['eq' => $sharedSecret])
@@ -41,19 +42,23 @@ namespace Develodesign\Punchout\Service;
         public function loadPunchOutGroupByCredentials($sharedSecret, $dunsIdentity, $aribaNetworkId): \Magento\Framework\DataObject|array
         {
             $loadTypes = ['secret', 'identity', 'ariba_network'];
+            //$result = new DataObject(['error' => false,'matching_punchout_group' => null,'message' => null]);
             $matchingPunchoutGroup = [];
           
             // Loop through each load type.
             foreach ($loadTypes as $loadType) {
                 switch ($loadType) {
                     case 'secret':
-                        $matchingPunchoutGroup = $this->loadPunchOutGroupBySecret($sharedSecret,$dunsIdentity);
+                        //$result->setMatchingPunchoutGroup($this->loadPunchOutGroupBySecretDuns($sharedSecret,$dunsIdentity));
+                        $matchingPunchoutGroup = $this->loadPunchOutGroupBySecretDuns($sharedSecret,$dunsIdentity);
                         break;
                     case 'identity':
+                        //$result->setMatchingPunchoutGroup($this->loadPunchOutGroupByDunsIdentity($dunsIdentity));
                         $matchingPunchoutGroup = $this->loadPunchOutGroupByDunsIdentity($dunsIdentity);
                         break;
                     case 'ariba_network':
                         if (!empty(trim($aribaNetworkId))) {
+                            //$result->setMatchingPunchoutGroup($this->loadPunchOutGroupByAribaNetworkId($dunsIdentity));
                             $matchingPunchoutGroup = $this->loadPunchOutGroupByAribaNetworkId($aribaNetworkId);
                         }
                         break;
@@ -62,19 +67,34 @@ namespace Develodesign\Punchout\Service;
                         throw new \InvalidArgumentException(sprintf('Invalid load type: %s', $loadType));
                 }
                // toDo: rethink this
-                /*if (is_array($matchingPunchoutGroup) && empty($matchingPunchoutGroup)) {
+                /*if (null === $result->getMatchingPunchoutGroup()) {
                     switch ($loadType) {
                         case 'secret':
+                            $result->setError(true);
+                            $result->setMessage(sprintf(
+                                'No matching PunchOut Group found for shared secret %s and duns identity: %s',
+                                $sharedSecret,$dunsIdentity
+                            ));
                             throw new \RuntimeException(sprintf(
-                                'No matching PunchOut Group found for shared secret: %s',
-                                $sharedSecret
+                                'No matching PunchOut Group found for shared secret %s and duns identity: %s',
+                                $sharedSecret,$dunsIdentity
                             ));
                         case 'identity':
+                            $result->setError(true);
+                            $result->setMessage(sprintf(
+                                'No matching PunchOut Group found for DUNS identity: %s',
+                                $dunsIdentity
+                            ));
                             throw new \RuntimeException(sprintf(
                                 'No matching PunchOut Group found for DUNS identity: %s',
                                 $dunsIdentity
                             ));
                         case 'ariba_network':
+                            $result->setError(true);
+                            $result->setMessage(sprintf(
+                                'No matching PunchOut Group found for Ariba Network ID: %s',
+                                $aribaNetworkId
+                            ));
                             throw new \RuntimeException(sprintf(
                                 'No matching PunchOut Group found for Ariba Network ID: %s',
                                 $aribaNetworkId
@@ -82,7 +102,7 @@ namespace Develodesign\Punchout\Service;
                     }
                 }*/
             }
-            
+            //return $result;
             return $matchingPunchoutGroup;
         }
     }

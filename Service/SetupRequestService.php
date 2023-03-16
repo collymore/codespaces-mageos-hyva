@@ -111,11 +111,11 @@ namespace Develodesign\Punchout\Service;
                 'user_id' => $punchoutSetupRequestModel->getCustomerId(),
                 'payloadId' => $punchoutSetupRequestModel->getPayloadId()
             ];
-            return sprintf('%s?Bearer=%s', $this->getPunchoutSetUpLoginUrl(), base64_encode(json_encode($postBody)));
+            return sprintf('%s%s?Bearer=%s', $this->url->getUrl(), $this->getPunchoutSetUpLoginUrl(), base64_encode(json_encode($postBody)));
         }
 
         private function getPunchoutSetUpLoginUrl(): string
         {
-            return $this->url->getUrl('develo_punchout/index/loginproxy');
+            return 'develo_punchout/index/loginproxy';
         }
     }
