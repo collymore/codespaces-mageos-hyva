@@ -2,24 +2,29 @@
 
 namespace Develodesign\Punchout\Service;
 
-    use Develodesign\Punchout\Model\PunchoutSetupRequestFactory;
     use Develodesign\Punchout\Model\PunchoutSetupRequest;
+    use Develodesign\Punchout\Model\PunchoutSetupRequestFactory;
     use Develodesign\Punchout\Model\ResourceModel\PunchoutSetupRequest as PunchoutSetupRequestResource;
     use Magento\Framework\DataObject;
     use Magento\Framework\Exception\AlreadyExistsException;
     use Magento\Framework\Simplexml\Element;
+    use Magento\Framework\UrlInterface;
 
     class SetupRequestService
     {
         private $punchoutSetupRequestFactory;
         private $setupRequestResource;
 
+        private $url;
+
         public function __construct(
             PunchoutSetupRequestFactory $punchoutSetupRequestFactory,
-            PunchoutSetupRequestResource $setupRequestResource
+            PunchoutSetupRequestResource $setupRequestResource,
+            UrlInterface $urlBuilder
         ) {
             $this->punchoutSetupRequestFactory = $punchoutSetupRequestFactory;
             $this->setupRequestResource = $setupRequestResource;
+            $this->url = $urlBuilder;
         }
 
         /**
@@ -92,12 +97,25 @@ namespace Develodesign\Punchout\Service;
             return $now->modify('+1 week')->format('Y-m-d H:i:s');
         }
 
-        public function getProxyResponse(PunchoutSetupRequest $punchoutSetupRequestModel): array
+        
+
+        /**
+         * @param PunchoutSetupRequest $punchoutSetupRequestModel
+         *
+         * @return string
+         */
+        public function getStartUpUrlResponse(PunchoutSetupRequest $punchoutSetupRequestModel): string
         {
-            return [
+            $postBody = [
                 'token'   => $punchoutSetupRequestModel->getAccessToken(),
                 'user_id' => $punchoutSetupRequestModel->getCustomerId(),
                 'payloadId' => $punchoutSetupRequestModel->getPayloadId()
             ];
+            return sprintf('%s?Bearer=%s', $this->getPunchoutSetUpLoginUrl(), base64_encode(json_encode($postBody)));
+        }
+
+        private function getPunchoutSetUpLoginUrl(): string
+        {
+            return $this->url->getUrl('develo_punchout/index/loginproxy');
         }
     }

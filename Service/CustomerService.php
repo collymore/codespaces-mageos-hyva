@@ -3,7 +3,6 @@
 namespace Develodesign\Punchout\Service;
 
     use Develodesign\Punchout\Model\PunchoutGroup;
-    use Magento\Customer\Api\CustomerRepositoryInterface;
     use Magento\Customer\Model\AddressFactory;
     use Magento\Customer\Model\Customer;
     use Magento\Customer\Model\CustomerFactory;

@@ -91,8 +91,8 @@
                     }
                     $setupRequestDTO = $this->setupRequestService->prepareSetupData(customerId: $matchingCustomer->getId(),cxmlData: $parsedXMLData);
                     $punchoutSetupRequestModel = $this->setupRequestService->createPunchoutSetupRequest($setupRequestDTO);
-                    $responseData = $this->setupRequestService->getProxyResponse(punchoutSetupRequestModel: $punchoutSetupRequestModel);
-                    return $this->cxmlResponse->respondWithData(200, json_encode($responseData));
+                    $startUrl = $this->setupRequestService->getStartUpUrlResponse(punchoutSetupRequestModel: $punchoutSetupRequestModel);
+                    return $this->cxmlResponse->punchoutUpResponse(200,$startUrl);
                    
                 }
                 
