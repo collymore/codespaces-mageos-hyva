@@ -9,6 +9,7 @@ namespace Develodesign\Punchout\Service;
     use Magento\Customer\Model\CustomerFactory;
     use Magento\Customer\Model\ResourceModel\Address as AddressResource;
     use Magento\Customer\Model\ResourceModel\Customer as CustomerResource;
+    use Magento\Framework\DataObject;
     use Magento\Framework\Exception\AlreadyExistsException;
     use Magento\Framework\Exception\LocalizedException;
     use Magento\Framework\Exception\NoSuchEntityException;
@@ -16,11 +17,6 @@ namespace Develodesign\Punchout\Service;
 
     class CustomerService
     {
-        /**
-         * @var CustomerRepositoryInterface
-         */
-        private $customerRepository;
-
         /**
          * @var StoreManagerInterface
          */
@@ -46,14 +42,12 @@ namespace Develodesign\Punchout\Service;
         private $addressResource;
 
         public function __construct(
-            CustomerRepositoryInterface $customerRepository,
             StoreManagerInterface $storeManager,
             CustomerFactory $customerFactory,
             CustomerResource $customerResource,
             AddressFactory $addressFactory,
             AddressResource $addressResource
         ) {
-            $this->customerRepository = $customerRepository;
             $this->storeManager = $storeManager;
             $this->customerFactory = $customerFactory;
             $this->customerResource = $customerResource;
@@ -77,7 +71,7 @@ namespace Develodesign\Punchout\Service;
          * @throws NoSuchEntityException
          * @throws AlreadyExistsException
          */
-        public function createCustomer(\Magento\Framework\DataObject $customerDTO): Customer
+        public function createCustomer(DataObject $customerDTO): Customer
         {
             $customer = $this->customerFactory->create();
             $customer->isObjectNew(true);
@@ -116,9 +110,9 @@ namespace Develodesign\Punchout\Service;
             $this->addressResource->save($customerAddress);
         }
 
-        public function prepareCustomerData(PunchoutGroup $matchingPunchoutGroup, $email, $nameData)
+        public function prepareCustomerData(PunchoutGroup $matchingPunchoutGroup, $email, $nameData): DataObject
         {
-            return new \Magento\Framework\DataObject(
+            return new DataObject(
                 [
                     'website_id' => $this->storeManager->getWebsite()->getId(),
                     'first_name' => $nameData['first_name'],

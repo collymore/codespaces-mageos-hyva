@@ -1,0 +1,116 @@
+<?php
+    
+    namespace Develodesign\Punchout\Controller\Index;
+    
+    use Develodesign\Punchout\Model\PunchoutGroup;
+    use Develodesign\Punchout\Response\CxmlResponse;
+    use Develodesign\Punchout\Service\CustomerService;
+    use Develodesign\Punchout\Service\CxmlService;
+    use Develodesign\Punchout\Service\PunchoutGroupService;
+    use Develodesign\Punchout\Service\SetupRequestService;
+    use Magento\Framework\App\Action\Action;
+    use Magento\Framework\App\Request\InvalidRequestException;
+    use Magento\Framework\App\RequestInterface;
+    
+    class CxmlSetup extends Action implements \Magento\Framework\App\CsrfAwareActionInterface
+    {
+        /**
+         * @var CxmlService
+         */
+        protected $cxmlService;
+        
+        /**
+         * @var CxmlResponse
+         */
+        protected $cxmlResponse;
+        
+        /**
+         * @var PunchoutGroupService
+         */
+        protected $punchoutGroupService;
+        
+        /**
+         * @var CustomerService
+         */
+        protected $customerService;
+    
+        /**
+         * @var SetupRequestService
+         */
+        protected $setupRequestService;
+        
+        public function __construct(
+            \Magento\Framework\App\Action\Context $context,
+            CxmlService $cxmlService,
+            CxmlResponse $cxmlResponse,
+            PunchoutGroupService $punchoutGroupService,
+            CustomerService $customerService,
+            SetupRequestService $setupRequestService
+        ) {
+            parent::__construct($context);
+            $this->cxmlService = $cxmlService;
+            $this->cxmlResponse = $cxmlResponse;
+            $this->punchoutGroupService = $punchoutGroupService;
+            $this->customerService = $customerService;
+            $this->setupRequestService = $setupRequestService;
+        }
+        public function execute()
+        {
+            try {
+                $xmlRawData = file_get_contents('php://input');
+                if (!$xmlRawData) {
+                    return $this->cxmlResponse->respondWithData(400, 'Post body is missing or XML appears invalid');
+                }
+                $parsedXMLData = $this->cxmlService->parseXmlResponse($xmlRawData);
+                $violations = $this->cxmlService->validateSetupRequest($parsedXMLData);
+                if ($violations['error'] === true) {
+                    return $this->cxmlResponse->respondWithData(422, json_encode($violations));
+                }
+                $sharedSecret = $parsedXMLData->Header->Sender->Credential->SharedSecret;
+                $dunsIdentity = $parsedXMLData->Header->Sender->Credential->Identity;
+                $aribaNetworkId = $this->cxmlService->getAribaNetworkId();
+                /** @var PunchoutGroup $matchingPunchoutGroup */
+                $matchingPunchoutGroup = $this->punchoutGroupService->loadPunchOutGroupByCredentials(sharedSecret: $sharedSecret,
+                    dunsIdentity: $dunsIdentity, aribaNetworkId: $aribaNetworkId);
+                
+                $extrinsicData = $this->cxmlService->getExtrinsicData($parsedXMLData->Request->PunchOutSetupRequest->Extrinsic);
+                
+                if($this->cxmlService->isCreate($parsedXMLData) === true){
+                    $useEmail = $this->cxmlService->fetchEmail($extrinsicData,$parsedXMLData);
+                    if(empty(trim($useEmail))){
+                        $useEmail = $this->cxmlService->createEmail($extrinsicData, $parsedXMLData,
+                            $matchingPunchoutGroup->getGroupEmail());
+                    }
+                    $matchingCustomer = $this->customerService->fetchCustomer($useEmail);
+                    if(!$matchingCustomer->getId()){
+                        $nameData = $this->cxmlService->getFirstLastName($extrinsicData);
+                        $customerDTO = $this->customerService->prepareCustomerData(matchingPunchoutGroup:$matchingPunchoutGroup,email:$useEmail,nameData:$nameData);
+                        $matchingCustomer = $this->customerService->createCustomer($customerDTO);
+                        $this->customerService->createCustomerAddress(customer:$matchingCustomer,punchoutGroup:$matchingPunchoutGroup);
+                        
+                    }
+                    $setupRequestDTO = $this->setupRequestService->prepareSetupData(customerId: $matchingCustomer->getId(),cxmlData: $parsedXMLData);
+                    $punchoutSetupRequestModel = $this->setupRequestService->createPunchoutSetupRequest($setupRequestDTO);
+                    $responseData = $this->setupRequestService->getProxyResponse(punchoutSetupRequestModel: $punchoutSetupRequestModel);
+                    return $this->cxmlResponse->respondWithData(200, json_encode($responseData));
+                   
+                }
+                
+                
+            } catch (\Exception $exception) {
+                return $this->cxmlResponse->respondWithData(400, $exception->getMessage());
+            }
+            return $this->cxmlResponse->respondSuccess();
+        }
+        
+        public function createCsrfValidationException(RequestInterface $request): ?InvalidRequestException
+        {
+            return null;
+        }
+        
+        public function validateForCsrf(RequestInterface $request): ?bool
+        {
+            return true;
+        }
+    }
+

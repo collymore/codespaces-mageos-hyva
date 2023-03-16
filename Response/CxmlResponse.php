@@ -45,13 +45,6 @@ namespace Develodesign\Punchout\Response;
             $result->setStatusHeader($statusCode);
             return $result;
         }
+
         
-        public function formatErrorMessage(array $violations)
-        {
-           $messages = [];
-            foreach ($violations as $violation){
-                $messages[] = $violation;
-            }
-            return $messages;
-        }
     }
