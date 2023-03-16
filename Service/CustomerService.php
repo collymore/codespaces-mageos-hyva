@@ -4,7 +4,6 @@ namespace Develodesign\Punchout\Service;
 
     use Develodesign\Punchout\Model\PunchoutGroup;
     use Magento\Customer\Api\CustomerRepositoryInterface;
-    use Magento\Customer\Api\Data\CustomerInterface;
     use Magento\Customer\Model\AddressFactory;
     use Magento\Customer\Model\Customer;
     use Magento\Customer\Model\CustomerFactory;
@@ -63,12 +62,15 @@ namespace Develodesign\Punchout\Service;
         }
 
         /**
-         * @throws NoSuchEntityException
+         * @param $customerEmail
+         *
+         * @return Customer
          * @throws LocalizedException
+         * @throws NoSuchEntityException
          */
-        public function fetchCustomer($customerEmail): CustomerInterface
+        public function fetchCustomer($customerEmail): Customer
         {
-            return $this->customerRepository->get($customerEmail, $this->storeManager->getStore()->getWebsiteId());
+            return $this->customerFactory->create()->setWebsiteId($this->storeManager->getStore()->getWebsiteId())->loadByEmail($customerEmail);
         }
 
         /**
@@ -79,14 +81,14 @@ namespace Develodesign\Punchout\Service;
         {
             $customer = $this->customerFactory->create();
             $customer->isObjectNew(true);
-            $customer->setWebsiteId($customerDTO->getWebsiteId())
-                ->setStoreId($this->storeManager->getStore()->getId())
+            $customer->setStoreId($this->storeManager->getStore()->getId())
                 ->setFirstname($customerDTO->getFirstName())
                 ->setLastname($customerDTO->getLastName())
                 ->setEmail($customerDTO->getEmail())
                 ->setPassword($customerDTO->getPassword())
                 ->setGroupId($customerDTO->getGroupId())
-                ->setPunchoutGroupId($customerDTO->getPunchoutGroupId())
+                ->setPunchoutGroup($customerDTO->getPunchoutGroupId())
+                ->setWebsiteId($customerDTO->getWebsiteId())
                 ->setIsActive(1)
                 ->setForceConfirmed(true);
             $this->customerResource->save($customer);
@@ -118,13 +120,13 @@ namespace Develodesign\Punchout\Service;
         {
             return new \Magento\Framework\DataObject(
                 [
-                    'websiteId' => $this->storeManager->getWebsite()->getId(),
-                    'firstName' => $nameData['first_name'],
-                    'lastName' => $nameData['last_name'],
+                    'website_id' => $this->storeManager->getWebsite()->getId(),
+                    'first_name' => $nameData['first_name'],
+                    'last_name' => $nameData['last_name'],
                     'email' => $email,
                     'password' => $this->getRandomPassword(),
-                    'groupId' => $matchingPunchoutGroup->getMagentoCustomerGroup(),
-                    'punchoutGroupId' => $matchingPunchoutGroup->getPunchoutgroupId()
+                    'group_id' => $matchingPunchoutGroup->getMagentoCustomerGroup(),
+                    'punchout_group_id' => $matchingPunchoutGroup->getPunchoutgroupId()
                 ]
             );
         }
