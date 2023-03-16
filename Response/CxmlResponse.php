@@ -23,7 +23,7 @@ namespace Develodesign\Punchout\Response;
             $result->setHeader('Content-Type', 'text/xml');
             $result->setContents('<?xml version="1.0" encoding="UTF-8"?>
                      <!DOCTYPE cXML SYSTEM "http://xml.cxml.org/schemas/cXML/1.2.055/cXML.dtd">
-                        <cXML payloadID="" version="1.2.055"  xml:lang="en" timestamp="">
+                        <cXML version="1.2.055"  xml:lang="en" timestamp=""' . $this->getTimeStamp() . '"">
                           <Response>
                             <Status code="200" text="OK" />
                           </Response>
@@ -38,7 +38,7 @@ namespace Develodesign\Punchout\Response;
             $result->setHeader('Content-Type', 'text/xml');
             $result->setContents('<?xml version="1.0" encoding="UTF-8"?>
                      <!DOCTYPE cXML SYSTEM "http://xml.cxml.org/schemas/cXML/1.2.055/cXML.dtd">
-                        <cXML payloadID="" version="1.2.055"  xml:lang="en" timestamp="">
+                        <cXML version="1.2.055"  xml:lang="en" timestamp="' . $this->getTimeStamp() . '">
                           <Response>
                             <Status code="' . $statusCode . '" text="' . $message . '" />
                           </Response>
@@ -47,15 +47,15 @@ namespace Develodesign\Punchout\Response;
             return $result;
         }
 
-        public function punchoutUpResponse($statusCode, $startUrl): Raw
+        public function punchoutUpResponse($statusCode, $payloadId, $startUrl): Raw
         {
             $result = $this->resultRawFactory->create();
             $result->setHeader('Content-Type', 'text/xml');
             $result->setContents('<?xml version="1.0" encoding="UTF-8"?>
                        <!DOCTYPE cXML SYSTEM "http://xml.cxml.org/schemas/cXML/1.1.010/cXML.dtd">
-                        <cXML payloadID="" version="1.1.007" xml:lang="en" timestamp="">
+                        <cXML payloadID="'.$payloadId.'" version="1.1.007" xml:lang="en" timestamp="' . $this->getTimeStamp() . '">
                            <Response>
-                            <Status code="' . $statusCode. '" text="success"></Status>
+                            <Status code="' . $statusCode . '" text="success"></Status>
                             <PunchOutSetupResponse>
                               <StartPage>
                                  <URL>' . $startUrl . '</URL>
@@ -67,5 +67,8 @@ namespace Develodesign\Punchout\Response;
             return $result;
         }
 
-        
+        private function getTimeStamp()
+        {
+            return (new \DateTime('now', new \DateTimeZone('UTC')))->format('Y-m-d\TH:i:s');
+        }
     }

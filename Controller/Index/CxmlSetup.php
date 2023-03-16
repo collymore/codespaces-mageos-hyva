@@ -92,7 +92,9 @@
                     $setupRequestDTO = $this->setupRequestService->prepareSetupData(customerId: $matchingCustomer->getId(),cxmlData: $parsedXMLData);
                     $punchoutSetupRequestModel = $this->setupRequestService->createPunchoutSetupRequest($setupRequestDTO);
                     $startUrl = $this->setupRequestService->getStartUpUrlResponse(punchoutSetupRequestModel: $punchoutSetupRequestModel);
-                    return $this->cxmlResponse->punchoutUpResponse(200,$startUrl);
+    
+                    return $this->cxmlResponse->punchoutUpResponse(statusCode: 200,
+                        payloadId: $parsedXMLData->getAttribute('payloadID'), startUrl: $startUrl);
                    
                 }
                 
