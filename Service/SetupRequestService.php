@@ -5,6 +5,7 @@ namespace Develodesign\Punchout\Service;
     use Develodesign\Punchout\Model\PunchoutSetupRequest;
     use Develodesign\Punchout\Model\PunchoutSetupRequestFactory;
     use Develodesign\Punchout\Model\ResourceModel\PunchoutSetupRequest as PunchoutSetupRequestResource;
+    use Develodesign\Punchout\Model\ResourceModel\PunchoutSetupRequest\Collection as PunchoutSetupCollection;
     use Magento\Framework\DataObject;
     use Magento\Framework\Exception\AlreadyExistsException;
     use Magento\Framework\Simplexml\Element;
@@ -12,19 +13,36 @@ namespace Develodesign\Punchout\Service;
 
     class SetupRequestService
     {
+        /**
+         * @var PunchoutSetupRequestFactory
+         */
         private $punchoutSetupRequestFactory;
+
+        /**
+         * @var PunchoutSetupRequestResource
+         */
         private $setupRequestResource;
 
+        /**
+         * @var UrlInterface
+         */
         private $url;
+
+        /**
+         * @var PunchoutSetupCollection
+         */
+        private $collection;
 
         public function __construct(
             PunchoutSetupRequestFactory $punchoutSetupRequestFactory,
             PunchoutSetupRequestResource $setupRequestResource,
-            UrlInterface $urlBuilder
+            UrlInterface $urlBuilder,
+            PunchoutSetupCollection $collection
         ) {
             $this->punchoutSetupRequestFactory = $punchoutSetupRequestFactory;
             $this->setupRequestResource = $setupRequestResource;
             $this->url = $urlBuilder;
+            $this->collection = $collection;
         }
 
         /**
@@ -97,8 +115,6 @@ namespace Develodesign\Punchout\Service;
             return $now->modify('+1 week')->format('Y-m-d H:i:s');
         }
 
-        
-
         /**
          * @param PunchoutSetupRequest $punchoutSetupRequestModel
          *
@@ -117,5 +133,12 @@ namespace Develodesign\Punchout\Service;
         private function getPunchoutSetUpLoginUrl(): string
         {
             return 'develo_punchout/index/loginproxy';
+        }
+
+        public function getProxyUser(string $token, int $userId): DataObject
+        {
+            return $this->collection->addFieldToFilter('access_token', $token)
+                ->addFieldToFilter('customer_id', $userId)
+                ->getFirstItem();
         }
     }
