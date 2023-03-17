@@ -8,6 +8,7 @@ namespace Develodesign\Punchout\Service;
     use Magento\Customer\Model\CustomerFactory;
     use Magento\Customer\Model\ResourceModel\Address as AddressResource;
     use Magento\Customer\Model\ResourceModel\Customer as CustomerResource;
+    use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
     use Magento\Framework\DataObject;
     use Magento\Framework\Exception\AlreadyExistsException;
     use Magento\Framework\Exception\LocalizedException;
@@ -40,18 +41,25 @@ namespace Develodesign\Punchout\Service;
          */
         private $addressResource;
 
+        /**
+         * @var CollectionFactory
+         */
+        private $customerCollection;
+
         public function __construct(
             StoreManagerInterface $storeManager,
             CustomerFactory $customerFactory,
             CustomerResource $customerResource,
             AddressFactory $addressFactory,
-            AddressResource $addressResource
+            AddressResource $addressResource,
+            CollectionFactory $collectionFactory
         ) {
             $this->storeManager = $storeManager;
             $this->customerFactory = $customerFactory;
             $this->customerResource = $customerResource;
             $this->addressFactory = $addressFactory;
             $this->addressResource = $addressResource;
+            $this->customerCollection = $collectionFactory;
         }
 
         /**
@@ -122,6 +130,19 @@ namespace Develodesign\Punchout\Service;
                     'punchout_group_id' => $matchingPunchoutGroup->getPunchoutgroupId()
                 ]
             );
+        }
+
+        /**
+         * @throws NoSuchEntityException
+         * @throws LocalizedException
+         */
+        public function isActiveProxyUser(int $userId)
+        {
+            $proxyUser = $this->customerCollection->create()
+                ->addFieldToFilter('entity_id', $userId)
+                ->getFirstItem();
+
+            return (int)$proxyUser->getIsActive() === 1;
         }
 
         private function getRandomPassword()

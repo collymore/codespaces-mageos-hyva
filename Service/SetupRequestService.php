@@ -141,4 +141,15 @@ namespace Develodesign\Punchout\Service;
                 ->addFieldToFilter('customer_id', $userId)
                 ->getFirstItem();
         }
+
+        public function getRefreshedToken($userId, $now)
+        {
+            $timeStamp = $now->format('Y-m-d H:i:s');
+            $punchoutSetupCollection = $this->collection->addFieldToFilter('customer_id', $userId)
+                ->addFieldToFilter('expiry_date', ['gteq' => $timeStamp]);
+            if ($punchoutSetupCollection->count() > 0) {
+                return $punchoutSetupCollection->getFirstItem()->getAccessToken();
+            }
+            return false;
+        }
     }

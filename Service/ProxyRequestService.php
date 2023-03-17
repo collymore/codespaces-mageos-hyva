@@ -1,10 +1,9 @@
 <?php
-    
-    namespace Develodesign\Punchout\Service;
-    
+
+namespace Develodesign\Punchout\Service;
+
     class ProxyRequestService
     {
-    
         public function getRequestParam($requestParam)
         {
             $param = [];
@@ -12,7 +11,20 @@
                 $param = json_decode(base64_decode($requestParam));
             }
             return $param;
-        
         }
-        
+
+        public function isTokenExpired(string $tokenExpiryDate): bool
+        {
+            $tokenExpiryDate = new \DateTime($tokenExpiryDate);
+            return $tokenExpiryDate > $this->getCurrentTimeStamp();
+        }
+
+        public function getCurrentTimeStamp()
+        {
+            $timestamp = new \DateTime('now', new \DateTimeZone('UTC'));
+            $timestamp->format('Y-m-d H:i:s');
+            return $timestamp;
+        }
+    
+    
     }

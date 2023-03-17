@@ -70,31 +70,16 @@ namespace Develodesign\Punchout\Service;
                 /*if (null === $result->getMatchingPunchoutGroup()) {
                     switch ($loadType) {
                         case 'secret':
-                            $result->setError(true);
-                            $result->setMessage(sprintf(
-                                'No matching PunchOut Group found for shared secret %s and duns identity: %s',
-                                $sharedSecret,$dunsIdentity
-                            ));
                             throw new \RuntimeException(sprintf(
                                 'No matching PunchOut Group found for shared secret %s and duns identity: %s',
                                 $sharedSecret,$dunsIdentity
                             ));
                         case 'identity':
-                            $result->setError(true);
-                            $result->setMessage(sprintf(
-                                'No matching PunchOut Group found for DUNS identity: %s',
-                                $dunsIdentity
-                            ));
                             throw new \RuntimeException(sprintf(
                                 'No matching PunchOut Group found for DUNS identity: %s',
                                 $dunsIdentity
                             ));
                         case 'ariba_network':
-                            $result->setError(true);
-                            $result->setMessage(sprintf(
-                                'No matching PunchOut Group found for Ariba Network ID: %s',
-                                $aribaNetworkId
-                            ));
                             throw new \RuntimeException(sprintf(
                                 'No matching PunchOut Group found for Ariba Network ID: %s',
                                 $aribaNetworkId
