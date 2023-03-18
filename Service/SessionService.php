@@ -44,6 +44,18 @@ namespace Develodesign\Punchout\Service;
             return $this->customerSession;
         }
 
+        public function createOCISessionData(array $params)
+        {
+            $this->customerSession->setPunchoutType('oci')
+                ->setHookUrl($params['hook_url'])
+                ->setTarget($params['~target'])
+                ->setOkCode($params['~okcode'])
+                ->setCaller($params['~caller'])
+                ->setOciVersion($params['oci_version']);
+
+            return $this->getCustomerSession();
+        }
+
         public function getPunchoutType(): string
         {
             return $this->customerSession->getPunchoutType();
