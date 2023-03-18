@@ -69,7 +69,7 @@
                 $sharedSecret = $parsedXMLData->Header->Sender->Credential->SharedSecret;
                 $dunsIdentity = $parsedXMLData->Header->Sender->Credential->Identity;
                 $aribaNetworkId = $this->cxmlService->getAribaNetworkId();
-                /** @var PunchoutGroup $matchingPunchoutGroup */
+               
                 $matchingPunchoutGroup = $this->punchoutGroupService->loadPunchOutGroupByCredentials(sharedSecret: $sharedSecret,
                     dunsIdentity: $dunsIdentity, aribaNetworkId: $aribaNetworkId);
                 

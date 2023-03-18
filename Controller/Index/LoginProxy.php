@@ -79,7 +79,7 @@ namespace Develodesign\Punchout\Controller\Index;
                 }
                 $matchingCustomer = $this->setupRequestService->getProxyUser(token: $queryParam->token,
                     userId: $queryParam->user_id);
-                if (!$matchingCustomer) {
+                if (null === $matchingCustomer) {
                     return $this->jsonResponse->sendResponse(
                         404,
                         sprintf('No matching customer found with the provided id %d', $queryParam->user_id)

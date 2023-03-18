@@ -135,11 +135,15 @@ namespace Develodesign\Punchout\Service;
             return 'develo_punchout/index/loginproxy';
         }
 
-        public function getProxyUser(string $token, int $userId): DataObject
+        public function getProxyUser(string $token, int $userId): ?DataObject
         {
-            return $this->collection->addFieldToFilter('access_token', $token)
+            $punchoutSetup = $this->collection->addFieldToFilter('access_token', $token)
                 ->addFieldToFilter('customer_id', $userId)
                 ->getFirstItem();
+            if (!($punchoutSetup->count() > 0)) {
+                return null;
+            }
+            return $punchoutSetup->getFirstItem();
         }
 
         public function getRefreshedToken($userId, $now)
