@@ -40,7 +40,7 @@ class Index extends \Magento\Backend\App\Action
     public function execute()
     {
         $resultPage = $this->resultPageFactory->create();
-        $resultPage->getConfig()->getTitle()->prepend(__("Punchout Group"));
+        $resultPage->getConfig()->getTitle()->prepend(__("Punchout Groups"));
         return $resultPage;
     }
 }
