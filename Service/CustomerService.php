@@ -99,7 +99,7 @@ namespace Develodesign\Punchout\Service;
         /**
          * @throws AlreadyExistsException
          */
-        public function createCustomerAddress(Customer $customer, PunchoutGroup $punchoutGroup): void
+        public function createCustomerAddress(Customer $customer, DataObject $punchoutGroup): void
         {
             $customerAddress = $this->addressFactory->create();
             $customerAddress->setCustomerId($customer->getId())
@@ -117,7 +117,7 @@ namespace Develodesign\Punchout\Service;
             $this->addressResource->save($customerAddress);
         }
 
-        public function prepareCustomerData(PunchoutGroup $matchingPunchoutGroup, $email, $nameData): DataObject
+        public function prepareCustomerData(DataObject $matchingPunchoutGroup, $email, $nameData): DataObject
         {
             return new DataObject(
                 [
@@ -136,7 +136,7 @@ namespace Develodesign\Punchout\Service;
          * @throws NoSuchEntityException
          * @throws LocalizedException
          */
-        public function isActiveProxyUser(int $userId)
+        public function isActiveProxyUser(int $userId): bool
         {
             $proxyUser = $this->customerCollection->create()
                 ->addFieldToFilter('entity_id', $userId)
