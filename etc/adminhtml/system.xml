@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="develodesign" translate="label" sortOrder="100">
+            <label>Punchout Settings</label>
+        </tab>
+        <section id="develodesign_punchout" translate="label" sortOrder="130" showInDefault="1" showInWebsite="1"
+                 showInStore="1">
+            <label>Punchout</label>
+            <tab>develodesign</tab>
+            <resource>Develodesign_Punchout::punchout_config</resource>
+            <group id="defaults" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1"
+                   showInStore="1">
+                <label>Defaults</label>
+                <field id="punchout_toggle" translate="label comment" type="select" sortOrder="10" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Punchout System Status</label>
+                    <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
+                </field>
+                <field id="uom" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1"
+                       showInStore="1">
+                    <label>Default Unit of Measure (UOM)</label>
+                    <comment>This is your default unit of measure for an item sale, such as EA (Each).</comment>
+                </field>
+                <field id="self_dun_identity" translate="label comment" type="text" sortOrder="21" showInDefault="1" showInWebsite="1"
+                       showInStore="1">
+                    <label>Identity (DUNS)</label>
+                    <comment>This is our domain identifier (DUN/Network ID) </comment>
+                </field>
+            </group>
+            <group id="display" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" >
+                <label>Display Settings</label>
+                <field id="transfer_button_label" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Transfer Button Label</label>
+                </field>
+            </group>
+            <group id="customer" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1"
+                   showInStore="1">
+                <label>Customer Behaviors</label>
+                <field id="auto_create_user" translate="label" type="select" sortOrder="20" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Auto-Create User</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
