@@ -101,4 +101,15 @@ namespace Develodesign\Punchout\Service;
             }
             return $punchoutGroup->getFirstItem();
         }
+        
+        public function loadPunchOutGroupById(int $punchoutGroupId)
+        {
+            $punchoutGroup = $this->punchoutGroupCollection->create()
+                ->addFieldToFilter('punchoutgroup_id', ['eq' => $punchoutGroupId]);
+            if($punchoutGroup->count() > 0){
+                return $punchoutGroup->getFirstItem();
+            }
+            return null;
+            
+        }
     }

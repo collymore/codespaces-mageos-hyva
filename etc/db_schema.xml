@@ -36,7 +36,7 @@
 		</index>
 	</table>
 	<table name="customer_entity">
-		<column name="punchout_group" nullable="true" xsi:type="int"  length="null" unsigned="true" identity="false" comment="Punchout Group Identifier"/>
+		<column name="punchout_group" nullable="true" xsi:type="int" unsigned="true" identity="false" comment="Punchout Group Identifier"/>
 	</table>
 	<table name="develodesign_punchout_punchoutsetuprequest" resource="default" engine="innodb" comment="develodesign_punchout_punchoutsetuprequest Table">
 		<column xsi:type="int" name="setup_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity Id"/>
