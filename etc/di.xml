@@ -19,4 +19,21 @@
 	<preference for="Develodesign\Punchout\Api\PunchoutSetupRequestRepositoryInterface" type="Develodesign\Punchout\Model\PunchoutSetupRequestRepository"/>
 	<preference for="Develodesign\Punchout\Api\Data\PunchoutSetupRequestInterface" type="Develodesign\Punchout\Model\PunchoutSetupRequest"/>
 	<preference for="Develodesign\Punchout\Api\Data\PunchoutSetupRequestSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+
+	<preference for="Develodesign\Punchout\Api\ActivityEventLogRepositoryInterface" type="Develodesign\Punchout\Model\ActivityEventLogRepository"/>
+	<preference for="Develodesign\Punchout\Api\Data\ActivityEventLogInterface" type="Develodesign\Punchout\Model\Data\ActivityEventLog"/>
+	<preference for="Develodesign\Punchout\Api\Data\ActivityEventLogSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+	<virtualType name="Develodesign\Punchout\Model\ResourceModel\ActivityEventLog\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+		<arguments>
+			<argument name="mainTable" xsi:type="string">develodesign_logactivity</argument>
+			<argument name="resourceModel" xsi:type="string">Develodesign\Punchout\Model\ResourceModel\ActivityEventLog\Collection</argument>
+		</arguments>
+	</virtualType>
+	<type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+		<arguments>
+			<argument name="collections" xsi:type="array">
+				<item name="develodesign_punchout_activityeventlog_listing_data_source" xsi:type="string">Develodesign\Punchout\Model\ResourceModel\ActivityEventLog\Grid\Collection</item>
+			</argument>
+		</arguments>
+	</type>
 </config>

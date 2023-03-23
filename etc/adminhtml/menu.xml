@@ -3,5 +3,6 @@
 	<menu>
 		<add id="Develodesign::top_level" title="DeveloDesign" module="Develodesign_Punchout" sortOrder="9999" resource="Magento_Backend::content"/>
 		<add id="Develodesign_Punchout::develodesign_punchout_punchoutgroup" title="Punchout Group" module="Develodesign_Punchout" sortOrder="9999" resource="Magento_Backend::content" parent="Develodesign::top_level" action="develodesign_punchout/punchoutgroup/index"/>
+		<add id="Develodesign_Punchout:::develodesign_punchout_activityeventlog" title="Activity Event Log" module="Develodesign_Punchout" sortOrder="999999" resource="Magento_Backend::content" parent="Develodesign::top_level" action="develodesign_punchout/activityeventlog/index"/>
 	</menu>
 </config>

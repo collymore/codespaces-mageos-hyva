@@ -56,4 +56,21 @@
 		<column name="po_number" nullable="true" xsi:type="varchar" comment="PO number of the order is raised" length="255"/>
 		<column name="order_status" nullable="true" xsi:type="varchar" comment="Order status of the order raised" length="255"/>
 	</table>
+	<table name="develodesign_logactivity" resource="default" engine="innodb" comment="A develo activity logs table for events across the platform ">
+		<column xsi:type="smallint" name="log_id" padding="6" unsigned="true" nullable="false" identity="true" comment="Entity Id"/>
+		<constraint xsi:type="primary" referenceId="PRIMARY">
+			<column name="log_id"/>
+		</constraint>
+		<column name="event_type" nullable="true" xsi:type="varchar" length="255" comment="Event type"/>
+		<column name="action" nullable="true" xsi:type="varchar" length="255" comment="Action performed by the user"/>
+		<column name="user_id" nullable="true" xsi:type="int" comment="User performing the action"/>
+		<column name="punchoutgroup_id" nullable="true" xsi:type="int" comment="The Punchout group the user performing the action belongs to"/>
+		<column name="info" nullable="true" xsi:type="text" comment="Data generated during event"/>
+		<column name="error_message" nullable="true" xsi:type="text" comment="Error generated during event"/>
+		<column xsi:type="datetime" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Commodity record created at"/>
+		<column xsi:type="datetime" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Commodity record updated at"/>
+		<index referenceId="DEVELODESIGN_LOGACTIVITY_USER_ID" indexType="btree">
+			<column name="user_id"/>
+		</index>
+	</table>
 </schema>

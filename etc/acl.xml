@@ -9,6 +9,12 @@
 					<resource id="Develodesign_Punchout::PunchoutGroup_update" title="Update PunchoutGroup" sortOrder="30"/>
 					<resource id="Develodesign_Punchout::PunchoutGroup_view" title="View PunchoutGroup" sortOrder="40"/>
 				</resource>
+				<resource id="Develodesign_Punchout::ActivityEventLog" title="ActivityEventLog" sortOrder="60">
+					<resource id="Develodesign_Punchout::ActivityEventLog_save" title="Save ActivityEventLog" sortOrder="70"/>
+					<resource id="Develodesign_Punchout::ActivityEventLog_delete" title="Delete ActivityEventLog" sortOrder="80"/>
+					<resource id="Develodesign_Punchout::ActivityEventLog_update" title="Update ActivityEventLog" sortOrder="90"/>
+					<resource id="Develodesign_Punchout::ActivityEventLog_view" title="View ActivityEventLog" sortOrder="100"/>
+				</resource>
 			</resource>
 		</resources>
 	</acl>
