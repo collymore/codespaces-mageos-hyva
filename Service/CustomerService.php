@@ -149,4 +149,12 @@ namespace Develodesign\Punchout\Service;
         {
             return uniqid('M181#Ha73y' . rand(), false);
         }
+        
+        public function getPunchoutGroupId(int $customerId)
+        {
+            $customer = $this->customerCollection->create()
+                ->addFieldToFilter('entity_id', $customerId)
+                ->getFirstItem();
+            return $customer->getPunchoutGroup();
+        }
     }

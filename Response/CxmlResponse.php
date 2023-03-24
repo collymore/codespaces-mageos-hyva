@@ -71,4 +71,45 @@ namespace Develodesign\Punchout\Response;
         {
             return (new \DateTime('now', new \DateTimeZone('UTC')))->format('Y-m-d\TH:i:s');
         }
+    
+        public function getPunchoutOrderMessage(array $cxmlSessionData, array $punchoutOrder): string
+        {
+            return sprintf(
+                '<?xml version="1.0" encoding="UTF-8"?>
+                    <!DOCTYPE cXML SYSTEM "http://xml.cxml.org/schemas/cXML/1.2.055/cXML.dtd">
+                    <cXML version="1.2.055" payloadID="%s" timestamp="%s" xml:lang="en">
+                        <Header>
+                            <From>
+                                <Credential domain="DUNS">
+                                    <Identity></Identity>
+                                </Credential>
+                            </From>
+                            <To>
+                                <Credential domain="DUNS">
+                                    <Identity>%s</Identity>
+                                </Credential>
+                            </To>
+                            <Sender>
+                                <Credential domain="DUNS">
+                                    <Identity>%s</Identity>
+                                </Credential>
+                                <UserAgent>Store</UserAgent>
+                            </Sender>
+                        </Header>
+                        <Message deploymentMode="production">
+                            <PunchOutOrderMessage>
+                                <BuyerCookie>%s</BuyerCookie>
+                                <PunchOutOrderMessageHeader operationAllowed="create">
+                                    <Total>
+                                        <Money currency="GBP">%s</Money>
+                                    </Total>
+                                </PunchOutOrderMessageHeader>',
+                $cxmlSessionData['payloadId'],
+                $this->getTimeStamp(),
+                $punchoutOrder['punchoutgroup_duns'] ?? $cxmlSessionData['sender_identity'],
+                $cxmlSessionData['sender_identity'],
+                $cxmlSessionData['buyer_cookie'],
+                $punchoutOrder['grand_total']
+            );
+        }
     }

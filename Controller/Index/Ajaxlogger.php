@@ -38,7 +38,7 @@ namespace Develodesign\Punchout\Controller\Index;
         public function __construct(
             Context $context,
             JsonFactory $jsonFactory,
-            \Develodesign\LogActivity\Model\ActivityEventLogFactory $activityEventLogFactory,
+            \Develodesign\Punchout\Model\ActivityEventLogFactory $activityEventLogFactory,
             CustomerSession $customerSession,
             PunchoutGroupService $punchoutGroupService
         ) {
@@ -57,7 +57,6 @@ namespace Develodesign\Punchout\Controller\Index;
             $resultJson = $this->jsonFactory->create();
             $requestPostData = $this->getRequest()->getPost()->toArray();
             $response['error'] = true;
-            /** @var \Develodesign\Punchout\Model\ActivityEventLog $activityEventLog */
             $activityEventLog = $this->activityEventLogFactory->create();
 
             try {

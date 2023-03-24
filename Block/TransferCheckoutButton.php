@@ -2,24 +2,68 @@
 
 namespace Develodesign\Punchout\Block;
 
+    use Develodesign\Punchout\Helper\PunchoutConfigHelper;
+    use Develodesign\Punchout\Response\CxmlResponse;
+    use Develodesign\Punchout\Service\CustomerService;
+    use Develodesign\Punchout\Service\CxmlService;
+    use Develodesign\Punchout\Service\PunchoutGroupService;
     use Develodesign\Punchout\Service\SessionService;
     use Magento\Checkout\Block\Onepage\Link;
     use Magento\Checkout\Helper\Data;
+    use Magento\Checkout\Model\Cart;
     use Magento\Checkout\Model\Session;
     use Magento\Framework\View\Element\Template\Context;
 
     class TransferCheckoutButton extends Link
     {
+        /**
+         * @var SessionService
+         */
         protected $sessionService;
+    
+        /**
+         * @var PunchoutConfigHelper
+         */
+        protected $punchoutConfigHelper;
+    
+        /**
+         * @var Cart
+         */
+        protected $cart;
+    
+        /**
+         * @var PunchoutGroupService
+         */
+        protected $punchoutGroupService;
+    
+        /**
+         * @var CxmlResponse
+         */
+        protected $cxmlResponse;
+        protected $cxmlService;
+        protected $customerService;
+    
         public function __construct(
             Context $context,
             Session $checkoutSession,
             Data $checkoutHelper,
             SessionService $sessionService,
+            PunchoutConfigHelper $punchoutConfigHelper,
+            Cart $cart,
+            PunchoutGroupService $punchoutGroupService,
+            CxmlResponse $cxmlResponse,
+            CxmlService $cxmlService,
+            CustomerService $customerService,
             array $data = []
             
         ) {
             $this->sessionService = $sessionService;
+            $this->punchoutConfigHelper = $punchoutConfigHelper;
+            $this->cart = $cart;
+            $this->punchoutGroupService = $punchoutGroupService;
+            $this->cxmlResponse = $cxmlResponse;
+            $this->cxmlService = $cxmlService;
+            $this->customerService = $customerService;
             parent::__construct($context, $checkoutSession, $checkoutHelper, $data);
         }
 
@@ -48,30 +92,46 @@ namespace Develodesign\Punchout\Block;
         public function generateCXMLCheckoutForm()
         {
             $cxmlSessionData  = $this->sessionService->getCXMLSessionData();
-            
-            $defaultConfigGroupArry = $this->_helperData->getDefaultGroupValues();
-            $customerConfigGroupArry = $this->_helperData->getCustomerGroupValues();
-            $quote = $this->_cart->getQuote();
-            $company = $this->_companyHelperData->getCompanyByCustomerId((int)$this->_punchoutSessionCustomerManager->getCustomerId());
-            $this->company = $this->_companyHelperData->getCompanyByCustomerId((int)$this->_punchoutSessionCustomerManager->getCustomerId());
-        
-            $punchoutOrderArry = [
+            $uom = $this->punchoutConfigHelper->getConfigUOM();
+            $quote = $this->cart->getQuote();
+            $customer = $this->sessionService->getCustomerSession();
+            $punchoutGroupId = $this->customerService->getPunchoutGroupId($customer->getCustomerId());
+            $punchoutGroup = $this->punchoutGroupService->loadPunchOutGroupById($punchoutGroupId);
+            $punchoutOrder = [
                 'grand_total'   => $quote->getGrandTotal(),
-                'company_duns'   => $company->getDunsIdentity()
+                'punchoutgroup_duns'   => $punchoutGroup->getDunsIdentity()
             ];
-        
-            if($this->company->getId() == '137' || $this->company->getId() == '288'|| $this->company->getId() == '543'){
-                $punchoutOrderArry['tfl_version'] = '1.2.055';
-            }
-            $xml = $this->_setUpRequestHelper->getCXMLPunchOutOrderMessage($cxmlSessionDataArry, $defaultConfigGroupArry, $customerConfigGroupArry, $punchoutOrderArry);
-            $xml .= $this->getCXMLItems($quote->getAllItems());
+            $xml = $this->cxmlResponse->getPunchoutOrderMessage($cxmlSessionData, $punchoutOrder);
+            $xml .= $this->cxmlService->getCXMLItems($quote->getAllItems(),$uom);
             $xml .= '</PunchOutOrderMessage>
                             </Message>
                         </cXML>';
-            $form = sprintf("<form id=\"punchout_cxml_form\"  action=\"%s\" method=\"post\" enctype=\"application/x-www-form-urlencoded\" >
+    
+            return sprintf("<form id=\"punchout_cxml_form\"  action=\"%s\" method=\"post\" enctype=\"application/x-www-form-urlencoded\" >
                         <input name=\"cXML-urlencoded\" id=\"urlencoded_bottom\" type=\"hidden\" value= '%s'>
-                    </form>", $cxmlSessionDataArry['return_url'], $xml);
+                    </form>", $cxmlSessionData['return_url'], $xml);
+            
+        }
+    
+        public function generateCXMLSubmitButton()
+        {
+            $form = '#punchout_cxml_form';
+            $modal = '#punchout-modal';
+            $label = 'Transfer Basket Items With Punchout';
         
-            return $form;
+            $html = '<button class=" button btn-proceed-checkout btn-checkout" id="punchout-button-submit" type="button">
+                                <span>
+                                    <span>' . $label . '</span>
+                                </span>
+                    </button>
+                    <script>
+                    require([\'jquery\', \'jquery/ui\'], function($){
+                      $( "#punchout-button-submit" ).click(function() {
+                            $("' . $modal . '").show();
+                            $("' . $form . '").submit();
+                        });
+                    });
+                    </script>';
+            return $html;
         }
     }
