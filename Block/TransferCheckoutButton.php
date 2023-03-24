@@ -79,7 +79,7 @@ namespace Develodesign\Punchout\Block;
              */
             switch ($this->sessionService->getPunchoutType()) {
                 case 'oci':
-                    $this->setTemplate('Develodesign_Punchout::onepage/oci_link.phtml');
+                    $this->setTemplate('Develodesign_Punchout::onepage/oci.phtml');
                     break;
                 case 'cxml':
                     $this->setTemplate('Develodesign_Punchout::onepage/cxml.phtml');

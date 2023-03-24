@@ -2,3 +2,46 @@
 <?php
     echo $this->generateOciCheckoutForm();
     echo $this->generateOCISubmitButton();
+?>
+
+<script type="text/javascript">
+    require(["jquery", 'mage/url'], function($,urlBuilder){
+        function logOutGoingXMLData(payload)
+        {
+            $.ajax({
+                method: 'POST',
+                url: urlBuilder.build('develo_punchout/index/ajaxlogger'),
+                data: payload
+            }).done(function (response) {
+                if(response && response['error'] === false){
+                    console.log(response);
+
+                }
+            });
+        }
+
+        $(document).ready(function() {
+
+            $('#punchout_oci_form').submit(function() {
+
+                let fields = $(this).serializeArray();
+                /**
+                 * Log Outgoing CXML data
+                 */
+                let payload = {
+                    info: JSON.stringify(fields),
+                    event_type:'OCI Cart Page Punchout',
+                    action: 'Develodesign/Punchout/Block/TransferCheckoutButton'
+
+                };
+                logOutGoingXMLData(payload);
+            });
+
+
+
+
+        });
+
+
+    });
+</script>

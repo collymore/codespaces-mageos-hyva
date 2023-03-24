@@ -81,7 +81,8 @@
         private function createSharedOciFields($i, $item): string
         {
             $leadtime = $item->getLeadTime();
-            $desc = htmlentities($item->getDescription());
+            $desc = $item->getDescription() ?? '';
+            $desc = htmlentities($desc);
             return sprintf(
                 '<input type="hidden" name="NEW_ITEM-DESCRIPTION[%d]"  value="%s">
                                         <input type="hidden" name="NEW_ITEM-UNIT[%d]"  value="EA">
@@ -140,7 +141,7 @@
          */
         private function getUnspscCode($sku): string
         {
-            return $this->productRepository->get($sku)->getUnspsc();
+            return $this->productRepository->get($sku)->getUnspsc() ?? '';
         }
         
         
