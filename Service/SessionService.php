@@ -65,6 +65,18 @@ namespace Develodesign\Punchout\Service;
         {
             return $this->customerSession;
         }
+        
+        public function getCXMLSessionData()
+        {
+            $customerSession = $this->getCustomerSession();
+            return [
+                'payloadId' => $customerSession->getPayloadId(),
+                'sender_identity' => $customerSession->getSenderIdentity(),
+                'return_url' => $customerSession->getReturnUrl(),
+                'buyer_cookie' => $customerSession->getBuyerCookie()
+            ];
+         
+        }
 
 
         /**

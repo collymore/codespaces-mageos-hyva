@@ -138,8 +138,7 @@ namespace Develodesign\Punchout\Service;
         public function getProxyUser(string $token, int $userId): ?DataObject
         {
             $punchoutSetup = $this->collection->addFieldToFilter('access_token', $token)
-                ->addFieldToFilter('customer_id', $userId)
-                ->getFirstItem();
+                ->addFieldToFilter('customer_id', $userId);
             if (!($punchoutSetup->count() > 0)) {
                 return null;
             }

@@ -1,11 +1,17 @@
+<div class="modal" id="punchout-modal">
+    <div class="modal-content">
+    </div>
+</div>
 
-
-<?php echo $this->generateCXMLCheckoutForm();
-    echo $this->generateCXMLSubmitButton(); ?>
-
+<button class=" button btn-proceed-checkout btn-checkout" id="punchout-button-submit" type="button">
+<span>
+<span>Transfer Basket Items With Punchout</span>
+</span>
+</button>
 
 <script type="text/javascript">
-    require(["jquery", 'mage/url'], function($,urlBuilder){
+    require(["jquery", 'mage/url', 'jquery/ui'], function($,urlBuilder){
+
         function logOutGoingXMLData(payload)
         {
             $.ajax({
@@ -20,10 +26,9 @@
             });
         }
 
-        $(document).ready(function() {
-
-            $('#punchout_cxml_form').submit(function() {
-
+        $( "#punchout-button-submit" ).click(function() {
+            $('#punchout-modal').show();
+            $('#punchout_cxml_form').submit(function () {
                 let $xmlStr =  $('#urlencoded_bottom').val();
                 /**
                  * Log Outgoing CXML data
@@ -36,11 +41,8 @@
                 };
                 logOutGoingXMLData(payload);
             });
-
-
-
-
         });
+   
 
 
     });
