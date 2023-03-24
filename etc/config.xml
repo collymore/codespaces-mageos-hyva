@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+     <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+        <default>
+            <develodesign_punchout>
+                <defaults>
+                    <punchout_toggle>1</punchout_toggle>
+                    <uom>EA</uom>
+                </defaults>
+                <display>
+                    <transfer_button_label><![CDATA[Return Punchout Cart]]></transfer_button_label>
+                </display>
+                 <customer>
+                    <auto_create_user>1</auto_create_user>
+                </customer>
+            </develodesign_punchout>
+        </default>
+    </config>

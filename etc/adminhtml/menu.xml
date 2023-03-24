@@ -1,8 +1,9 @@
 <?xml version="1.0" ?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
 	<menu>
+		<add id="Develodesign_Punchout::develodesign_punchout_punchoutgroup" title="Punchout Groups" module="Develodesign_Punchout" sortOrder="9999" resource="Magento_Backend::content" parent="Magento_Customer::customer" action="develodesign_punchout/punchoutgroup/index"/>
 		<add id="Develodesign::top_level" title="DeveloDesign" module="Develodesign_Punchout" sortOrder="9999" resource="Magento_Backend::content"/>
-		<add id="Develodesign_Punchout::develodesign_punchout_punchoutgroup" title="Punchout Group" module="Develodesign_Punchout" sortOrder="9999" resource="Magento_Backend::content" parent="Develodesign::top_level" action="develodesign_punchout/punchoutgroup/index"/>
 		<add id="Develodesign_Punchout:::develodesign_punchout_activityeventlog" title="Activity Event Log" module="Develodesign_Punchout" sortOrder="999999" resource="Magento_Backend::content" parent="Develodesign::top_level" action="develodesign_punchout/activityeventlog/index"/>
+
 	</menu>
 </config>

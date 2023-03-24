@@ -48,7 +48,7 @@
 			</argument>
 			<settings>
 				<dataType>text</dataType>
-				<label translate="true">Name</label>
+				<label translate="true">Group Name</label>
 				<dataScope>group_name</dataScope>
 				<validation>
 					<rule name="required-entry" xsi:type="boolean">true</rule>
@@ -72,30 +72,14 @@
 			</argument>
 			<settings>
 				<dataType>text</dataType>
-				<label translate="true">Status</label>
+				<label translate="true">Enabled</label>
 				<dataScope>status</dataScope>
 				<validation>
 					<rule name="required-entry" xsi:type="boolean">true</rule>
 				</validation>
 			</settings>
 		</field>
-		<field name="group_email" formElement="input" sortOrder="30">
-			<argument name="data" xsi:type="array">
-				<item name="config" xsi:type="array">
-					<item name="source" xsi:type="string">PunchoutGroup</item>
-				</item>
-			</argument>
-			<settings>
-				<dataType>text</dataType>
-				<label translate="true">Email</label>
-				<dataScope>group_email</dataScope>
-				<validation>
-					<rule name="required-entry" xsi:type="boolean">true</rule>
-					<rule name="validate-email" xsi:type="boolean">true</rule>
-				</validation>
-			</settings>
-		</field>
-		<field name="is_parent" formElement="checkbox" sortOrder="35">
+		<!--<field name="is_parent" formElement="checkbox" sortOrder="95">
 			<argument name="data" xsi:type="array">
 				<item name="config" xsi:type="array">
 					<item name="source" xsi:type="string">PunchoutGroup</item>
@@ -116,96 +100,6 @@
 				<dataScope>is_parent</dataScope>
 				<validation>
 					<rule name="required-entry" xsi:type="boolean">true</rule>
-				</validation>
-			</settings>
-		</field>
-		<field name="shared_secret" formElement="input" sortOrder="40">
-			<argument name="data" xsi:type="array">
-				<item name="config" xsi:type="array">
-					<item name="source" xsi:type="string">PunchoutGroup</item>
-				</item>
-			</argument>
-			<settings>
-				<dataType>text</dataType>
-				<label translate="true">Shared Secret</label>
-				<dataScope>shared_secret</dataScope>
-				<validation>
-					<rule name="required-entry" xsi:type="boolean">false</rule>
-				</validation>
-			</settings>
-		</field>
-		<field name="duns_identity" formElement="input" sortOrder="50">
-			<argument name="data" xsi:type="array">
-				<item name="config" xsi:type="array">
-					<item name="source" xsi:type="string">PunchoutGroup</item>
-				</item>
-			</argument>
-			<settings>
-				<dataType>text</dataType>
-				<label translate="true">DUNS Identity</label>
-				<dataScope>duns_identity</dataScope>
-				<validation>
-					<rule name="required-entry" xsi:type="boolean">false</rule>
-				</validation>
-			</settings>
-		</field>
-		<field name="ariba_network_id" formElement="input" sortOrder="60">
-			<argument name="data" xsi:type="array">
-				<item name="config" xsi:type="array">
-					<item name="source" xsi:type="string">PunchoutGroup</item>
-				</item>
-			</argument>
-			<settings>
-				<dataType>text</dataType>
-				<label translate="true">Ariba Network ID</label>
-				<dataScope>ariba_network_id</dataScope>
-				<validation>
-					<rule name="required-entry" xsi:type="boolean">false</rule>
-				</validation>
-			</settings>
-		</field>
-		<field name="business_unit" formElement="input" sortOrder="70">
-			<argument name="data" xsi:type="array">
-				<item name="config" xsi:type="array">
-					<item name="source" xsi:type="string">PunchoutGroup</item>
-				</item>
-			</argument>
-			<settings>
-				<dataType>text</dataType>
-				<label translate="true">Business Unit</label>
-				<dataScope>business_unit</dataScope>
-				<validation>
-					<rule name="required-entry" xsi:type="boolean">false</rule>
-				</validation>
-			</settings>
-		</field>
-		<field name="oci_username" formElement="input" sortOrder="80">
-			<argument name="data" xsi:type="array">
-				<item name="config" xsi:type="array">
-					<item name="source" xsi:type="string">PunchoutGroup</item>
-				</item>
-			</argument>
-			<settings>
-				<dataType>text</dataType>
-				<label translate="true">OCI Username</label>
-				<dataScope>oci_username</dataScope>
-				<validation>
-					<rule name="required-entry" xsi:type="boolean">false</rule>
-				</validation>
-			</settings>
-		</field>
-		<field name="oci_password" formElement="input" sortOrder="90">
-			<argument name="data" xsi:type="array">
-				<item name="config" xsi:type="array">
-					<item name="source" xsi:type="string">PunchoutGroup</item>
-				</item>
-			</argument>
-			<settings>
-				<dataType>text</dataType>
-				<label translate="true">OCI Password</label>
-				<dataScope>oci_password</dataScope>
-				<validation>
-					<rule name="required-entry" xsi:type="boolean">false</rule>
 				</validation>
 			</settings>
 		</field>
@@ -230,8 +124,22 @@
 					</settings>
 				</select>
 			</formElements>
-		</field>
-		<field name="magento_customer_group" formElement="select" sortOrder="105">
+		</field>-->	
+	</fieldset>
+	
+	<fieldset name="default_customer">
+        <settings>
+            <label translate="true">Group Defaults</label>
+        </settings>
+		<fieldset name="default_customer_group_settings">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">Customer Settings</item>
+                    <item name="collapsible" xsi:type="boolean">true</item>
+                    <item name="opened" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+			<field name="magento_customer_group" formElement="select" sortOrder="105">
 			<argument name="data" xsi:type="array">
 				<item name="config" xsi:type="array">
 					<item name="source" xsi:type="string">PunchoutGroup</item>
@@ -254,7 +162,33 @@
 			</select>
 		</formElements>
 		</field>
-		<field name="street" formElement="input" sortOrder="110">
+		<field name="group_email" formElement="input" sortOrder="30">
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="source" xsi:type="string">PunchoutGroup</item>
+				</item>
+			</argument>
+			<settings>
+				<dataType>text</dataType>
+				<label translate="true">Default Email Domain</label>
+				 <notice translate="true">If an email isn't found in the incoming request, a customer will be created with a random email with this domain.</notice>
+				<dataScope>group_email</dataScope>
+				<validation>
+					<rule name="required-entry" xsi:type="boolean">true</rule>
+				</validation>
+			</settings>
+		</field>
+        </fieldset>
+
+        <fieldset name="default_customer_group">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">Customer Address</item>
+                    <item name="collapsible" xsi:type="boolean">true</item>
+                    <item name="opened" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+			<field name="street" formElement="input" sortOrder="110">
 			<argument name="data" xsi:type="array">
 				<item name="config" xsi:type="array">
 					<item name="source" xsi:type="string">PunchoutGroup</item>
@@ -349,5 +283,126 @@
 				</validation>
 			</settings>
 		</field>
-	</fieldset>
+        </fieldset>
+    </fieldset>
+
+	 <fieldset name="cxml">
+        <settings>
+            <label translate="true">CXML</label>
+        </settings>
+        <fieldset name="cxml_group">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">Credentials</item>
+                    <item name="collapsible" xsi:type="boolean">true</item>
+                    <item name="opened" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+        		<field name="shared_secret" formElement="input" sortOrder="40">
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="source" xsi:type="string">PunchoutGroup</item>
+				</item>
+			</argument>
+			<settings>
+				<dataType>text</dataType>
+				<label translate="true">Shared Secret</label>
+				<dataScope>shared_secret</dataScope>
+				<validation>
+					<rule name="required-entry" xsi:type="boolean">false</rule>
+				</validation>
+			</settings>
+		</field>
+		<field name="duns_identity" formElement="input" sortOrder="50">
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="source" xsi:type="string">PunchoutGroup</item>
+				</item>
+			</argument>
+			<settings>
+				<dataType>text</dataType>
+				<label translate="true">DUNS Identity</label>
+				<dataScope>duns_identity</dataScope>
+				<validation>
+					<rule name="required-entry" xsi:type="boolean">false</rule>
+				</validation>
+			</settings>
+		</field>
+		<field name="ariba_network_id" formElement="input" sortOrder="60">
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="source" xsi:type="string">PunchoutGroup</item>
+				</item>
+			</argument>
+			<settings>
+				<dataType>text</dataType>
+				<label translate="true">Ariba Network ID</label>
+				<dataScope>ariba_network_id</dataScope>
+				<validation>
+					<rule name="required-entry" xsi:type="boolean">false</rule>
+				</validation>
+			</settings>
+		</field>
+				<field name="business_unit" formElement="input" sortOrder="70">
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="source" xsi:type="string">PunchoutGroup</item>
+				</item>
+			</argument>
+			<settings>
+				<dataType>text</dataType>
+				<label translate="true">Business Unit</label>
+				<dataScope>business_unit</dataScope>
+				<validation>
+					<rule name="required-entry" xsi:type="boolean">false</rule>
+				</validation>
+			</settings>
+		</field>
+        </fieldset>
+    </fieldset>
+
+	 <fieldset name="oci">
+        <settings>
+            <label translate="true">OCI</label>
+        </settings>
+        <fieldset name="oci_group">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">Credentials</item>
+                    <item name="collapsible" xsi:type="boolean">true</item>
+                    <item name="opened" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+           <field name="oci_username" formElement="input" sortOrder="80">
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="source" xsi:type="string">PunchoutGroup</item>
+				</item>
+			</argument>
+			<settings>
+				<dataType>text</dataType>
+				<label translate="true">OCI Username</label>
+				<dataScope>oci_username</dataScope>
+				<validation>
+					<rule name="required-entry" xsi:type="boolean">false</rule>
+				</validation>
+			</settings>
+		</field>
+		<field name="oci_password" formElement="input" sortOrder="90">
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="source" xsi:type="string">PunchoutGroup</item>
+				</item>
+			</argument>
+			<settings>
+				<dataType>text</dataType>
+				<label translate="true">OCI Password</label>
+				<dataScope>oci_password</dataScope>
+				<validation>
+					<rule name="required-entry" xsi:type="boolean">false</rule>
+				</validation>
+			</settings>
+		</field>
+        </fieldset>
+    </fieldset>
 </form>
