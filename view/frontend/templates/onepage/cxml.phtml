@@ -1,0 +1,47 @@
+
+
+<?php echo $this->generateCXMLCheckoutForm();
+    echo $this->generateCXMLSubmitButton(); ?>
+
+
+<script type="text/javascript">
+    require(["jquery", 'mage/url'], function($,urlBuilder){
+        function logOutGoingXMLData(payload)
+        {
+            $.ajax({
+                method: 'POST',
+                url: urlBuilder.build('/develodesign_punchout/index/ajaxlogger'),
+                data: payload
+            }).done(function (response) {
+                if(response && response['error'] === false){
+                    console.log(response);
+
+                }
+            });
+        }
+
+        $(document).ready(function() {
+
+            $('#punchout_cxml_form').submit(function() {
+
+                let $xmlStr =  $('#urlencoded_bottom').val();
+                /**
+                 * Log Outgoing CXML data
+                 */
+                let payload = {
+                    info: $xmlStr,
+                    event_type:'Cart Page Punchout',
+                    action: 'Develodesign/Punchout/Block/TransferCheckout/Cxml'
+
+                };
+                logOutGoingXMLData(payload);
+            });
+
+
+
+
+        });
+
+
+    });
+</script>
