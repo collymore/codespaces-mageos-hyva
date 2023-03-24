@@ -138,50 +138,5 @@ class CxmlService
         return $data;
     }
     
-    public function getCXMLItems($items, $uom)
-    {
-        $itemCode = '';
-        foreach ($items as $item) {
-            if ($item->getParentItemId()) {
-                continue;
-            }
-            
-            //remove double and single quotes from product names as it's breaking punchout
-            $name = str_replace("'","",$item->getName());
-            $name = str_replace('"',"",$name);
-            
-            
-            $unspsc = 'Unknown';
-            $itemCode .= sprintf(
-                '<ItemIn quantity="%s">
-                        <ItemID>
-                            <SupplierPartID>%s</SupplierPartID>
-                            <SupplierPartAuxiliaryID>%s</SupplierPartAuxiliaryID>
-                        </ItemID>
-                        <ItemDetail>
-                            <UnitPrice>
-                                <Money currency="GBP">%s</Money>
-                            </UnitPrice>
-                            <Description xml:lang="en"><![CDATA[%s]]></Description>
-                            <UnitOfMeasure>%s</UnitOfMeasure>
-                            <Classification domain="UNSPSC">%s</Classification>
-                            <ManufacturerName>%s</ManufacturerName>
-                            
-                          
-                        </ItemDetail>
-                    </ItemIn>',
-                $item->getQty(),
-                $item->getSku(),
-                $item->getId(),
-                $item->getPrice(),
-                $name,
-                $uom,
-                $unspsc,
-                $item->getBrand()
-            );
-        }
-        return $itemCode;
-    }
-    
     
 }

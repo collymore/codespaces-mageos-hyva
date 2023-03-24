@@ -65,20 +65,32 @@ namespace Develodesign\Punchout\Service;
         {
             return $this->customerSession;
         }
-        
-        public function getCXMLSessionData()
+    
+        public function getPunchoutSessionData(string $type): array
         {
+            $sessionData = [];
             $customerSession = $this->getCustomerSession();
-            return [
-                'payloadId' => $customerSession->getPayloadId(),
-                'sender_identity' => $customerSession->getSenderIdentity(),
-                'return_url' => $customerSession->getReturnUrl(),
-                'buyer_cookie' => $customerSession->getBuyerCookie()
-            ];
-         
+            switch ($type) {
+                case 'cxml':
+                    $sessionData = [
+                        'payloadId'       => $customerSession->getPayloadId(),
+                        'sender_identity' => $customerSession->getSenderIdentity(),
+                        'return_url'      => $customerSession->getReturnUrl(),
+                        'buyer_cookie'    => $customerSession->getBuyerCookie()
+                    ];
+                    break;
+                case 'oci':
+                    $sessionData = [
+                        'hook_url' => $customerSession->getHookUrl(),
+                        'target'   => $customerSession->getTarget(),
+                        'caller'   => $customerSession->getCaller()
+                    ];
+            }
+        
+            return $sessionData;
         }
-
-
+        
+        
         /**
          * Clears current user cart session data
          * @return bool

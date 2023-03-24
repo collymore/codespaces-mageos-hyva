@@ -22,6 +22,11 @@ namespace Develodesign\Punchout\Helper;
         {
           return $this->getConfiguredFlag('develodesign_punchout/customer/auto_create_user');
         }
+        
+        public function getConfigTransferButtonLabel()
+        {
+            return $this->getConfiguredValue('develodesign_punchout/display/transfer_button_label');
+        }
     
     
         public function getConfiguredValue($config_path, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT)
