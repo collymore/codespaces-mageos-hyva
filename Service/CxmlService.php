@@ -2,6 +2,7 @@
 
 namespace Develodesign\Punchout\Service;
 
+use Develodesign\Punchout\Exceptions\CxmlDocumentLoadingException;
 use Magento\Framework\Simplexml\Element;
 use RuntimeException;
 
@@ -14,7 +15,7 @@ class CxmlService
         if ($xml === false) {
             libxml_use_internal_errors($libxml);
             throw new RuntimeException(sprintf(
-                "Unable to partse cXML Request %s",
+                "Unable to parse cXML Setup Request %s",
                 trim(libxml_get_last_error()->message)
             ));
         }
@@ -136,6 +137,39 @@ class CxmlService
             $data['last_name'] =  'User';
         }
         return $data;
+    }
+    
+    /**
+     * @throws CxmlDocumentLoadingException
+     */
+    public function parseOrderRequest(string $orderXMLRequest):\SimpleXMLElement
+    {
+        $prev = \libxml_use_internal_errors(true);
+        \libxml_clear_errors();
+        
+        $dom = new \DOMDocument;
+        $dom->loadXML($orderXMLRequest);
+    
+        $errors = \libxml_get_errors();
+        \libxml_use_internal_errors($prev);
+    
+        if (\count($errors) !== 0) {
+            throw new CxmlDocumentLoadingException($errors);
+    
+        }
+        $libxml = libxml_use_internal_errors(true);
+        $isValid = $dom->validate();
+        if(!$isValid){
+            $errors = \libxml_get_errors();
+            \libxml_use_internal_errors($libxml);
+            throw new RuntimeException(sprintf(
+                "validation Error, cXML Order Request: %s",
+                $errors[0]->message
+            ));
+        }
+    
+        return simplexml_import_dom($dom);
+    
     }
     
     
