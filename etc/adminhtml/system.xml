@@ -44,6 +44,35 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
+            <group id="product" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1"
+                   showInStore="1">
+                <label>Product Behaviors</label>
+                <field id="load_non_catalogue" translate="label" type="select" sortOrder="20" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Load Non-Catalog Products</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="non_catalogue_sku" translate="label" type="text" sortOrder="20" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Non-Catalog Product SKU</label>
+                    <comment>This is SKU for identifying and retrieving your non-catalogue products </comment>
+                </field>
+                <field id="customizable_option_sku" translate="label" type="text" sortOrder="30" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Customizable Option SKU Title</label>
+                    <comment>This is the customizable product option SKU identifier/title </comment>
+                </field>
+                <field id="customizable_option_name" translate="label" type="text" sortOrder="40" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Customizable Option Name Title</label>
+                    <comment>This is the customizable product option Name identifier/title </comment>
+                </field>
+                <field id="customizable_option_qty" translate="label" type="text" sortOrder="50" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Customizable Option Quantity Title</label>
+                    <comment>This is the customizable product option Quantity identifier/title </comment>
+                </field>
+            </group>
         </section>
     </system>
 </config>

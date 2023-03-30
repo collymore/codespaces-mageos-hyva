@@ -13,6 +13,9 @@
                  <customer>
                     <auto_create_user>1</auto_create_user>
                 </customer>
+                <product>
+                    <load_non_catalogue>0</load_non_catalogue>
+                </product>
             </develodesign_punchout>
         </default>
     </config>

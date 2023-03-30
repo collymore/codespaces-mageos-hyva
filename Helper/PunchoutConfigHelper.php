@@ -22,10 +22,35 @@ namespace Develodesign\Punchout\Helper;
         {
           return $this->getConfiguredFlag('develodesign_punchout/customer/auto_create_user');
         }
-        
+    
         public function getConfigTransferButtonLabel()
         {
             return $this->getConfiguredValue('develodesign_punchout/display/transfer_button_label');
+        }
+        
+        public function getConfigLoadNonCatalogue()
+        {
+            return $this->getConfiguredFlag('develodesign_punchout/product/load_non_catalogue');
+        }
+        
+        public function getConfigNonCatalogueSKU()
+        {
+            return $this->getConfiguredValue('develodesign_punchout/product/non_catalogue_sku');
+        }
+        
+        public function getConfigSKUTitle()
+        {
+            return $this->getConfiguredValue('develodesign_punchout/product/customizable_option_sku');
+        }
+    
+        public function getConfigNameTitle()
+        {
+            return $this->getConfiguredValue('develodesign_punchout/product/customizable_option_name');
+        }
+    
+        public function getConfigQtyTitle()
+        {
+            return $this->getConfiguredValue('develodesign_punchout/product/customizable_option_qty');
         }
     
     
@@ -34,7 +59,7 @@ namespace Develodesign\Punchout\Helper;
             return $this->scopeConfig->getValue($config_path, $scope);
         }
     
-        public function getConfiguredFlag($config_path, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT)
+        public function getConfiguredFlag($config_path, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT): bool
         {
             return $this->scopeConfig->isSetFlag($config_path, $scope);
         }
