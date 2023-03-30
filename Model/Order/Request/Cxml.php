@@ -219,5 +219,13 @@
             $this->paymentMethod = $paymentMethod;
             return $this->paymentMethod;
         }
+    
+        public function getGrandTotal(): float
+        {
+            if(null === $this->grandTotal){
+                $this->grandTotal = (float) $this->cxml->Request->OrderRequest->OrderRequestHeader->Total->Money;
+            }
+            return $this->grandTotal;
+        }
         
     }

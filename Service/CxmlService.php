@@ -56,7 +56,7 @@ class CxmlService
         return $errors;
     }
 
-    public function getAribaNetworkId(): false|string
+    public function getAribaNetworkId($cxmlData): false|string
     {
         $aribaNetworkId = false;
         if (isset($cxmlData->Header->Sender->Credential['domain']) && stripos(strtolower((string)$cxmlData->Header->Sender->Credential['domain']), 'AribaNetwork') !== false) {
@@ -170,6 +170,84 @@ class CxmlService
     
         return simplexml_import_dom($dom);
     
+    }
+    
+    public function parseAddress($address)
+    {
+        $extAddressId = (string)$address->attributes()->addressID;
+        $deliverName = [];
+        $argsName = (string)$address->Name;
+        if(isset($address->PostalAddress->DeliverTo)){
+            foreach ($address->PostalAddress->DeliverTo as $deliverTo){
+                if (trim((string)$deliverTo) !== '') {
+                    $deliverName[] = (string)$deliverTo;
+                }
+            }
+            if($deliverName){
+                $argsName = implode(',',$deliverName);
+            }
+        }
+        $nameData = $this->getDefaultFirstLastName($argsName);
+        
+        $countryId = (string)$address->PostalAddress->Country->attributes()->isoCountryCode;
+        $region = '';
+       
+        $street = [];
+        foreach ($address->PostalAddress->Street as $line) {
+            if (trim((string)$line) !== '') {
+                $street[] = (string)$line;
+            }
+        }
+        
+        $tel = isset($address->Phone->TelephoneNumber->CountryCode,
+            $address->Phone->TelephoneNumber->AreaOrCityCode,
+            $address->Phone->TelephoneNumber->Number) ? $address->Phone->TelephoneNumber->CountryCode .
+            $address->Phone->TelephoneNumber->AreaOrCityCode .
+            $address->Phone->TelephoneNumber->Number : '0';
+        
+        return array (
+            'ext_address_id' => $extAddressId,
+            'firstname' => $nameData[0],
+            'lastname' => $nameData[1],
+            'company' => (string)$address->Name,
+            'street' => $street,
+            'city' => (string)$address->PostalAddress->City,
+            'postcode' => (string)$address->PostalAddress->PostalCode,
+            'region' => $region,
+            'country_id' => $countryId,
+            'email' => (string)$address->Email,
+            'telephone' => $tel
+        );
+        
+    }
+    
+    private function getDefaultFirstLastName($name): array
+    {
+        $nameArray = array();
+        preg_match('/^(.+) ([^ ]+)$/', $name, $s);
+        if (count($s) > 2) {
+            $nameArray[] = $s[1];
+            $nameArray[] = $s[2];
+        } else {
+            $nameArray[] = $name;
+            $nameArray[] = 'Punchout User';
+        }
+        return $nameArray;
+    }
+    
+    public function getItemOutExtrinsic($extrinsic, $nonDefault = false)
+    {
+        $result = [];
+        foreach ($extrinsic as $ext) {
+            $key = strtolower(trim((string)$ext['name']));
+            $value = (string)$ext;
+            if($nonDefault){
+                $result[$key] = "{$key}: " .$value;
+            }else{
+                $result[$key] = $value;
+            }
+        }
+        return $result;
     }
     
     

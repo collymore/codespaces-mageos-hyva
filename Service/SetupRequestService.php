@@ -59,7 +59,6 @@ namespace Develodesign\Punchout\Service;
                 ->setAccessToken($setupData->getAccessToken())
                 ->setExpiryDate($setupData->getExpiryDate());
             $this->setupRequestResource->save($punchoutSetupModel);
-
             return $punchoutSetupModel;
         }
 
@@ -154,6 +153,44 @@ namespace Develodesign\Punchout\Service;
                 return $punchoutSetupCollection->getFirstItem()->getAccessToken();
             }
             return false;
+        }
+        
+        public function orderAlreadyExists(string $poNumber,int $customerId, $dunsNetwork): bool
+        {
+            $result = $this->collection->addFieldToFilter('po_number', $poNumber)
+            ->addFieldToFilter('customer_id', $customerId)
+            ->addFieldToFilter('sender_identity', $dunsNetwork);
+        
+            if ($result->count() > 0) {
+                throw new \RuntimeException(sprintf('An Order already created for the customer with purchase order number %s',$poNumber));
+            }
+            return false;
+        }
+    
+        public function getOrderSetupRequestData($sourceXml, $customerId,$order): array
+        {
+            return [
+                'customer_id' => $customerId,
+                'payloadId' => (string)$sourceXml['payloadID'],
+                'sender_identity' => (string)$sourceXml->Header->Sender->Credential->Identity,
+                'order_status' => sprintf('OrderId: %s  Status: %s', $order->getIncrementId(), $order->getRealOrderId())
+            ];
+        }
+    
+        /**
+         * @throws AlreadyExistsException
+         */
+        public function createOrderSetUpRequest($arryData): int
+        {
+            $punchoutSetupModel = $this->punchoutSetupRequestFactory->create();
+            $punchoutSetupModel->setCustomerId($arryData['customer_id'])
+                ->setPayloadId($arryData['payloadId'])
+                ->setSenderIdentity($arryData['sender_identity'])
+                ->setRequestType(1)
+                ->setPurchaseOrderNumber($arryData['purchase_order_number'])
+                ->setOrderStatus($arryData['order_status']);
+            $this->setupRequestResource->save($punchoutSetupModel);
+            return (int)$punchoutSetupModel->getSetupId();
         }
 
     }

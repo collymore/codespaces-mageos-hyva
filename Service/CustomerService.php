@@ -3,6 +3,8 @@
 namespace Develodesign\Punchout\Service;
 
     use Develodesign\Punchout\Model\PunchoutGroup;
+    use Magento\Customer\Api\Data\AddressInterface;
+    use Magento\Customer\Api\Data\CustomerInterface;
     use Magento\Customer\Model\AddressFactory;
     use Magento\Customer\Model\Customer;
     use Magento\Customer\Model\CustomerFactory;
@@ -13,6 +15,7 @@ namespace Develodesign\Punchout\Service;
     use Magento\Framework\Exception\AlreadyExistsException;
     use Magento\Framework\Exception\LocalizedException;
     use Magento\Framework\Exception\NoSuchEntityException;
+    use Magento\Store\Api\Data\StoreInterface;
     use Magento\Store\Model\StoreManagerInterface;
 
     class CustomerService
@@ -45,6 +48,8 @@ namespace Develodesign\Punchout\Service;
          * @var CollectionFactory
          */
         private $customerCollection;
+        
+        private $customerRepository;
 
         public function __construct(
             StoreManagerInterface $storeManager,
@@ -52,7 +57,8 @@ namespace Develodesign\Punchout\Service;
             CustomerResource $customerResource,
             AddressFactory $addressFactory,
             AddressResource $addressResource,
-            CollectionFactory $collectionFactory
+            CollectionFactory $collectionFactory,
+            \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
         ) {
             $this->storeManager = $storeManager;
             $this->customerFactory = $customerFactory;
@@ -60,6 +66,16 @@ namespace Develodesign\Punchout\Service;
             $this->addressFactory = $addressFactory;
             $this->addressResource = $addressResource;
             $this->customerCollection = $collectionFactory;
+            $this->customerRepository = $customerRepository;
+        }
+    
+        /**
+         * @throws NoSuchEntityException
+         * @throws LocalizedException
+         */
+        public function getCustomerByEmail($customerEmail): CustomerInterface
+        {
+           return $this->customerRepository->get($customerEmail);
         }
 
         /**
@@ -156,5 +172,62 @@ namespace Develodesign\Punchout\Service;
                 ->addFieldToFilter('entity_id', $customerId)
                 ->getFirstItem();
             return $customer->getPunchoutGroup();
+        }
+    
+        /**
+         * @throws NoSuchEntityException
+         */
+        public function getMainStore(): StoreInterface
+        {
+            return $this->storeManager->getStore();
+        }
+    
+        public function getExistingCustomerAddress($data, CustomerInterface $customer): bool|array
+        {
+            /** @var AddressInterface $address */
+            foreach ($customer->getAddresses() as $address) {
+                $postCode = strtolower(trim($address->getPostcode()));
+                $queryPostCode = strtolower(trim($data['postcode']));
+                $street = strtolower(trim($address->getStreet()[0]));
+                $queryStreet = strtolower(trim($data['street'][0]));
+                $queryName  = strtolower(trim($data['company']));
+                $addressName =  strtolower(trim($address->getFirstname()));
+                $matches = false;
+            
+                if($postCode === $queryPostCode) {
+                    $matches = true;
+                }
+                if($postCode === $queryPostCode && $queryName === $addressName ){
+                    $matches = true;
+                }
+                if($postCode === $queryPostCode && $queryStreet === $addressName ){
+                    $matches = true;
+                }
+                if($postCode === $queryPostCode && $queryStreet === $street ){
+                    $matches = true;
+                }
+            
+                if ($matches) {
+                    $firstName = $customer->getFirstname();
+                    $lastName = $customer->getLastname();
+                    $email = $customer->getEmail();
+    
+                    return [
+                        'ext_address_id' => $address->getId(),
+                        'firstname' => $firstName,
+                        'lastname' => $lastName,
+                        'company' => $address->getCompany(),
+                        'street' => $address->getStreet(),
+                        'city' => $address->getCity(),
+                        'postcode' => $address->getPostcode(),
+                        'region' => ($address->getRegion()) ? $address->getRegion()->getRegion() : '',
+                        'region_id' => $address->getRegionId(),
+                        'country_id' => $address->getCountryId(),
+                        'email' => $email,
+                        'telephone' => $address->getTelephone()
+                    ];
+                }
+            }
+            return false;
         }
     }

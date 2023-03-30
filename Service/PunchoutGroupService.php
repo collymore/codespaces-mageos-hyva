@@ -17,7 +17,7 @@ namespace Develodesign\Punchout\Service;
             $this->punchoutGroupCollection = $punchoutGroupCollection;
         }
     
-        private function loadPunchOutGroupBySecretDuns($sharedSecret,$dunsIdentity): DataObject
+        public function loadPunchOutGroupBySecretDuns($sharedSecret,$dunsIdentity): DataObject
         {
             return $this->punchoutGroupCollection->create()
                 ->addFieldToFilter('shared_secret', ['eq' => $sharedSecret])
@@ -25,17 +25,25 @@ namespace Develodesign\Punchout\Service;
                 ->getFirstItem();
         }
     
-        private function loadPunchOutGroupByDunsIdentity($dunsIdentity): DataObject
+        public function loadPunchOutGroupByDunsIdentity($dunsIdentity): DataObject
         {
             return $this->punchoutGroupCollection->create()
                 ->addFieldToFilter('duns_identity', ['eq' => $dunsIdentity])
                 ->getFirstItem();
         }
 
-        private function loadPunchOutGroupByAribaNetworkId($aribaNetworkId): DataObject
+        public function loadPunchOutGroupByAribaNetworkId($aribaNetworkId): DataObject
         {
             return $this->punchoutGroupCollection->create()
                 ->addFieldToFilter('ariba_network_id', ['eq' => $aribaNetworkId])
+                ->getFirstItem();
+        }
+    
+        public function loadPunchOutGroupByAribaNetworkSecret($sharedSecret,$aribaNetworkId): DataObject
+        {
+            return $this->punchoutGroupCollection->create()
+                ->addFieldToFilter('ariba_network_id', ['eq' => $aribaNetworkId])
+                ->addFieldToFilter('shared_secret', ['eq' => $sharedSecret])
                 ->getFirstItem();
         }
 

@@ -247,8 +247,7 @@
                             $result['message'] = 'Order created successfully - web reference: ' . $order->getIncrementId();
                             $result['punchoutGroupId'] = $this->getPunchoutGroup()->getPunchoutgroupId();
                         }
-                        var_dump($result);
-                        die();
+                        
                     }
                 }
                
