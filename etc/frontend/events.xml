@@ -3,8 +3,14 @@
     <event name="layout_load_before">
         <observer name="punchoutout_order_customer_navigation_link" instance="Develodesign\Punchout\Observer\RemoveMyOrderLink" />
     </event>
-
-    <event name="cxml_setup_request_start_url">
-        <observer name="cxml_setup_request_start_url_observer" instance="Develodesign\Punchout\Observer\Cxml\CxmlSetupRequestEvent"/>
+    <event name="cxml_setup_request_event">
+        <observer name="cxml_setup_request_event_observer" instance="Develodesign\Punchout\Observer\Cxml\CxmlSetupRequestEvent"/>
     </event>
+    <event name="login_proxy_request_event">
+        <observer name="login_proxy_request_event_observer" instance="Develodesign\Punchout\Observer\Cxml\LoginProxyRequestEvent"/>
+    </event>
+    <event name="oci_setup_request_event">
+        <observer name="oci_setup_request_event_observer" instance="Develodesign\Punchout\Observer\Oci\OciSetupRequestEvent"/>
+    </event>
+
 </config>

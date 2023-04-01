@@ -1,17 +1,13 @@
 <?php
     
-    namespace Develodesign\Punchout\Observer\Cxml;
-
-    use Develodesign\Punchout\Api\ActivityEventLogRepositoryInterface;
-    use Develodesign\Punchout\Model\ActivityEventLogFactory;
+    namespace Develodesign\Punchout\Observer\Oci;
+    
     use Develodesign\Punchout\Observer\BasePunchoutRequestEvent;
     use Magento\Framework\Event\Observer;
     use Magento\Framework\Event\ObserverInterface;
-    use Magento\Framework\Exception\LocalizedException;
 
-    class CxmlSetupRequestEvent extends BasePunchoutRequestEvent implements ObserverInterface
+    class OciSetupRequestEvent extends BasePunchoutRequestEvent implements ObserverInterface
     {
-       
         /**
          * @throws \Exception
          */
@@ -28,5 +24,4 @@
             ])->save();
         
         }
-    
     }

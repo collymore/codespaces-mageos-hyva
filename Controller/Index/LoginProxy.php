@@ -1,6 +1,7 @@
 <?php
 namespace Develodesign\Punchout\Controller\Index;
 
+    use Develodesign\Punchout\Event\EventServiceProvider;
     use Develodesign\Punchout\Service\CustomerService;
     use Develodesign\Punchout\Service\ProxyRequestService;
     use Develodesign\Punchout\Service\SessionService;
@@ -41,19 +42,26 @@ namespace Develodesign\Punchout\Controller\Index;
          */
         protected $customerSessionService;
     
+        /**
+         * @var EventServiceProvider
+         */
+        protected $eventServiceProvider;
+    
         public function __construct(
             ActionContext $context,
             JsonResponse $jsonResponse,
             ProxyRequestService $proxyRequestService,
             SetupRequestService $setupRequestService,
             CustomerService $customerService,
-            SessionService $sessionService
+            SessionService $sessionService,
+            EventServiceProvider $eventServiceProvider
         ) {
             $this->jsonResponse = $jsonResponse;
             $this->proxyRequestService = $proxyRequestService;
             $this->setupRequestService = $setupRequestService;
             $this->customerService = $customerService;
             $this->customerSessionService = $sessionService;
+            $this->eventServiceProvider = $eventServiceProvider;
             parent::__construct($context);
         }
 
@@ -122,6 +130,9 @@ namespace Develodesign\Punchout\Controller\Index;
                     $e->getMessage()
                 );
             }
+            $info = 'Successful CXML Store Login';
+            $punchoutGroupId = $this->customerService->getPunchoutGroupId($queryParam->user_id);
+            $this->eventServiceProvider->dispatchLoginProxyRequestEvent($queryParam->user_id,$punchoutGroupId,$info);
             return $this->_redirect('/');
         }
     }

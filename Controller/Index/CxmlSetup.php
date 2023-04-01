@@ -3,7 +3,6 @@
     namespace Develodesign\Punchout\Controller\Index;
     
     use Develodesign\Punchout\Event\EventServiceProvider;
-    use Develodesign\Punchout\Model\PunchoutGroup;
     use Develodesign\Punchout\Response\CxmlResponse;
     use Develodesign\Punchout\Service\CustomerService;
     use Develodesign\Punchout\Service\CxmlService;

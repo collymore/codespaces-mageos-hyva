@@ -2,6 +2,7 @@
 
 namespace Develodesign\Punchout\Controller\Index;
 
+    use Develodesign\Punchout\Event\EventServiceProvider;
     use Develodesign\Punchout\Response\JsonResponse;
     use Develodesign\Punchout\Service\CustomerService;
     use Develodesign\Punchout\Service\OciService;
@@ -30,19 +31,26 @@ namespace Develodesign\Punchout\Controller\Index;
          */
         protected $customerSessionService;
     
+        /**
+         * @var EventServiceProvider
+         */
+        protected $eventServiceProvider;
+    
         public function __construct(
             ActionContext $context,
             OciService $ociService,
             PunchoutGroupService $punchoutGroupService,
             JsonResponse $jsonResponse,
             CustomerService $customerService,
-            SessionService $sessionService
+            SessionService $sessionService,
+            EventServiceProvider $eventServiceProvider
         ) {
             $this->ociService = $ociService;
             $this->punchoutGroupService = $punchoutGroupService;
             $this->jsonResponse = $jsonResponse;
             $this->customerService = $customerService;
             $this->customerSessionService = $sessionService;
+            $this->eventServiceProvider = $eventServiceProvider;
             parent::__construct($context);
         }
     
@@ -113,7 +121,8 @@ namespace Develodesign\Punchout\Controller\Index;
                 if($customerSession){
                     $this->customerSessionService->clearAuthUserCartSessionData();
                 }
-                
+                $info = 'Successful OCI PunchOutSetupResponse and Store Login';
+                $this->eventServiceProvider->dispatchCxmlSetupRequestEvent($matchingCustomer->getId(),$matchingPunchoutGroup->getPunchoutgroupId(),$info);
                 return $this->_redirect('/');
                 
             } catch (\Exception $exception) {

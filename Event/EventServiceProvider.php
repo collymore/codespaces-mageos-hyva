@@ -23,10 +23,37 @@
     
         public function dispatchCxmlSetupRequestEvent(int $customerId, int $punchoutgroupId, string $info): void
         {
-             $this->eventManager->dispatch('cxml_setup_request_start_url',
+             $this->eventManager->dispatch('cxml_setup_request_event',
                 [
                     'event_type' => 'CXML PunchOutSetupRequest',
                     'action' => 'CxmlSetup',
+                    'user_id' => $customerId,
+                    'punchoutgroup_id' => $punchoutgroupId,
+                    'info' => $info
+                ]
+            );
+        }
+        
+        public function dispatchLoginProxyRequestEvent(int $customerId, int $punchoutgroupId, string $info): void
+        {
+            $this->eventManager->dispatch('login_proxy_request_event',
+                [
+                    'event_type' => 'CXML PunchOutSetupRequest Store Login',
+                    'action' => 'LoginProxy',
+                    'user_id' => $customerId,
+                    'punchoutgroup_id' => $punchoutgroupId,
+                    'info' => $info
+                ]
+            );
+        }
+    
+    
+        public function dispatchOciSetupRequestEvent(int $customerId, int $punchoutgroupId, string $info): void
+        {
+            $this->eventManager->dispatch('oci_setup_request_event',
+                [
+                    'event_type' => 'OCI PunchOutSetupRequest',
+                    'action' => 'OCI Setup',
                     'user_id' => $customerId,
                     'punchoutgroup_id' => $punchoutgroupId,
                     'info' => $info
