@@ -4,6 +4,7 @@ namespace Develodesign\Punchout\Service;
 
     use Develodesign\Punchout\Model\ResourceModel\PunchoutGroup\CollectionFactory;
     use Magento\Framework\DataObject;
+    use Magento\Framework\Exception\NoSuchEntityException;
 
     class PunchoutGroupService
     {
@@ -49,54 +50,30 @@ namespace Develodesign\Punchout\Service;
 
         public function loadPunchOutGroupByCredentials($sharedSecret, $dunsIdentity, $aribaNetworkId): DataObject|array
         {
-            $loadTypes = ['secret', 'identity', 'ariba_network'];
-            //$result = new DataObject(['error' => false,'matching_punchout_group' => null,'message' => null]);
-            $matchingPunchoutGroup = [];
-          
-            // Loop through each load type.
-            foreach ($loadTypes as $loadType) {
-                switch ($loadType) {
-                    case 'secret':
-                        //$result->setMatchingPunchoutGroup($this->loadPunchOutGroupBySecretDuns($sharedSecret,$dunsIdentity));
-                        $matchingPunchoutGroup = $this->loadPunchOutGroupBySecretDuns($sharedSecret,$dunsIdentity);
-                        break;
-                    case 'identity':
-                        //$result->setMatchingPunchoutGroup($this->loadPunchOutGroupByDunsIdentity($dunsIdentity));
-                        $matchingPunchoutGroup = $this->loadPunchOutGroupByDunsIdentity($dunsIdentity);
-                        break;
-                    case 'ariba_network':
-                        if (!empty(trim($aribaNetworkId))) {
-                            //$result->setMatchingPunchoutGroup($this->loadPunchOutGroupByAribaNetworkId($dunsIdentity));
-                            $matchingPunchoutGroup = $this->loadPunchOutGroupByAribaNetworkId($aribaNetworkId);
-                        }
-                        break;
-                    default:
-                        // Throw an exception if an invalid load type is provided.
-                        throw new \InvalidArgumentException(sprintf('Invalid load type: %s', $loadType));
+            $punchoutGroup = $this->loadPunchOutGroupBySecretDuns($sharedSecret,$dunsIdentity);
+            if((!(int)$punchoutGroup->getPunchoutgroupId()) > 0) {
+                $punchoutGroup = $this->loadPunchOutGroupByDunsIdentity($dunsIdentity);
+                if(((!(int)$punchoutGroup->getPunchoutgroupId()) > 0) && !empty(trim($aribaNetworkId))) {
+                    $punchoutGroup = $this->loadPunchOutGroupByAribaNetworkId($aribaNetworkId);
                 }
-               // toDo: rethink this
-                /*if (null === $result->getMatchingPunchoutGroup()) {
-                    switch ($loadType) {
-                        case 'secret':
-                            throw new \RuntimeException(sprintf(
-                                'No matching PunchOut Group found for shared secret %s and duns identity: %s',
-                                $sharedSecret,$dunsIdentity
-                            ));
-                        case 'identity':
-                            throw new \RuntimeException(sprintf(
-                                'No matching PunchOut Group found for DUNS identity: %s',
-                                $dunsIdentity
-                            ));
-                        case 'ariba_network':
-                            throw new \RuntimeException(sprintf(
-                                'No matching PunchOut Group found for Ariba Network ID: %s',
-                                $aribaNetworkId
-                            ));
-                    }
-                }*/
             }
-            //return $result;
-            return $matchingPunchoutGroup;
+            if ($punchoutGroup === null || $punchoutGroup->getPunchoutgroupId() === null) {
+                throw new NoSuchEntityException(
+                    __(
+                        'No such PunchoutGroup entity with %fieldName = %fieldValue, %field2Name = %field2Value, %field3Name = %field3Value',
+                        [
+                            'fieldName'   => 'sharedSecret',
+                            'fieldValue'  => $sharedSecret,
+                            'field2Name'  => 'dunsIdentity',
+                            'field2Value' => $dunsIdentity,
+                            'field3Name'  => 'aribaNetworkId',
+                            'field3Value' => $aribaNetworkId,
+                        ]
+                    )
+                );
+            }
+            return $punchoutGroup;
+    
         }
     
         public function loadPunchOutGroupByOciCredentials(string $username, string $password): ?DataObject

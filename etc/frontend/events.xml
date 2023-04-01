@@ -5,6 +5,6 @@
     </event>
 
     <event name="cxml_setup_request_start_url">
-        <observer name="cxml_setup_request_start_url_observer" instance=" Develodesign\Punchout\Observer\Cxml\CxmlSetupRequestEvent"/>
+        <observer name="cxml_setup_request_start_url_observer" instance="Develodesign\Punchout\Observer\Cxml\CxmlSetupRequestEvent"/>
     </event>
 </config>

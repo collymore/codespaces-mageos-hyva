@@ -33,15 +33,16 @@
          */
         public function execute(Observer $observer)
         {
-                $activityEvent = $this->activityEventLogFactory->create();
-                $activityEvent->setData([
-                    'event_type'       => $observer->getEvent()->getEventType(),
-                    'action'           => $observer->getEvent()->getAction(),
-                    'user_id'          => $observer->getEvent()->getUserId(),
-                    'punchoutgroup_id' => $observer->getEvent()->getPunchoutgroupId(),
-                    'info'             => $observer->getEvent()->info()
-                ]);
-             return $this->activityEventLogRepository->save($activityEvent);
+            $activityEvent = $this->activityEventLogFactory->create();
+        
+            return $activityEvent->setData([
+                'event_type'       => $observer->getEvent()->getEventType(),
+                'action'           => $observer->getEvent()->getAction(),
+                'user_id'          => $observer->getEvent()->getUserId(),
+                'punchoutgroup_id' => $observer->getEvent()->getPunchoutgroupId(),
+                'info'             => $observer->getEvent()->getInfo()
+            ])->save();
+        
         }
     
     }
