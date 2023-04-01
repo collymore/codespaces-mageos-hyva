@@ -15,8 +15,6 @@
         protected $companyId;
         
         protected $punchoutGroup;
-        
-        protected $productId;
         protected $shippingCode;
         protected $shippingPrice;
         
@@ -48,7 +46,7 @@
          $this->setupRequestService = $setupRequestService;
         }
     
-        public function setDocument($document)
+        public function setDocument($document): void
         {
             $this->document = $document;
         }
@@ -85,11 +83,6 @@
             return $this->punchoutGroup;
         }
     
-        public function setPunchoutGroup($punchoutGroup)
-        {
-            $this->punchoutGroup = $punchoutGroup;
-        }
-    
         public function getCompanyId()
         {
             return $this->companyId;
@@ -99,16 +92,7 @@
         {
             $this->companyId = $companyId;
         }
-    
-        public function setProductId($productId): void
-        {
-            $this->productId = $productId;
-        }
-    
-        public function getProductId()
-        {
-            return $this->productId;
-        }
+        
     
         public function setPoNumber($poNumber): void
         {
@@ -119,21 +103,13 @@
         {
             return $this->poNumber;
         }
-    
-        public function setPaymentMethod($paymentMethod)
-        {
-            $this->paymentMethod = $paymentMethod;
-        }
+        
     
         public function getPaymentMethod()
         {
             return $this->paymentMethod;
         }
-    
-        public function setGrandTotal($grandTotal)
-        {
-            $this->grandTotal = $grandTotal;
-        }
+        
     
         public function getGrandTotal()
         {

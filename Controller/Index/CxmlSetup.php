@@ -2,6 +2,7 @@
     
     namespace Develodesign\Punchout\Controller\Index;
     
+    use Develodesign\Punchout\Event\EventServiceProvider;
     use Develodesign\Punchout\Model\PunchoutGroup;
     use Develodesign\Punchout\Response\CxmlResponse;
     use Develodesign\Punchout\Service\CustomerService;
@@ -38,14 +39,20 @@
          * @var SetupRequestService
          */
         protected $setupRequestService;
-        
+    
+        /**
+         * @var EventServiceProvider
+         */
+        protected $eventServiceProvider;
+    
         public function __construct(
             \Magento\Framework\App\Action\Context $context,
             CxmlService $cxmlService,
             CxmlResponse $cxmlResponse,
             PunchoutGroupService $punchoutGroupService,
             CustomerService $customerService,
-            SetupRequestService $setupRequestService
+            SetupRequestService $setupRequestService,
+            EventServiceProvider $eventServiceProvider
         ) {
             parent::__construct($context);
             $this->cxmlService = $cxmlService;
@@ -53,6 +60,7 @@
             $this->punchoutGroupService = $punchoutGroupService;
             $this->customerService = $customerService;
             $this->setupRequestService = $setupRequestService;
+            $this->eventServiceProvider = $eventServiceProvider;
         }
         public function execute()
         {
@@ -92,7 +100,8 @@
                     $setupRequestDTO = $this->setupRequestService->prepareSetupData(customerId: $matchingCustomer->getId(),cxmlData: $parsedXMLData);
                     $punchoutSetupRequestModel = $this->setupRequestService->createPunchoutSetupRequest($setupRequestDTO);
                     $startUrl = $this->setupRequestService->getStartUpUrlResponse(punchoutSetupRequestModel: $punchoutSetupRequestModel);
-    
+                    $info = 'Successful CXML PunchOutSetupResponse';
+                    $this->eventServiceProvider->dispatchCxmlSetupRequestEvent($matchingCustomer->getId(),$matchingPunchoutGroup->getPunchoutgroupId(),$info);
                     return $this->cxmlResponse->punchoutUpResponse(statusCode: 200,
                         payloadId: $parsedXMLData->getAttribute('payloadID'), startUrl: $startUrl);
                    

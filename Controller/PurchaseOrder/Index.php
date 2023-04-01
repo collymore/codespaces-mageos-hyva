@@ -1,0 +1,55 @@
+<?php
+    
+    namespace Develodesign\Punchout\Controller\PurchaseOrder;
+    
+  
+    use Develodesign\Punchout\Exceptions\CxmlDocumentLoadingException;
+    use Develodesign\Punchout\Model\Order\Request;
+    use Develodesign\Punchout\Response\CxmlResponse;
+    use Magento\Framework\App\Action\Action;
+    use Magento\Framework\App\Action\Context;
+    use Magento\Framework\App\CsrfAwareActionInterface;
+    use Magento\Framework\App\Request\InvalidRequestException;
+    use Magento\Framework\App\RequestInterface;
+
+    class Index extends Action implements CsrfAwareActionInterface
+    {
+        protected $orderRequest;
+        private CxmlResponse $cxmlResponse;
+    
+        public function __construct(
+            Context $context,
+            Request $orderRequest,
+            CxmlResponse $cxmlResponse,
+        )
+        {
+            $this->cxmlResponse = $cxmlResponse;
+            $this->orderRequest = $orderRequest;
+            parent::__construct($context);
+        }
+    
+        /**
+         */
+        public function execute()
+        {
+             try {
+                $orderRequest = $this->orderRequest;
+                $orderRequest->setDocument(file_get_contents('php://input'));
+                $orderRequest->isValid();
+                $result = $orderRequest->getCreateOrder();
+                } catch (\Exception|CxmlDocumentLoadingException $exception) {
+                     return $this->cxmlResponse->respondWithData(500, $exception->getMessage());
+                 }
+                return $this->cxmlResponse->respondWithData(200, $result['message']);
+        }
+    
+        public function createCsrfValidationException(RequestInterface $request): ?InvalidRequestException
+        {
+           return null;
+        }
+    
+        public function validateForCsrf(RequestInterface $request): ?bool
+        {
+            return true;
+        }
+    }

@@ -178,17 +178,13 @@
                 $store = $this->customerService->getMainStore();
                 $shippingAddressData = $this->getDocument()->getShipToAddress();
                 $billingAddressData = $this->getDocument()->getBillToAddress();
-                $result['shippingAddressData'] = $shippingAddressData;
-                $result['billingAddressData'] = $billingAddressData;
     
                 if (!isset($billingAddressData['firstname']) || !$billingAddressData['firstname']) {
                     $billingAddressData['firstname'] = $customer->getFirstname();
                 }
                 $purchaseOrderNo = $this->getDocument()->getPoNumber();
+                $result['poNumber'] = $purchaseOrderNo;
                 $shippingMethodCode = $this->getDocument()->getShippingCode();
-                $shippingPrice = $this->getDocument()->getShippingPrice();
-                $grandTotal = $this->getDocument()->getGrandTotal();
-                $tax = $this->getDocument()->getTax();
                 $quote = $this->createOrderService->getCart();
                 $quote->assignCustomer($customer);
                 $quote->setStoreId($store->getId());
@@ -244,7 +240,7 @@
                             $this->createOrderService->invoiceOrder($this->createOrder);
                             $this->createOrder->save();
                             $result['order_id'] = $order->getRealOrderId();
-                            $result['message'] = 'Order created successfully - web reference: ' . $order->getIncrementId();
+                            $result['message'] = sprintf('Order created successfully - web reference: %s for customer %s',$order->getIncrementId(), $this->getPunchoutGroup()->getGroupName());
                             $result['punchoutGroupId'] = $this->getPunchoutGroup()->getPunchoutgroupId();
                         }
                         

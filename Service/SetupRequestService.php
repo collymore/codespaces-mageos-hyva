@@ -187,7 +187,7 @@ namespace Develodesign\Punchout\Service;
                 ->setPayloadId($arryData['payloadId'])
                 ->setSenderIdentity($arryData['sender_identity'])
                 ->setRequestType(1)
-                ->setPurchaseOrderNumber($arryData['purchase_order_number'])
+                ->setPoNumber($arryData['purchase_order_number'])
                 ->setOrderStatus($arryData['order_status']);
             $this->setupRequestResource->save($punchoutSetupModel);
             return (int)$punchoutSetupModel->getSetupId();
