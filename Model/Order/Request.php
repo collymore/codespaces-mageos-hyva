@@ -250,9 +250,17 @@
                             $result['punchoutGroupId'] = $this->getPunchoutGroup()->getPunchoutgroupId();
                             $this->eventServiceProvider->dispatchCxmlOrderRequestEvent(customerId: $customer->getId(),punchoutgroupId: $this->getPunchoutGroup()->getPunchoutgroupId(),info: $result['message']);
                         }
-                        
+                        $this->eventServiceProvider->dispatchCxmlOrderRequestEvent(customerId: $customer->getId(),
+                            punchoutgroupId: $this->getPunchoutGroup()->getPunchoutgroupId(),
+                            info: 'Order failed to create');
                     }
+                    $this->eventServiceProvider->dispatchCxmlOrderRequestEvent(customerId: $customer->getId(),
+                        punchoutgroupId: $this->getPunchoutGroup()->getPunchoutgroupId(),
+                        info: 'Payment is unavailable for the quote items raised');
                 }
+                $this->eventServiceProvider->dispatchCxmlOrderRequestEvent(customerId: $customer->getId(),
+                    punchoutgroupId: $this->getPunchoutGroup()->getPunchoutgroupId(),
+                    info: 'Failure to get all visible cart items');
                
             }
             return $result;
