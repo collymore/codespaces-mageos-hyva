@@ -25,14 +25,21 @@
          */
         protected $cxmlResponse;
     
+        /**
+         * @var EventServiceProvider
+         */
+        protected $eventServiceProvider;
+    
         public function __construct(
             Context $context,
             Request $orderRequest,
-            CxmlResponse $cxmlResponse
+            CxmlResponse $cxmlResponse,
+            EventServiceProvider $eventServiceProvider
         )
         {
             $this->cxmlResponse = $cxmlResponse;
             $this->orderRequest = $orderRequest;
+            $this->eventServiceProvider = $eventServiceProvider;
             parent::__construct($context);
         }
     
@@ -46,6 +53,9 @@
                 $orderRequest->isValid();
                 $result = $orderRequest->getCreateOrder();
                 } catch (\Exception|CxmlDocumentLoadingException $exception) {
+                 $this->eventServiceProvider->dispatchExceptionPunchoutRequestEvent(eventType: 'CXML PunchOut Order Request',
+                     action: 'CXML OrderRequest', info: sprintf('Message:%s File:%s', $exception->getMessage(),
+                         $exception->getFile()));
                      return $this->cxmlResponse->respondWithData(500, $exception->getMessage());
                  }
                 return $this->cxmlResponse->respondWithData(200, $result['message']);

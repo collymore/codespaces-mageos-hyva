@@ -15,5 +15,7 @@
     <event name="cxml_order_request_event">
         <observer name="cxml_order_request_event_observer" instance="Develodesign\Punchout\Observer\Cxml\CxmlOrderRequestEvent"/>
     </event>
-
+    <event name="exception_punchout_request_event">
+        <observer name="exception_punchout_request_event_observer" instance="Develodesign\Punchout\Observer\PunchoutExceptions\ExceptionRequestEvent"/>
+    </event>
 </config>

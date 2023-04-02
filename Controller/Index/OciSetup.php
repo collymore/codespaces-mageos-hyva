@@ -126,6 +126,9 @@ namespace Develodesign\Punchout\Controller\Index;
                 return $this->_redirect('/');
                 
             } catch (\Exception $exception) {
+                $this->eventServiceProvider->dispatchExceptionPunchoutRequestEvent(eventType: 'OCI PunchOutSetupRequest',
+                    action: 'OciSetup', info: sprintf('Message:%s File:%s', $exception->getMessage(),
+                        $exception->getFile()));
                 return $this->jsonResponse->sendResponse(
                     500,
                     $exception->getMessage()

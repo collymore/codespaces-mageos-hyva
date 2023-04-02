@@ -108,6 +108,9 @@
                 
                 
             } catch (\Exception $exception) {
+                $this->eventServiceProvider->dispatchExceptionPunchoutRequestEvent(eventType: 'CXML PunchOutSetupRequest',
+                    action: 'CxmlSetup', info: sprintf('Message:%s File:%s', $exception->getMessage(),
+                        $exception->getFile()));
                 return $this->cxmlResponse->respondWithData(400, $exception->getMessage());
             }
             return $this->cxmlResponse->respondSuccess();

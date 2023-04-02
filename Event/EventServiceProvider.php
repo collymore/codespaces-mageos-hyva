@@ -73,5 +73,16 @@
                 ]
             );
         }
+        
+        public function dispatchExceptionPunchoutRequestEvent(string $eventType, string $action, string $info): void
+        {
+            $this->eventManager->dispatch('exception_punchout_request_event',
+                [
+                    'event_type' => $eventType,
+                    'action' => $action,
+                    'info' => $info
+                ]
+            );
+        }
     
     }

@@ -125,6 +125,9 @@ namespace Develodesign\Punchout\Controller\Index;
                
                 
             } catch (NoSuchEntityException|LocalizedException $e) {
+                $this->eventServiceProvider->dispatchExceptionPunchoutRequestEvent(eventType: 'CXML PunchOutSetupRequest Store Login',
+                    action: 'LoginProxy', info: sprintf('Message:%s File:%s', $e->getMessage(),
+                        $e->getFile()));
                 return $this->jsonResponse->sendResponse(
                     500,
                     $e->getMessage()
