@@ -7,6 +7,7 @@
     use Magento\Framework\DataObject;
     use Magento\Framework\Exception\LocalizedException;
     use Magento\Framework\Exception\NoSuchEntityException;
+    use Develodesign\Punchout\Model\PunchoutGroup;
 
     class Cxml extends AbstractRequest
     {
@@ -51,10 +52,10 @@
         }
     
         /**
-         * @return DataObject|null
+         * @return PunchoutGroup
          * @throws NoSuchEntityException
          */
-        public function getPunchoutGroup(): ?DataObject
+        public function getPunchoutGroup(): PunchoutGroup
         {
             $punchoutGroup = parent::getPunchoutGroup();
             if (null !== $punchoutGroup) {
@@ -66,25 +67,17 @@
             
             if(!$aribaNetworkId){
                 $matchingResult = $this->punchoutGroupService->loadPunchOutGroupBySecretDuns(sharedSecret:$sharedSecret,dunsIdentity: $dunsIdentity);
-                if((int)$matchingResult->getPunchoutgroupId() > 0){
+                if($matchingResult->getPunchoutgroupId()){
                     $punchoutGroup = $matchingResult;
-                    
-                }
-                if($punchoutGroup === null){
-                    $dunsResult = $this->punchoutGroupService->loadPunchOutGroupByDunsIdentity(dunsIdentity:$dunsIdentity);
-                    if((int)$dunsResult->getPunchoutgroupId() > 0){
-                        $punchoutGroup = $dunsResult;
-                        
-                    }
                 }
             }
             if($aribaNetworkId){
                $networkResult = $this->punchoutGroupService->loadPunchOutGroupByAribaNetworkSecret($sharedSecret,$aribaNetworkId);
-                if((int)$networkResult->getPunchoutgroupId() > 0){
+                if($networkResult->getPunchoutgroupId()){
                     $punchoutGroup = $networkResult;
                 }
             }
-            if ($punchoutGroup === null || $punchoutGroup->getPunchoutgroupId() === null) {
+            if ($punchoutGroup === null || !$punchoutGroup->getPunchoutgroupId()) {
                 throw new NoSuchEntityException(
                     __(
                         'No such PunchoutGroup entity with %fieldName = %fieldValue, %field2Name = %field2Value, %field3Name = %field3Value',
