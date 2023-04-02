@@ -2,6 +2,7 @@
     
     namespace Develodesign\Punchout\Model\Order;
     
+    use Develodesign\Punchout\Event\EventServiceProvider;
     use Develodesign\Punchout\Exceptions\CxmlDocumentLoadingException;
     use Develodesign\Punchout\Model\Order\Request\AbstractRequest;
     use Develodesign\Punchout\Model\Order\Request\Cxml;
@@ -11,15 +12,13 @@
     use Develodesign\Punchout\Service\PunchoutGroupService;
     use Develodesign\Punchout\Service\SessionService;
     use Develodesign\Punchout\Service\SetupRequestService;
-    use http\Exception\RuntimeException;
     use Magento\Customer\Api\Data\CustomerInterface;
-    use Magento\Customer\Model\Customer;
     use Magento\Framework\DataObject;
     use Magento\Framework\Exception\CouldNotSaveException;
     use Magento\Framework\Exception\LocalizedException;
     use Magento\Framework\Exception\NoSuchEntityException;
 
-    class Request extends \Magento\Framework\DataObject
+    class Request extends DataObject
     {
         /** @var AbstractRequest */
         protected $document;
@@ -66,13 +65,19 @@
          */
         protected $sessionService;
     
+        /**
+         * @var EventServiceProvider
+         */
+        protected $eventServiceProvider;
+    
         public function __construct(
             CxmlService $cxmlService,
             CustomerService $customerService,
             PunchoutGroupService $punchoutGroupService,
             SetupRequestService $setupRequestService,
             CreateOrderService $createOrderService,
-            SessionService $sessionService
+            SessionService $sessionService,
+            EventServiceProvider $eventServiceProvider
         )
         {
            $this->cxmlService = $cxmlService;
@@ -82,6 +87,7 @@
            $this->createOrder = null;
            $this->createOrderService = $createOrderService;
            $this->sessionService = $sessionService;
+           $this->eventServiceProvider = $eventServiceProvider;
         }
     
         public function setDocument($document)
@@ -242,6 +248,7 @@
                             $result['order_id'] = $order->getRealOrderId();
                             $result['message'] = sprintf('Order created successfully - web reference: %s for customer %s',$order->getIncrementId(), $this->getPunchoutGroup()->getGroupName());
                             $result['punchoutGroupId'] = $this->getPunchoutGroup()->getPunchoutgroupId();
+                            $this->eventServiceProvider->dispatchCxmlOrderRequestEvent(customerId: $customer->getId(),punchoutgroupId: $this->getPunchoutGroup()->getPunchoutgroupId(),info: $result['message']);
                         }
                         
                     }

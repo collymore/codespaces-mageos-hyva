@@ -12,5 +12,8 @@
     <event name="oci_setup_request_event">
         <observer name="oci_setup_request_event_observer" instance="Develodesign\Punchout\Observer\Oci\OciSetupRequestEvent"/>
     </event>
+    <event name="cxml_order_request_event">
+        <observer name="cxml_order_request_event_observer" instance="Develodesign\Punchout\Observer\Cxml\CxmlOrderRequestEvent"/>
+    </event>
 
 </config>

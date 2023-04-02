@@ -61,4 +61,17 @@
             );
         }
     
+        public function dispatchCxmlOrderRequestEvent(int $customerId, int $punchoutgroupId, string $info): void
+        {
+            $this->eventManager->dispatch('cxml_order_request_event',
+                [
+                    'event_type' => 'CXML PunchOut Order Request',
+                    'action' => 'CXML OrderRequest',
+                    'user_id' => $customerId,
+                    'punchoutgroup_id' => $punchoutgroupId,
+                    'info' => $info
+                ]
+            );
+        }
+    
     }
