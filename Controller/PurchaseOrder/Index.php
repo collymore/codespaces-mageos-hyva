@@ -3,6 +3,7 @@
     namespace Develodesign\Punchout\Controller\PurchaseOrder;
     
   
+    use Develodesign\Punchout\Event\EventServiceProvider;
     use Develodesign\Punchout\Exceptions\CxmlDocumentLoadingException;
     use Develodesign\Punchout\Model\Order\Request;
     use Develodesign\Punchout\Response\CxmlResponse;
@@ -14,13 +15,20 @@
 
     class Index extends Action implements CsrfAwareActionInterface
     {
+        /**
+         * @var Request
+         */
         protected $orderRequest;
-        private CxmlResponse $cxmlResponse;
+    
+        /**
+         * @var CxmlResponse
+         */
+        protected $cxmlResponse;
     
         public function __construct(
             Context $context,
             Request $orderRequest,
-            CxmlResponse $cxmlResponse,
+            CxmlResponse $cxmlResponse
         )
         {
             $this->cxmlResponse = $cxmlResponse;

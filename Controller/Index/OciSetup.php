@@ -122,7 +122,7 @@ namespace Develodesign\Punchout\Controller\Index;
                     $this->customerSessionService->clearAuthUserCartSessionData();
                 }
                 $info = 'Successful OCI PunchOutSetupResponse and Store Login';
-                $this->eventServiceProvider->dispatchCxmlSetupRequestEvent($matchingCustomer->getId(),$matchingPunchoutGroup->getPunchoutgroupId(),$info);
+                $this->eventServiceProvider->dispatchOciSetupRequestEvent($matchingCustomer->getId(),$matchingPunchoutGroup->getPunchoutgroupId(),$info);
                 return $this->_redirect('/');
                 
             } catch (\Exception $exception) {

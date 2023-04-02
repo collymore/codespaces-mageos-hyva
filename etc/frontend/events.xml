@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="layout_load_before">
-        <observer name="punchoutout_order_customer_navigation_link" instance="Develodesign\Punchout\Observer\RemoveMyOrderLink" />
+        <observer name="punchoutout_order_customer_navigation_link" instance="Develodesign\Punchout\Observer\RemoveOrderLink" />
     </event>
     <event name="cxml_setup_request_event">
         <observer name="cxml_setup_request_event_observer" instance="Develodesign\Punchout\Observer\Cxml\CxmlSetupRequestEvent"/>
