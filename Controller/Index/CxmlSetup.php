@@ -66,11 +66,14 @@
             try {
                 $xmlRawData = file_get_contents('php://input');
                 if (!$xmlRawData) {
+                    $this->eventServiceProvider->dispatchCxmlSetupRequestEvent('','','No POST data included in request');
                     return $this->cxmlResponse->respondWithData(400, 'Post body is missing or XML appears invalid');
                 }
+
                 $parsedXMLData = $this->cxmlService->parseXmlResponse($xmlRawData);
                 $violations = $this->cxmlService->validateSetupRequest($parsedXMLData);
                 if ($violations['error'] === true) {
+                    $this->eventServiceProvider->dispatchCxmlSetupRequestEvent('','',"Validation Error : " . json_encode($violations));
                     return $this->cxmlResponse->respondWithData(422, json_encode($violations));
                 }
                 $sharedSecret = $parsedXMLData->Header->Sender->Credential->SharedSecret;
@@ -94,7 +97,6 @@
                         $customerDTO = $this->customerService->prepareCustomerData(matchingPunchoutGroup:$matchingPunchoutGroup,email:$useEmail,nameData:$nameData);
                         $matchingCustomer = $this->customerService->createCustomer($customerDTO);
                         $this->customerService->createCustomerAddress(customer:$matchingCustomer,punchoutGroup:$matchingPunchoutGroup);
-                        
                     }
                     $setupRequestDTO = $this->setupRequestService->prepareSetupData(customerId: $matchingCustomer->getId(),cxmlData: $parsedXMLData);
                     $punchoutSetupRequestModel = $this->setupRequestService->createPunchoutSetupRequest($setupRequestDTO);
