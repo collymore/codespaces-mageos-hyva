@@ -123,7 +123,6 @@ namespace Develodesign\Punchout\Block;
             $customer = $this->sessionService->getCustomerSession();
             $punchoutGroupId = $this->customerService->getPunchoutGroupId($customer->getCustomerId());
             $form = $this->ociBlock->getOCIForm(ociSessionData:$ociSessionData,items: $this->cart->getItems(),punchoutGroupId: $punchoutGroupId);
-            $form .= '</form>';
             return $form;
         }
         
