@@ -26,17 +26,20 @@
             parent::__construct($activityEventLogFactory);
         }
     
-        public function execute(Observer $observer)
+        public function execute(Observer $observer): void
         {
             $activityEvent = $this->activityEventLogFactory->create();
             $customerId = $this->sessionService->getCustomerSession()->getCustomerId();
-            $punchoutGroupId = $this->customerService->getPunchoutGroupId($customerId);
-            return $activityEvent->setData([
-                'event_type'       => $observer->getEvent()->getEventType(),
-                'action'           => $observer->getEvent()->getAction(),
-                'user_id'          => $customerId,
-                'punchoutgroup_id' => $punchoutGroupId,
-                'info'             => $observer->getEvent()->getInfo()
-            ])->save();
+            if($customerId){
+                $punchoutGroupId = $this->customerService->getPunchoutGroupId($customerId);
+                 $activityEvent->setData([
+                    'event_type'       => $observer->getEvent()->getEventType(),
+                    'action'           => $observer->getEvent()->getAction(),
+                    'user_id'          => $customerId,
+                    'punchoutgroup_id' => $punchoutGroupId,
+                    'info'             => $observer->getEvent()->getInfo()
+                ])->save();
+            }
+            
         }
     }
