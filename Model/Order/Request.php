@@ -217,7 +217,7 @@
                     $shippingAddress->setCollectShippingRates(true)
                         ->collectShippingRates()
                         ->setShippingMethod($shippingMethodCode);
-                    
+        
                     if ($this->createOrderService->isPaymentAvailable(storeId: $store->getId(),
                             quote: $quote) === true) {
                         $quote->setInventoryProcessed(false);
@@ -229,7 +229,7 @@
             
                         $orderId = $this->createOrderService->makeOrderPlacement($quote->getId());
                         $order = $this->createOrderService->getCreatedOrder($orderId);
-    
+            
                         if ($order->getEntityId()) {
                             $this->createOrder = $order;
                             $sourceXml = $this->document->getCxml();
@@ -246,21 +246,30 @@
                             $this->createOrderService->invoiceOrder($this->createOrder);
                             $this->createOrder->save();
                             $result['order_id'] = $order->getRealOrderId();
-                            $result['message'] = sprintf('Order created successfully - web reference: %s for customer %s',$order->getIncrementId(), $this->getPunchoutGroup()->getGroupName());
+                            $result['message'] = sprintf('Order created successfully - web reference: %s for customer %s',
+                                $order->getIncrementId(), $this->getPunchoutGroup()->getGroupName());
                             $result['punchoutGroupId'] = $this->getPunchoutGroup()->getPunchoutgroupId();
-                            $this->eventServiceProvider->dispatchCxmlOrderRequestEvent(customerId: $customer->getId(),punchoutgroupId: $this->getPunchoutGroup()->getPunchoutgroupId(),info: $result['message']);
+                            $this->eventServiceProvider->dispatchCxmlOrderRequestEvent(customerId: $customer->getId(),
+                                punchoutgroupId: $this->getPunchoutGroup()->getPunchoutgroupId(),
+                                info: $result['message']);
+                        } else {
+                            $this->eventServiceProvider->dispatchCxmlOrderRequestEvent(customerId: $customer->getId(),
+                                punchoutgroupId: $this->getPunchoutGroup()->getPunchoutgroupId(),
+                                info: 'Order failed to create');
                         }
+            
+                    } else {
                         $this->eventServiceProvider->dispatchCxmlOrderRequestEvent(customerId: $customer->getId(),
                             punchoutgroupId: $this->getPunchoutGroup()->getPunchoutgroupId(),
-                            info: 'Order failed to create');
+                            info: 'Payment is unavailable for the quote items raised');
                     }
+        
+                } else {
                     $this->eventServiceProvider->dispatchCxmlOrderRequestEvent(customerId: $customer->getId(),
                         punchoutgroupId: $this->getPunchoutGroup()->getPunchoutgroupId(),
-                        info: 'Payment is unavailable for the quote items raised');
+                        info: 'Failure to get all visible cart items');
                 }
-                $this->eventServiceProvider->dispatchCxmlOrderRequestEvent(customerId: $customer->getId(),
-                    punchoutgroupId: $this->getPunchoutGroup()->getPunchoutgroupId(),
-                    info: 'Failure to get all visible cart items');
+                
                
             }
             return $result;
