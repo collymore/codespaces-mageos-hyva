@@ -17,12 +17,12 @@ class PunchoutSetupRequest extends AbstractModel implements PunchoutSetupRequest
     
     public function getSetupId()
     {
-        // TODO: Implement getSetupId() method.
+        return $this->getData(self::SETUP_ID);
     }
     
     public function setSetupId($setupId)
     {
-        // TODO: Implement setSetupId() method.
+        return $this->setData(self::SETUP_ID, $setupId);
     }
 
     /**
