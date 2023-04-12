@@ -66,7 +66,7 @@
             $aribaNetworkId = $this->cxmlService->getAribaNetworkId($this->cxml);
             
             if(!$aribaNetworkId){
-                $matchingResult = $this->punchoutGroupService->loadPunchOutGroupBySecretDuns(sharedSecret:$sharedSecret,dunsIdentity: $dunsIdentity);
+                $matchingResult = $this->punchoutGroupService->loadPunchOutGroupBySecretDuns($sharedSecret,$dunsIdentity);
                 if($matchingResult->getPunchoutgroupId()){
                     $punchoutGroup = $matchingResult;
                 }

@@ -92,8 +92,8 @@ namespace Develodesign\Punchout\Controller\Index;
                 }
     
                 $matchingPunchoutGroup = $this->punchoutGroupService->loadPunchOutGroupByOciCredentials(
-                    username: $validatedPostBody['username'],
-                    password: $validatedPostBody['password']
+                   $validatedPostBody['username'],
+                   $validatedPostBody['password']
                 );
                 if (null === $matchingPunchoutGroup) {
                     return $this->jsonResponse->sendResponse(
@@ -104,10 +104,10 @@ namespace Develodesign\Punchout\Controller\Index;
                 }
                 $matchingCustomer = $this->customerService->fetchCustomer($validatedPostBody['username']);
                 if(!$matchingCustomer->getId()){
-                    $nameData = $this->ociService->getFirstLastName(name:$matchingPunchoutGroup->getGroupName());
-                    $customerDTO = $this->customerService->prepareCustomerData(matchingPunchoutGroup:$matchingPunchoutGroup,email:$validatedPostBody['username'],nameData:$nameData);
+                    $nameData = $this->ociService->getFirstLastName($matchingPunchoutGroup->getGroupName());
+                    $customerDTO = $this->customerService->prepareCustomerData($matchingPunchoutGroup,$validatedPostBody['username'],$nameData);
                     $matchingCustomer = $this->customerService->createCustomer($customerDTO);
-                    $this->customerService->createCustomerAddress(customer:$matchingCustomer,punchoutGroup:$matchingPunchoutGroup);
+                    $this->customerService->createCustomerAddress($matchingCustomer,$matchingPunchoutGroup);
         
                 }
                 if (!$this->customerSessionService->authoriseCustomer($matchingCustomer->getId())) {
@@ -126,8 +126,8 @@ namespace Develodesign\Punchout\Controller\Index;
                 return $this->_redirect('/');
                 
             } catch (\Exception $exception) {
-                $this->eventServiceProvider->dispatchExceptionPunchoutRequestEvent(eventType: 'OCI PunchOutSetupRequest',
-                    action: 'OciSetup', info: sprintf('Message:%s File:%s', $exception->getMessage(),
+                $this->eventServiceProvider->dispatchExceptionPunchoutRequestEvent('OCI PunchOutSetupRequest',
+                    'OciSetup', sprintf('Message:%s File:%s', $exception->getMessage(),
                         $exception->getFile()));
                 return $this->jsonResponse->sendResponse(
                     500,

@@ -197,7 +197,7 @@
                 $quote->setCurrency();
                 $quote->setCustomerIsGuest(false);
                 $outItems = $this->getDocument()->getItems()->getData();
-                $quoteItems =  $this->createOrderService->getQuoteItem(outItems: $outItems,quote: $quote,store: $store);
+                $quoteItems =  $this->createOrderService->getQuoteItem($outItems,$quote,$store);
                 $this->sessionService->getCustomerSession()->setId($customer->getId());
                 foreach ($quoteItems as $quoteItem) {
                     $quote->addItem($quoteItem);
@@ -265,9 +265,9 @@
                     }
         
                 } else {
-                    $this->eventServiceProvider->dispatchCxmlOrderRequestEvent(customerId: $customer->getId(),
-                        punchoutgroupId: $this->getPunchoutGroup()->getPunchoutgroupId(),
-                        info: 'Failure to get all visible cart items');
+                    $this->eventServiceProvider->dispatchCxmlOrderRequestEvent( $customer->getId(),
+                        $this->getPunchoutGroup()->getPunchoutgroupId(),
+                        'Failure to get all visible cart items');
                 }
                 
                

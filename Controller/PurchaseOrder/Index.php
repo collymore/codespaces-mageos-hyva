@@ -53,8 +53,8 @@
                 $orderRequest->isValid();
                 $result = $orderRequest->getCreateOrder();
                 } catch (\Exception|CxmlDocumentLoadingException $exception) {
-                 $this->eventServiceProvider->dispatchExceptionPunchoutRequestEvent(eventType: 'CXML PunchOut Order Request',
-                     action: 'CXML OrderRequest', info: sprintf('Message:%s File:%s', $exception->getMessage(),
+                 $this->eventServiceProvider->dispatchExceptionPunchoutRequestEvent('CXML PunchOut Order Request',
+                    'CXML OrderRequest', sprintf('Message:%s File:%s', $exception->getMessage(),
                          $exception->getFile()));
                      return $this->cxmlResponse->respondWithData(500, $exception->getMessage());
                  }

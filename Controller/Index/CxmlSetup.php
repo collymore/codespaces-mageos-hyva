@@ -69,52 +69,61 @@
                     $this->eventServiceProvider->dispatchCxmlSetupRequestEvent('','','No POST data included in request');
                     return $this->cxmlResponse->respondWithData(400, 'Post body is missing or XML appears invalid');
                 }
-
+    
                 $parsedXMLData = $this->cxmlService->parseXmlResponse($xmlRawData);
                 $violations = $this->cxmlService->validateSetupRequest($parsedXMLData);
                 if ($violations['error'] === true) {
-                    $this->eventServiceProvider->dispatchCxmlSetupRequestEvent('','',"Validation Error : " . json_encode($violations));
+                    $this->eventServiceProvider->dispatchCxmlSetupRequestEvent('', '',
+                        "Validation Error : " . json_encode($violations));
+        
                     return $this->cxmlResponse->respondWithData(422, json_encode($violations));
                 }
                 $sharedSecret = $parsedXMLData->Header->Sender->Credential->SharedSecret;
                 $dunsIdentity = $parsedXMLData->Header->Sender->Credential->Identity;
                 $aribaNetworkId = $this->cxmlService->getAribaNetworkId($parsedXMLData);
-               
-                $matchingPunchoutGroup = $this->punchoutGroupService->loadPunchOutGroupByCredentials(sharedSecret: $sharedSecret,
-                    dunsIdentity: $dunsIdentity, aribaNetworkId: $aribaNetworkId);
-                
+    
+                $matchingPunchoutGroup = $this->punchoutGroupService->loadPunchOutGroupByCredentials($sharedSecret,
+                    $dunsIdentity, $aribaNetworkId);
+    
                 $extrinsicData = $this->cxmlService->getExtrinsicData($parsedXMLData->Request->PunchOutSetupRequest->Extrinsic);
-                
-                if($this->cxmlService->isCreate($parsedXMLData) === true){
-                    $useEmail = $this->cxmlService->fetchEmail($extrinsicData,$parsedXMLData);
-                    if(empty(trim($useEmail))){
+    
+                if ($this->cxmlService->isCreate($parsedXMLData) === true) {
+                    $useEmail = $this->cxmlService->fetchEmail($extrinsicData, $parsedXMLData);
+                    if (empty(trim($useEmail))) {
                         $useEmail = $this->cxmlService->createEmail($extrinsicData, $parsedXMLData,
                             $matchingPunchoutGroup->getGroupEmail());
                     }
                     $matchingCustomer = $this->customerService->fetchCustomer($useEmail);
-                    if(!$matchingCustomer->getId()){
+                    if (!$matchingCustomer->getId()) {
                         $nameData = $this->cxmlService->getFirstLastName($extrinsicData);
-                        $customerDTO = $this->customerService->prepareCustomerData(matchingPunchoutGroup:$matchingPunchoutGroup,email:$useEmail,nameData:$nameData);
+                        $customerDTO = $this->customerService->prepareCustomerData($matchingPunchoutGroup, $useEmail,
+                            $nameData);
                         $matchingCustomer = $this->customerService->createCustomer($customerDTO);
-                        $this->customerService->createCustomerAddress(customer:$matchingCustomer,punchoutGroup:$matchingPunchoutGroup);
+                        $this->customerService->createCustomerAddress($matchingCustomer, $matchingPunchoutGroup);
                     }
-                    $setupRequestDTO = $this->setupRequestService->prepareSetupData(customerId: $matchingCustomer->getId(),cxmlData: $parsedXMLData);
+                    $setupRequestDTO = $this->setupRequestService->prepareSetupData($matchingCustomer->getId(),
+                        $parsedXMLData);
                     $punchoutSetupRequestModel = $this->setupRequestService->createPunchoutSetupRequest($setupRequestDTO);
-                    $startUrl = $this->setupRequestService->getStartUpUrlResponse(punchoutSetupRequestModel: $punchoutSetupRequestModel);
+                    $startUrl = $this->setupRequestService->getStartUpUrlResponse($punchoutSetupRequestModel);
                     $info = 'Successful CXML PunchOutSetupResponse';
-                    $this->eventServiceProvider->dispatchCxmlSetupRequestEvent($matchingCustomer->getId(),$matchingPunchoutGroup->getPunchoutgroupId(),$info);
-                    return $this->cxmlResponse->punchoutUpResponse(statusCode: 200,
-                        payloadId: $parsedXMLData->getAttribute('payloadID'), startUrl: $startUrl);
-                   
+                    $this->eventServiceProvider->dispatchCxmlSetupRequestEvent($matchingCustomer->getId(),
+                        $matchingPunchoutGroup->getPunchoutgroupId(), $info);
+        
+                    return $this->cxmlResponse->punchoutUpResponse(200, $parsedXMLData->getAttribute('payloadID'),
+                        $startUrl);
+        
                 }
-                
-                
+    
+    
             } catch (\Exception $exception) {
-                $this->eventServiceProvider->dispatchExceptionPunchoutRequestEvent(eventType: 'CXML PunchOutSetupRequest',
-                    action: 'CxmlSetup', info: sprintf('Message:%s File:%s', $exception->getMessage(),
+                $this->eventServiceProvider->dispatchExceptionPunchoutRequestEvent('CXML PunchOutSetupRequest',
+                    'CxmlSetup',
+                    sprintf('Message:%s File:%s', $exception->getMessage(),
                         $exception->getFile()));
+    
                 return $this->cxmlResponse->respondWithData(400, $exception->getMessage());
             }
+    
             return $this->cxmlResponse->respondSuccess();
         }
         
