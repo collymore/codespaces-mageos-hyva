@@ -56,7 +56,7 @@ namespace Develodesign\Punchout\Service;
             return $this->getCustomerSession();
         }
 
-        public function getPunchoutType(): string
+        public function getPunchoutType(): string|null
         {
             return $this->customerSession->getPunchoutType();
         }
