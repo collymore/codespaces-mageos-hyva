@@ -26,7 +26,11 @@
                 </div>
             
             </form>
-        </div>
+            <div>
+                <a class="download-link-file-sample" href="<?=  /* @escapeNotVerified */ $block->getDownloadSampleUrl() ?>" target="_blank" rel="nofollow">
+                    <?= $block->escapeHtml(__('Download Sample')) ?>
+                </a> |
+            </div>
     </div>
     
     <script>
