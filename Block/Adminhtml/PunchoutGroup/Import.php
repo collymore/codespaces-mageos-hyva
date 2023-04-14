@@ -35,4 +35,9 @@ class Import extends Widget
     {
         return $this->getUrl('develodesign_punchout/punchoutgroup/importPost');
     }
+    
+    public function getDownloadSampleUrl()
+    {
+        return $this->getUrl('develodesign_punchout/punchoutgroup/downloadFile');
+    }
 }
