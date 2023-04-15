@@ -9,6 +9,7 @@
     use Magento\Backend\App\Action\Context;
 
 
+
     class DownloadFile extends \Develodesign\Punchout\Controller\Adminhtml\PunchoutGroup
     {
         /**
@@ -28,7 +29,7 @@
          * @param DirectoryList $directory
          */
         public function __construct(
-            \Magento\Framework\App\Action\Context $context,
+            Context $context,
             Registry  $coreRegistry,
             \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
             \Magento\Framework\Filesystem\DirectoryList $directory
