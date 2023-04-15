@@ -17,18 +17,21 @@ define([
         debugger
         e.preventDefault();
         if($(this).hasClass("oci")){
-            window.open(
-                $(this).parent(".punchout-options").find(".oci-url").val()
-                +"?username="+$(this).parent(".punchout-options").find(".oci-username").val()
-                + "&password="+$(this).parent(".punchout-options").find(".oci-password").val()
-                +"&hook_url="+$(this).parent(".punchout-options").find(".oci-hook").val()
-                +"&~target="+$(this).parent(".punchout-options").find(".oci-hook").val(),
+            let url = $(this).parent(".punchout-options").find(".oci-url").val() + "?username=" + $(this).parent(".punchout-options").find(".oci-username").val()
+                + "&password=" + $(this).parent(".punchout-options").find(".oci-password").val()
+                + "&hook_url=" + $(this).parent(".punchout-options").find(".oci-hook").val()
+                +"&~target="+'_blank'
+                +"&~okcode=ADDI"
+                +"&~caller=CTLG"
+               +"&OCI_VERSION=4.0";
+            return window.open(
+                url,
                 '_blank'
             );
         }
         else if($(this).hasClass("cxml")){
             $.ajax({
-                type: "POST",
+                type: "GET",
                 url: $(this).parent(".punchout-options").find(".cxml-url").val(),
                 cache: false,
                 dataType: "xml",
@@ -39,6 +42,7 @@ define([
                     'shared_secret': $(this).parent(".punchout-options").find(".cxml-shared-secret").val(),
                     'request_operation': $(this).parent(".punchout-options").find(".cxml-request-operation").val(),
                     'sender_identity': $(this).parent(".punchout-options").find(".cxml-sender-identity").val(),
+                    'ariba_network_id':$(this).parent(".punchout-options").find(".cxml-ariba-network-id").val(),
                     'extrinsic_data': $(this).parent(".punchout-options").find(".cxml-extrinsic-data").val(),
                     'contact_data': $(this).parent(".punchout-options").find(".cxml-contact-data").val(),
                     'return_url': $(this).parent(".punchout-options").find(".cxml-return-url").val()

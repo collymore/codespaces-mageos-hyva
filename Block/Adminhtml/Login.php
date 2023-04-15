@@ -2,10 +2,12 @@
 
 namespace Develodesign\Punchout\Block\Adminhtml;
 
+use Develodesign\Punchout\Api\Data\PunchoutGroupInterface;
 use Develodesign\Punchout\Model\ResourceModel\PunchoutGroup\CollectionFactory as PunchoutGroupCollectionFactory;
 use Develodesign\Punchout\Api\PunchoutGroupRepositoryInterface;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Url;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\Template\Context;
 
 /**
@@ -15,7 +17,7 @@ use Magento\Framework\View\Element\Template\Context;
 class Login extends \Magento\Framework\View\Element\Template
 {
     /**
-     * @var CollectionFactory
+     * @var PunchoutGroupCollectionFactory
      */
     protected $punchoutGroupCollection;
 
@@ -45,27 +47,34 @@ class Login extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @return PunchoutGroupCollectionFactory
+     * @return \Develodesign\Punchout\Model\ResourceModel\PunchoutGroup\Collection
      */
     public function getPunchoutGroups()
     {
         $collection = $this->punchoutGroupCollection->create();
-        $collection->setOrder('group_name', 'ASC');
+        $collection->addFieldToFilter('status', ['eq' => '1'])
+            ->setOrder('group_name', 'ASC');
+    
         return $collection;
     }
 
     /**
      * @return string
      */
-    public function getCustomPostActionUrl()
+    public function getCXMLSetupUrl(): string
     {
-        $url = $this->getUrl('develo_punchout/index/login');
-        return $url;
+        return  sprintf('%s%s',$this->getBaseUrl(),'develo_punchout/index/cxmlsetup');
     }
-
+    
+    public function getOCISetupUrl(): string
+    {
+        return sprintf('%s%s',$this->getBaseUrl(),'develo_punchout/index/ocisetup');
+    }
+    
     /**
      * @param $groupId
-     * @return false|\Magento\Company\Api\Data\CompanyInterface
+     *
+     * @return PunchoutGroupInterface|false
      */
     public function getPunchoutGroup($groupId)
     {
@@ -75,39 +84,45 @@ class Login extends \Magento\Framework\View\Element\Template
             return false;
         }
     }
-
+    
     /**
      * @param $groupId
+     *
      * @return bool
+     * @throws LocalizedException
      */
-    public function hasPunchout($groupId)
+    public function hasPunchout($groupId): bool
     {
         $punchout = false;
-        if ($this->hasCxmlPunchout($groupId) || $this->hasOciPunchout($groupId)) {
+        if ($this->getCxmlPunchout($groupId) || $this->getOciPunchout($groupId)) {
             $punchout = true;
         }
         return $punchout;
     }
-
+    
     /**
      * @param $groupId
+     *
      * @return array|false
+     * @throws LocalizedException
      */
-    public function hasCxmlPunchout($groupId)
+    public function getCxmlPunchout($groupId): bool|array
     {
-        if (!$group = $this->punchoutGroupRepository->get($groupId))
+        if (!$group = $this->punchoutGroupRepository->get($groupId)) {
             return false;
+        }
 
         if (
-            !$group->getData("status") ||
-            !$group->getData("shared_secret") ||
-            (!$group->getData("duns_identity") || !$group->getData("ariba_network_id"))
+            !$group->getSharedSecret() &&
+            (!$group->getDunsIdentity() || !$group->getAribaNetworkId())
         ) {
             return false;
         }
+        
         return array(
-            "shared_secret" => $group->getData("shared_secret"),
-            "duns_identity" => $group->getData("duns_identity")?:$group->getData("duns_identity")
+            "shared_secret" => $group->getSharedSecret(),
+            "duns_identity" => $group->getDunsIdentity(),
+            "ariba_network_id" => $group->getAribaNetworkId()
         );
     }
 
@@ -115,31 +130,32 @@ class Login extends \Magento\Framework\View\Element\Template
      * @param $groupId
      * @return array|false
      */
-    public function hasOciPunchout($groupId)
+    public function getOciPunchout($groupId): bool|array
     {
-        if (!$group = $this->getPunchoutGroup($groupId))
+        if (!$group = $this->getPunchoutGroup($groupId)) {
             return false;
+        }
         if (
-            !$group->getData("is_punchout") ||
-            !$group->getData("oci_username") ||
-            !$group->getData("oci_password")
+            !$group->getOciUsername() &&
+            !$group->getOciPassword()
         ) {
             return false;
         }
         return array(
-            "oci_username" => $group->getData("oci_username"),
-            "oci_password" => $group->getData("oci_password")
+            "oci_username" => $group->getOciUsername(),
+            "oci_password" => $group->getOciPassword()
         );
     }
 
     /**
      * @param $name
-     * @return mixed|string
+     * @return string
      */
-    public function getShortName($name)
+    public function getShortName($name): string
     {
-        if (strlen($name) > 24)
+        if (strlen($name) > 24) {
             $name = substr($name, 0, 24) . ' ...';
+        }
         return $name;
     }
 

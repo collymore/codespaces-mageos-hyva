@@ -83,7 +83,7 @@ namespace Develodesign\Punchout\Controller\Index;
                         $configParam
                     );
                 }
-                if  (!$this->ociService->isValidEmail($validatedPostBody['username'])) {
+                if  (!$this->ociService->isValidEmail((string)$validatedPostBody['username'])) {
                     return $this->jsonResponse->sendResponse(
                         422,
                         sprintf('Valid email is required to perform this action, %s provided', $validatedPostBody['username'])
