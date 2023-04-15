@@ -1,0 +1,56 @@
+<div class="block block-customer-login">
+    <input type="text"
+           name="punchout-search"
+           id="punchout-search"
+           class="input-text admin__control-text data-grid-search-control"
+           placeholder="<?= __('Search Punchout Groups...'); ?>"
+           data-mage-init='{"Develodesign_Punchout/js/search":{}}'
+           style="margin-bottom: 24px; text-align: center; width:300px"
+    />
+   <div class="admin__data-grid-wrap" data-role="grid-wrapper">
+    <table class="data-grid data-grid-draggable" id="punchout-options" data-role="grid" style="max-width:1500px;">
+    <thead>
+        <tr>
+            <th class="data-grid-th ">Group Name</th>
+            <th class="data-grid-th ">CXML Login</th>
+            <th class="data-grid-th ">OCI Login</th>
+        </tr>
+        </thead>    
+        <?php 
+        $toggle = "_odd-row";
+        foreach ($block->getPunchoutGroups() as $punchoutGroup): 
+            $toggle = ($toggle=="_odd-row"?"":"_odd-row");
+        ?>
+            <tr class="<?php echo $toggle;?> group-row">
+                <?php if($block->hasPunchout($punchoutGroup->getId())):?>
+                    <td class="group-name"><?php echo $punchoutGroup->getGroupName();?></td>
+                    <td class="punchout-options cxml-login">      
+                           <?php if($cxmlInfo = $block->hasCxmlPunchout($punchoutGroup->getId())): ?>
+                                 <span class="punchout-option cxml">CXML</span>
+                                <input type="hidden" name="cxml-url" class="cxml-url" value="/develo_punchout/index/cxmlsetup" />
+                                <input type="hidden" name="cxml-payload-id" class="cxml-payload-id" value="<?= substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(10/strlen($x)) )),1,10) ?>" />
+                                <input type="hidden" name="cxml-buyer-cookie" class="cxml-buyer-cookie" value="<?= substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(20/strlen($x)) )),1,20) ?>" />
+                                <input type="hidden" name="cxml-shared-secret" class="cxml-shared-secret" value="<?= $cxmlInfo["shared_secret"] ?>" />
+                                <input type="hidden" name="cxml-request-operation" class="cxml-request-operation" value="create" />
+                                <input type="hidden" name="cxml-sender-identity" class="cxml-sender-identity" value="<?= $cxmlInfo["duns_identity"] ?>" />
+                                <input type="hidden" name="cxml-extrinsic-data" class="cxml-extrinsic-data" value="test" />
+                                <input type="hidden" name="cxml-contact-data" class="cxml-contact-data" value="endUser" />
+                                <input type="hidden" name="cxml-return-url" class="cxml-return-url" value="<?= $block->getBaseUrl() ?>" />
+                            <?php endif; ?>
+                        </span>
+                    </td>
+                    <td class="punchout-options oci-login">
+                        <?php if($ociInfo = $block->hasOciPunchout($punchoutGroup->getId())): ?>
+                                <span class="punchout-option oci">OCI</span>
+                                <input type="hidden" name="oci-url" class="oci-url" value="/develo_punchout/index/ocisetup" />
+                                <input type="hidden" name="oci-hook" class="oci-hook" value="<?= $block->getBaseUrl() ?>" />
+                                <input type="hidden" name="oci-username" class="oci-username" value="<?= $ociInfo["oci_username"] ?>" />
+                                <input type="hidden" name="oci-password" class="oci-password" value="<?= $ociInfo["oci_password"] ?>" />
+                             <?php endif; ?>
+                    </td>
+                <?php endif; ?>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+   </div>
+</div>

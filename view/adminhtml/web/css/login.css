@@ -1,0 +1,79 @@
+ #punchout-options li {
+    border-bottom: 1px solid #ccc;
+    padding: 7px 0;
+    margin-bottom: 0;
+}
+
+#punchout-options li span.customer-toggle {
+    float: right;
+    border: 1px solid;
+    background: #0084f4;
+    padding: 0px 8px;
+    color: #fff;
+    font-size: 18px;
+    margin-top: -3px;
+    border-radius: 4px;
+    line-height: 24px;
+    cursor: pointer;
+    min-width: 10px;
+}
+#punchout-options li span.customer-toggle:hover,
+#punchout-options li span.customer-toggle.active,
+.punchout-icon:hover,
+.punchout-icon.active,
+.punchout-option:hover{
+    background-color: #CCCCCC;
+}
+
+.punchout-icon {
+    float: left;
+    color: #fff;
+    background-color: #0084f4;
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    line-height: 26px;
+    font-size: 14px;
+    margin-top: -2px;
+    cursor: pointer;
+    position: relative;
+}
+
+.punchout-icon i{
+    transform: rotate(-90deg);
+}
+
+.punchout-icon .punchout-options{
+    display: none;
+}
+
+.punchout-icon.active .punchout-options {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 320px;
+    color: black;
+    background: #fff;
+}
+
+.punchout-icon .punchout-options .close-punchout{
+    float: right;
+    background-color: red;
+    border-radius: 4px;
+    width: 26px;
+    height: 26px;
+    color: #fff;
+    font-weight: bold;
+    font-size: 9px;
+    line-height: 27px;
+}
+
+.punchout-option {
+     background-color: #0084f4;
+     border-radius: 4px;
+     color: #fff;
+     font-size: 14px;
+     padding: 2px 14px;
+     margin: 0 14px;
+ }

@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+	<update handle="styles"/>
+	 <head>
+        <css src="Develodesign_Punchout::css/login.css"/>
+        <css src="https://use.fontawesome.com/releases/v5.7.1/css/all.css" src_type="url"/>
+    </head>
+    <referenceContainer name="content">
+        <container name="punchout_login_container" as="punchout_login_container" htmlTag="div"
+                   htmlClass="login-container">
+            <block class="Develodesign\Punchout\Block\Adminhtml\Login" name="punchout_login" template="Develodesign_Punchout::login.phtml"/>
+        </container>
+    </referenceContainer>
+</page>
