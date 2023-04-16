@@ -68,13 +68,13 @@ define([
                 '</cXML>';
 
             $.ajax({
-                accepts: {xml: "text/xml", text: "text/plain"},
                 type: "POST",
                 url: $(this).parent(".punchout-options").find(".cxml-url").val(),
                 cache: false,
                 dataType: "xml",
-                converters: {"text xml": jQuery.parseXML},
-                data: {backEndData: xml},
+                contentType: "application/xml",
+                data: xml,
+                processData: false,
                 success: function(data) {
                     const returnUrl = $(data).find('URL').first().text();
                     if(returnUrl){
