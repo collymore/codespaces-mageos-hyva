@@ -81,7 +81,7 @@ define([
                     //Empty to remove magento's default handler
                     if (typeof settings.data === 'string' &&
                         settings.data.indexOf('form_key=') === -1) {
-                        return settings.data;
+                        settings.data;
                     }
                 },
                 success: function (data) {
