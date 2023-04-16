@@ -14,7 +14,6 @@ define([
         $(this).toggleClass("active");
     });
     $('.punchout-option').click(function (e) {
-        debugger
         e.preventDefault();
         if($(this).hasClass("oci")){
             let url = $(this).parent(".punchout-options").find(".oci-url").val() + "?username=" + $(this).parent(".punchout-options").find(".oci-username").val()
@@ -75,10 +74,19 @@ define([
                 contentType: "application/xml",
                 data: xml,
                 processData: false,
-                success: function(data) {
+                beforeSend: function(jqXHR, settings){
+                    //Empty to remove magento's default handler
+                    if (typeof settings.data === 'string' &&
+                        settings.data.indexOf('form_key=') === -1) {
+                        return settings.data;
+                    }
+                },
+                success: function (data) {
                     const returnUrl = $(data).find('URL').first().text();
-                    if(returnUrl){
-                        window.open(returnUrl, '_blank');
+                    if (returnUrl) {
+                        return window.open(
+                            returnUrl,
+                            '_blank');
                     }
                 },
                 error: function (data) {
