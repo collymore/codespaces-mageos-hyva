@@ -5,6 +5,7 @@ namespace Develodesign\Punchout\Block\Adminhtml;
 use Develodesign\Punchout\Api\Data\PunchoutGroupInterface;
 use Develodesign\Punchout\Model\ResourceModel\PunchoutGroup\CollectionFactory as PunchoutGroupCollectionFactory;
 use Develodesign\Punchout\Api\PunchoutGroupRepositoryInterface;
+use Develodesign\Punchout\Service\CustomerService;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Url;
 use Magento\Framework\Exception\LocalizedException;
@@ -22,27 +23,30 @@ class Login extends \Magento\Framework\View\Element\Template
     protected $punchoutGroupCollection;
 
     protected $punchoutGroupRepository;
+    
+    /**
+     * @var CustomerService
+     */
+    protected $customerService;
 
     /**
      * Index constructor.
      * @param Context $context
-     * @param Session $customerSession
-     * @param Url $customerUrl
      * @param PunchoutGroupRepository $punchoutGroupRepository
      * @param PunchoutGroupCollectionFactory $CollectionFactory
      * @param array $data
      */
     public function __construct(
         Context $context,
-        Session $customerSession,
-        Url $customerUrl,
         PunchoutGroupRepositoryInterface $punchoutGroupRepository,
         PunchoutGroupCollectionFactory $CollectionFactory,
+        CustomerService $customerService,
         array $data = array()
     )
     {
         $this->punchoutGroupRepository = $punchoutGroupRepository;
         $this->punchoutGroupCollection = $CollectionFactory;
+        $this->customerService = $customerService;
         parent::__construct($context, $data);
     }
 
@@ -111,21 +115,23 @@ class Login extends \Magento\Framework\View\Element\Template
         if (!$group = $this->punchoutGroupRepository->get($groupId)) {
             return false;
         }
-
+    
         if (
             !$group->getSharedSecret() &&
             (!$group->getDunsIdentity() || !$group->getAribaNetworkId())
         ) {
             return false;
         }
-        
-        return array(
-            "shared_secret" => $group->getSharedSecret(),
-            "duns_identity" => $group->getDunsIdentity(),
-            "ariba_network_id" => $group->getAribaNetworkId()
-        );
+        $customer = $this->customerService->getCustomerByPunchoutGroupId($groupId);
+        return [
+            "shared_secret"    => $group->getSharedSecret(),
+            "duns_identity"    => $group->getDunsIdentity(),
+            "ariba_network_id" => $group->getAribaNetworkId(),
+            'contactName'  => sprintf('%s %s', $customer->getFirstname(), $customer->getLastname()) ?? 'Test User',
+            'contactEmail' => $customer->getEmail() ?? $group->getGroupEmail()
+        ];
+    
     }
-
     /**
      * @param $groupId
      * @return array|false
@@ -158,5 +164,5 @@ class Login extends \Magento\Framework\View\Element\Template
         }
         return $name;
     }
-
+    
 }

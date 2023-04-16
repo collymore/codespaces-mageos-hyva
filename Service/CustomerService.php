@@ -173,6 +173,16 @@ namespace Develodesign\Punchout\Service;
                 ->getFirstItem();
             return $customer->getPunchoutGroup();
         }
+        
+        public function getCustomerByPunchoutGroupId(int $punchoutGroupId)
+        {
+            $customer = $this->customerCollection->create()
+                ->addFieldToFilter('punchout_group', $punchoutGroupId);
+            if($customer->count() > 0){
+                return $customer->getFirstItem();
+            }
+            return null;
+        }
     
         /**
          * @throws NoSuchEntityException

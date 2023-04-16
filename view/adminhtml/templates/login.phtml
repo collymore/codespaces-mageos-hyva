@@ -36,7 +36,8 @@
                                 <input type="hidden" name="cxml-sender-identity" class="cxml-sender-identity" value="<?= $cxmlInfo["duns_identity"] ?>" />
                                 <input type="hidden" name="cxml-ariba-network-id" class="cxml-ariba-network-id" value="<?= $cxmlInfo["ariba_network_id"] ?>" />
                                 <input type="hidden" name="cxml-extrinsic-data" class="cxml-extrinsic-data" value="test" />
-                                <input type="hidden" name="cxml-contact-data" class="cxml-contact-data" value="endUser" />
+                                <input type="hidden" name="cxml-contact-data-name" class="cxml-contact-data-name" value="<?= $cxmlInfo["contactName"] ?>" />
+                                <input type="hidden" name="cxml-contact-data-email" class="cxml-contact-data-email" value="<?= $cxmlInfo["contactEmail"] ?>" />
                                 <input type="hidden" name="cxml-return-url" class="cxml-return-url" value="<?= $block->getBaseUrl() ?>" />
                             <?php endif; ?>
                         </span>
