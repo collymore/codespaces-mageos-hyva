@@ -42,6 +42,9 @@ define([
                 '            <Credential domain="DUNS">\n' +
                 '                <Identity>acme</Identity>\n' +
                 '            </Credential>\n' +
+                '           <Credential domain="transactionnetworkid">\n' +
+                '                <Identity>'+ $(this).parent(".punchout-options").find(".cxml-ariba-network-id").val()+'</Identity>\n' +
+                '            </Credential>'+
                 '        </To>\n' +
                 '        <Sender>\n' +
                 '            <Credential domain="NetworkId">\n' +
