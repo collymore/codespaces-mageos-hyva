@@ -33,7 +33,7 @@ define([
             const timestamp = new Date();
             const xml = '<?xml version="1.0" encoding="UTF-8"?>\n' +
                 '<!DOCTYPE cXML SYSTEM "http://xml.cxml.org/schemas/cXML/1.2.044/cXML.dtd">' +
-                '<cXML payloadID="'+ $(this).parent(".punchout-options").find(".cxml-payload-id").val()+'" timestamp="'+ timestamp.toISOString() +'"version="1.2.044" xml:lang="en"><Header>\n' +
+                '<cXML payloadID="'+ $(this).parent(".punchout-options").find(".cxml-payload-id").val()+'" timestamp="'+ timestamp.toISOString() +'" version="1.2.044" xml:lang="en"><Header>\n' +
                 '        <From>\n' +
                 '            <Credential domain="NetworkId">\n' +
                 '                <Identity></Identity>\n' +
