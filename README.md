@@ -1,4 +1,4 @@
-# Mage2 Module Develodesign Punchout
+# Module Develodesign Punchout
 
     ``develodesign/module-punchout``
 
