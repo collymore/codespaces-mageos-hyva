@@ -122,8 +122,7 @@ namespace Develodesign\Punchout\Block;
             $ociSessionData  = $this->sessionService->getPunchoutSessionData('oci');
             $customer = $this->sessionService->getCustomerSession();
             $punchoutGroupId = $this->customerService->getPunchoutGroupId($customer->getCustomerId());
-            $form = $this->ociBlock->getOCIForm(ociSessionData:$ociSessionData,items: $this->cart->getItems(),punchoutGroupId: $punchoutGroupId);
-            return $form;
+            return $this->ociBlock->getOCIForm(ociSessionData:$ociSessionData,items: $this->cart->getItems(),punchoutGroupId: $punchoutGroupId);
         }
         
         public function generateOCISubmitButton(): string
