@@ -46,6 +46,13 @@ namespace Develodesign\Punchout\Helper;
         }
 
         /**
+        * Returns the Modal content shown after returning Cxml cart
+        */
+        public function getTransferModalContent(){
+            return $this->getConfiguredValue('develodesign_punchout/display/transfer_modal_content');
+        }
+
+        /**
          * Returns if the non-catalog products feature should be used
          */
         public function getConfigLoadNonCatalogue()
