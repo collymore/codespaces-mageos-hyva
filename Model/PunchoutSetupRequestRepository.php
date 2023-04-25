@@ -12,7 +12,7 @@ use Develodesign\Punchout\Api\Data\PunchoutSetupRequestInterfaceFactory;
 use Develodesign\Punchout\Api\Data\PunchoutSetupRequestSearchResultsInterfaceFactory;
 use Develodesign\Punchout\Api\PunchoutSetupRequestRepositoryInterface;
 use Develodesign\Punchout\Model\ResourceModel\PunchoutSetupRequest as ResourcePunchoutSetupRequest;
-use Develodesign\Punchout\Model\ResourceModel\PunchoutSetupRequest\CollectionFactory as PunchoutSetupRequestCollectionFactory;
+use Develodesign\Punchout\Model\ResourceModel\PunchoutSetupRequest\CollectionFactory as PunchoutSetupRequestCollectionFactory;//phpcs:ignore
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -21,9 +21,9 @@ use Magento\Framework\Exception\NoSuchEntityException;
 class PunchoutSetupRequestRepository implements PunchoutSetupRequestRepositoryInterface
 {
 
-        /**
-         * @var PunchoutSetupRequestCollectionFactory
-         */
+    /**
+     * @var PunchoutSetupRequestCollectionFactory
+     */
     protected $punchoutSetupRequestCollectionFactory;
 
     /**

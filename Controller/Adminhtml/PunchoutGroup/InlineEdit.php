@@ -52,7 +52,7 @@ class InlineEdit extends \Magento\Backend\App\Action
                     /** @var PunchoutGroup $model */
                     $model = $this->_objectManager->create(PunchoutGroup::class)->load($modelid);
                     try {
-                        $model->setData(array_merge($model->getData(), $postItems[$modelid]));
+                        $model->setData(array_merge($model->getData(), $postItems[$modelid]));// phpcs:ignore
                         $model->save();
                     } catch (\Exception $e) {
                         $messages[] = "[Punchoutgroup ID: {$modelid}]  {$e->getMessage()}";

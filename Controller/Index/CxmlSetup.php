@@ -11,7 +11,8 @@
     use Magento\Framework\App\Action\Action;
     use Magento\Framework\App\Request\InvalidRequestException;
     use Magento\Framework\App\RequestInterface;
-    
+    use Magento\Framework\Filesystem\DriverInterface;
+
 class CxmlSetup extends Action implements \Magento\Framework\App\CsrfAwareActionInterface
 {
     /**
@@ -43,6 +44,11 @@ class CxmlSetup extends Action implements \Magento\Framework\App\CsrfAwareAction
      * @var EventServiceProvider
      */
     protected $eventServiceProvider;
+
+    /**
+     * @var DriverInterface
+     */
+    protected $driverInterface;
     
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -51,7 +57,8 @@ class CxmlSetup extends Action implements \Magento\Framework\App\CsrfAwareAction
         PunchoutGroupService $punchoutGroupService,
         CustomerService $customerService,
         SetupRequestService $setupRequestService,
-        EventServiceProvider $eventServiceProvider
+        EventServiceProvider $eventServiceProvider,
+        DriverInterface $driverInterface
     ) {
         parent::__construct($context);
         $this->cxmlService = $cxmlService;
@@ -60,11 +67,12 @@ class CxmlSetup extends Action implements \Magento\Framework\App\CsrfAwareAction
         $this->customerService = $customerService;
         $this->setupRequestService = $setupRequestService;
         $this->eventServiceProvider = $eventServiceProvider;
+        $this->driverInterface = $driverInterface;
     }
     public function execute()
     {
         try {
-            $xmlRawData = file_get_contents('php://input');
+            $xmlRawData = $this->driverInterface->fileGetContents('php://input');
             if (!$xmlRawData) {
                 $this->eventServiceProvider->dispatchCxmlSetupRequestEvent('', '', 'No POST data included in request');
                 return $this->cxmlResponse->respondWithData(400, 'Post body is missing or XML appears invalid');
@@ -91,7 +99,9 @@ class CxmlSetup extends Action implements \Magento\Framework\App\CsrfAwareAction
                 $aribaNetworkId
             );
     
-            $extrinsicData = $this->cxmlService->getExtrinsicData($parsedXMLData->Request->PunchOutSetupRequest->Extrinsic);
+            $extrinsicData = $this->cxmlService->getExtrinsicData(
+                $parsedXMLData->Request->PunchOutSetupRequest->Extrinsic
+            );
     
             if ($this->cxmlService->isCreate($parsedXMLData) === true) {
                 $useEmail = $this->cxmlService->fetchEmail($extrinsicData, $parsedXMLData);
@@ -131,10 +141,7 @@ class CxmlSetup extends Action implements \Magento\Framework\App\CsrfAwareAction
                     $parsedXMLData->getAttribute('payloadID'),
                     $startUrl
                 );
-        
             }
-    
-    
         } catch (\Exception $exception) {
             $this->eventServiceProvider->dispatchExceptionPunchoutRequestEvent(
                 'CXML PunchOutSetupRequest',

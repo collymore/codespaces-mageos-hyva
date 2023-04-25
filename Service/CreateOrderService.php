@@ -99,7 +99,6 @@ class CreateOrderService
         $this->transactionFactory = $transactionFactory;
     }
     
-    
     /**
      * @throws CouldNotSaveException
      * @throws NoSuchEntityException
@@ -143,7 +142,6 @@ class CreateOrderService
                         'options' => $productOptions,
                     ];
                     $product->setIsSuperMode(true);
-                    //$product->setSxeQuotePrice($price);
                     $product->setPrice($price);
                     $product->setCustomPrice($price);
                     $product->setOriginalCustomPrice($price);
@@ -200,10 +198,10 @@ class CreateOrderService
     private function getCustomisableProductOptions(Product $product, $item): array
     {
         $optionValues = [];
-        $skuTitle = $this->configHelper->getConfigSKUTitle();
-        $nameTitle = $this->configHelper->getConfigNameTitle();
-        $qtyTitle = $this->configHelper->getConfigQtyTitle();
-        if (isset($skuTitle, $nameTitle, $qtyTitle) && (trim($skuTitle) !== '' && trim($nameTitle) !== '' && trim($qtyTitle) !== '' )) {
+        $skuTitle = trim($this->configHelper->getConfigSKUTitle());
+        $nameTitle = trim($this->configHelper->getConfigNameTitle());
+        $qtyTitle = trim($this->configHelper->getConfigQtyTitle());
+        if (isset($skuTitle, $nameTitle, $qtyTitle) && ($skuTitle && $nameTitle && $qtyTitle)) {
             foreach ($product->getOptions() as $o) {
                 if ($o->getTitle() === $skuTitle) {
                     $optionValues[$o->getId()] = $item->getProductSku() ?: substr($item->getDescription(), 0, 60);
@@ -233,8 +231,9 @@ class CreateOrderService
             }
         }
         if (!$isAvailable) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('No payment is not available for the given quote.'));
-        
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('No payment is not available for the given quote.')
+            );
         }
     
         return true;

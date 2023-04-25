@@ -30,9 +30,9 @@ class Request extends DataObject
      */
     protected $customer;
 
-    protected $company;
-
-    
+    /**
+     * @var PunchoutGroup
+     */
     protected $punchoutGroup;
 
     /**
@@ -128,7 +128,6 @@ class Request extends DataObject
         return $this->customer;
     }
     
-
     /**
      * @return mixed
      */
@@ -159,7 +158,6 @@ class Request extends DataObject
         );
         return $this->getCustomer() && $this->getPunchoutGroup() !== null && !$isAlreadyExists;
     }
-
 
     /**
      * @throws NoSuchEntityException
@@ -233,8 +231,12 @@ class Request extends DataObject
                         if ($setupId) {
                             $result['setup_id'] = $setupId;
                         }
-                        $this->createOrder->addStatusHistoryComment("PunchOut Order received (PO Number {$order->getPayment()->getPoNumber()})");
-                        $this->createOrder->setState(\Magento\Sales\Model\Order::STATE_PROCESSING)->setStatus(\Magento\Sales\Model\Order::STATE_PROCESSING);
+                        $po = $order->getPayment()->getPoNumber();
+                        $this->createOrder
+                            ->addStatusHistoryComment("PunchOut Order (PO Number {$po})");
+                        $this->createOrder
+                            ->setState(\Magento\Sales\Model\Order::STATE_PROCESSING)
+                            ->setStatus(\Magento\Sales\Model\Order::STATE_PROCESSING);
                         $this->createOrderService->invoiceOrder($this->createOrder);
                         $this->createOrder->save();
                         $result['order_id'] = $order->getRealOrderId();
@@ -272,8 +274,6 @@ class Request extends DataObject
                     'Failure to get all visible cart items'
                 );
             }
-            
-            
         }
         return $result;
     }

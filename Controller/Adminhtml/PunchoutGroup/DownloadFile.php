@@ -7,6 +7,7 @@
     use Magento\Framework\Filesystem\DirectoryList;
     use Magento\Framework\Registry;
     use Magento\Backend\App\Action\Context;
+    use Magento\Framework\Filesystem\DriverInterface;
 
 class DownloadFile extends \Develodesign\Punchout\Controller\Adminhtml\PunchoutGroup
 {
@@ -21,6 +22,11 @@ class DownloadFile extends \Develodesign\Punchout\Controller\Adminhtml\PunchoutG
     protected $directory;
     
     /**
+     * @var DriverInterface
+     */
+    protected $driverInterface;
+    
+    /**
      * @param Context       $context
      * @param Registry      $coreRegistry
      * @param FileFactory   $fileFactory
@@ -30,15 +36,16 @@ class DownloadFile extends \Develodesign\Punchout\Controller\Adminhtml\PunchoutG
         Context $context,
         Registry  $coreRegistry,
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
-        \Magento\Framework\Filesystem\DirectoryList $directory
+        \Magento\Framework\Filesystem\DirectoryList $directory,
+        DriverInterface $driverInterface
     ) {
         
         $this->downloader = $fileFactory;
         $this->directory = $directory;
-    
+        $this->driverInterface = $driverInterface;
+
         parent::__construct($context, $coreRegistry);
     }
-    
     
     /**
      * @throws FileSystemException
@@ -51,7 +58,7 @@ class DownloadFile extends \Develodesign\Punchout\Controller\Adminhtml\PunchoutG
         $file = $this->directory->getPath('media') . '/' . $filepath;
         return $this->downloader->create(
             $filename,
-            @file_get_contents($file)
+            $this->driverInterface->fileGetContents($file)
         );
     }
 }

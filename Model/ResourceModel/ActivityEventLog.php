@@ -7,12 +7,6 @@ namespace Develodesign\Punchout\Model\ResourceModel;
 
 class ActivityEventLog extends AbstractDb
 {
-    public function __construct(
-        Context $context
-    ) {
-        parent::__construct($context);
-    }
-
     /**
      * Define resource model
      *

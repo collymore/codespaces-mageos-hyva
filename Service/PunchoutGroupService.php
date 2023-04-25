@@ -2,10 +2,10 @@
 
 namespace Develodesign\Punchout\Service;
 
-    use Develodesign\Punchout\Model\ResourceModel\PunchoutGroup\CollectionFactory;
-    use Magento\Framework\DataObject;
-    use Magento\Framework\Exception\NoSuchEntityException;
-    use Develodesign\Punchout\Model\PunchoutGroup;
+use Develodesign\Punchout\Model\ResourceModel\PunchoutGroup\CollectionFactory;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Develodesign\Punchout\Model\PunchoutGroup;
 
 class PunchoutGroupService
 {
@@ -19,6 +19,10 @@ class PunchoutGroupService
         $this->punchoutGroupCollection = $punchoutGroupCollection;
     }
     
+    /**
+     * Loads a punchout group by sharedsecret and Duns Id
+     * @return PunchoutGroup
+     */
     public function loadPunchOutGroupBySecretDuns($sharedSecret, $dunsIdentity): PunchoutGroup
     {
         return $this->punchoutGroupCollection->create()
@@ -27,6 +31,10 @@ class PunchoutGroupService
             ->getFirstItem();
     }
 
+    /**
+     * Loads a punchout group by sharedsecret and aribanetworkId
+     * @return PunchoutGroup
+     */
     public function loadPunchOutGroupByAribaNetworkSecret($sharedSecret, $aribaNetworkId): PunchoutGroup
     {
         return $this->punchoutGroupCollection->create()
@@ -35,6 +43,11 @@ class PunchoutGroupService
             ->getFirstItem();
     }
 
+    /**
+     * Loads a punchout group by sharedsecret and duns or aribanetworkId
+     * @throws NoSuchEntityException
+     * @return PunchoutGroup
+     */
     public function loadPunchOutGroupByCredentials($sharedSecret, $dunsIdentity, $aribaNetworkId): PunchoutGroup
     {
         $punchoutGroup = $this->loadPunchOutGroupBySecretDuns($sharedSecret, $dunsIdentity);
@@ -47,7 +60,7 @@ class PunchoutGroupService
         if (!$punchoutGroup->getPunchoutgroupId()) {
             throw new NoSuchEntityException(
                 __(
-                    'No such PunchoutGroup entity with %fieldName = %fieldValue, %field2Name = %field2Value, %field3Name = %field3Value',
+                    'NoSuch PunchoutGroup Shared Secret: %fieldValue, Duns: %field2Value, Ariba: %field3Value',
                     [
                         'fieldName'   => 'sharedSecret',
                         'fieldValue'  => $sharedSecret,
@@ -62,7 +75,11 @@ class PunchoutGroupService
         return $punchoutGroup;
     }
     
-    public function loadPunchOutGroupByOciCredentials(string $username, string $password): ?DataObject
+    /**
+     * Loads a punchoutGroup by OCI login credentials
+     * @return PunchoutGroup
+     */
+    public function loadPunchOutGroupByOciCredentials(string $username, string $password): ?PunchoutGroup
     {
         $punchoutGroup = $this->punchoutGroupCollection->create()
             ->addFieldToFilter('oci_username', ['eq' => $username])
@@ -73,7 +90,11 @@ class PunchoutGroupService
         return $punchoutGroup->getFirstItem();
     }
         
-    public function loadPunchOutGroupById(int $punchoutGroupId)
+    /**
+     * Loads a punchout group by punchoutgroup_id
+     * @return ?PunchoutGroup
+     */
+    public function loadPunchOutGroupById(int $punchoutGroupId) : ?PunchoutGroup
     {
         $punchoutGroup = $this->punchoutGroupCollection->create()
             ->addFieldToFilter('punchoutgroup_id', ['eq' => $punchoutGroupId]);

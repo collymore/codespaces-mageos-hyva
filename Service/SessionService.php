@@ -86,10 +86,8 @@ class SessionService
                     'caller'   => $customerSession->getCaller()
                 ];
         }
-        
         return $sessionData;
     }
-        
         
     /**
      * Clears current user cart session data

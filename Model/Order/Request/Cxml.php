@@ -1,13 +1,13 @@
 <?php
     
-    namespace Develodesign\Punchout\Model\Order\Request;
-    
-    use Develodesign\Punchout\Exceptions\CxmlDocumentLoadingException;
-    use Magento\Customer\Api\Data\CustomerInterface;
-    use Magento\Framework\DataObject;
-    use Magento\Framework\Exception\LocalizedException;
-    use Magento\Framework\Exception\NoSuchEntityException;
-    use Develodesign\Punchout\Model\PunchoutGroup;
+namespace Develodesign\Punchout\Model\Order\Request;
+
+use Develodesign\Punchout\Exceptions\CxmlDocumentLoadingException;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Develodesign\Punchout\Model\PunchoutGroup;
 
 class Cxml extends AbstractRequest
 {
@@ -72,7 +72,10 @@ class Cxml extends AbstractRequest
             }
         }
         if ($aribaNetworkId) {
-            $networkResult = $this->punchoutGroupService->loadPunchOutGroupByAribaNetworkSecret($sharedSecret, $aribaNetworkId);
+            $networkResult = $this->punchoutGroupService->loadPunchOutGroupByAribaNetworkSecret(
+                $sharedSecret,
+                $aribaNetworkId
+            );
             if ($networkResult->getPunchoutgroupId()) {
                 $punchoutGroup = $networkResult;
             }
@@ -80,7 +83,7 @@ class Cxml extends AbstractRequest
         if ($punchoutGroup === null || !$punchoutGroup->getPunchoutgroupId()) {
             throw new NoSuchEntityException(
                 __(
-                    'No such PunchoutGroup entity with %fieldName = %fieldValue, %field2Name = %field2Value, %field3Name = %field3Value',
+                    'No PunchoutGroup secret: %fieldValue, duns: %field2Value, ariba: %field3Value',
                     [
                         'fieldName'   => 'sharedSecret',
                         'fieldValue'  => $sharedSecret,
@@ -96,12 +99,18 @@ class Cxml extends AbstractRequest
         return $punchoutGroup;
     }
     
+    /**
+     * Get ShipToAddress
+     */
     public function getShipToAddress()
     {
         $address = $this->cxml->Request->OrderRequest->OrderRequestHeader->ShipTo->Address;
         return $this->cxmlService->parseAddress($address);
     }
     
+    /**
+     * Get billToAddress
+     */
     public function getBillToAddress()
     {
         $address = $this->cxml->Request->OrderRequest->OrderRequestHeader->BillTo->Address;
@@ -109,6 +118,7 @@ class Cxml extends AbstractRequest
     }
     
     /**
+     * Gets Product Items from Cxml xml object
      * @return DataObject
      */
     public function getItems(): DataObject
@@ -123,7 +133,12 @@ class Cxml extends AbstractRequest
                 if (isset($itemOut->ItemDetail->Extrinsic)) {
                     $extrinsic = [$this->cxmlService->getItemOutExtrinsic($itemOut->ItemDetail->Extrinsic)];
                 }
-                if (isset($itemOut->Distribution, $itemOut->Distribution->Accounting, $itemOut->Distribution->Accounting->Segment)) {
+                if (isset(
+                    $itemOut->Distribution,
+                    $itemOut->Distribution->Accounting,
+                    $itemOut->Distribution->Accounting->Segment
+                )
+                    ) {
                     $distribution = [
                         'accounting_name' => (string)$itemOut->Distribution->Accounting->attributes()->name,
                         'segment' => sprintf(
@@ -164,6 +179,9 @@ class Cxml extends AbstractRequest
         return $this->items;
     }
     
+    /**
+     * Set items in request document
+     */
     public function setItems($items): void
     {
         if (is_array($items)) {
@@ -175,13 +193,20 @@ class Cxml extends AbstractRequest
         }
     }
     
+    /**
+     * Get PO number from request xml
+     */
     public function getPoNumber(): string
     {
-        $poNumber = $this->poNumber ?? (string)$this->cxml->Request->OrderRequest->OrderRequestHeader->attributes()->orderID;
+        $orderId = (string)$this->cxml->Request->OrderRequest->OrderRequestHeader->attributes()->orderID;
+        $poNumber = $this->poNumber ?? $orderId;
         $this->poNumber = $poNumber;
         return $this->poNumber;
     }
     
+    /**
+     * Get shipping code or default to freeshipping_freeshipping
+     */
     public function getShippingCode(): string
     {
         if (null === $this->shippingCode) {
@@ -190,6 +215,9 @@ class Cxml extends AbstractRequest
         return $this->shippingCode;
     }
     
+    /**
+     * Get shipping price from xml request
+     */
     public function getShippingPrice(): string
     {
         if (null === $this->shippingPrice) {
@@ -198,6 +226,9 @@ class Cxml extends AbstractRequest
         return $this->shippingCode;
     }
     
+    /**
+     * Get tax int value from xml request
+     */
     public function getTax(): int
     {
         if (!isset($this->tax)) {
@@ -206,6 +237,9 @@ class Cxml extends AbstractRequest
         return $this->tax;
     }
     
+    /**
+     * Get payment method from xml request
+     */
     public function getPaymentMethod(): string
     {
         $paymentMethod = $this->paymentMethod ?? 'purchaseorder';
@@ -213,6 +247,9 @@ class Cxml extends AbstractRequest
         return $this->paymentMethod;
     }
     
+    /**
+     * Get Cxml order GrandTotal float from xml
+     */
     public function getGrandTotal(): float
     {
         if (null === $this->grandTotal) {

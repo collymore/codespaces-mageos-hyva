@@ -2,12 +2,13 @@
 
 namespace Develodesign\Punchout\Ui\Component\Listing\Column;
 
-    use Magento\Customer\Model\ResourceModel\CustomerRepository;
-    use Magento\Framework\Exception\LocalizedException;
-    use Magento\Framework\Exception\NoSuchEntityException;
-    use Magento\Framework\View\Element\UiComponent\ContextInterface;
-    use Magento\Framework\View\Element\UiComponentFactory;
-    use Magento\Ui\Component\Listing\Columns\Column;
+use Magento\Customer\Model\ResourceModel\CustomerRepository;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Ui\Component\Listing\Columns\Column;
+use Psr\Log\LoggerInterface;
 
 class Customer extends Column
 {
@@ -15,6 +16,11 @@ class Customer extends Column
      * @var CustomerRepository
      */
     protected $customerRepository;
+
+    /**
+     * @var LoggerInterface|MockObject
+     */
+    private $logger;
     
     /**
      * Customer constructor.
@@ -29,10 +35,12 @@ class Customer extends Column
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
         CustomerRepository $customerRepository,
+        LoggerInterface $logger,
         array $components = [],
         array $data = []
     ) {
         $this->customerRepository = $customerRepository;
+        $this->logger = $logger;
         
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
@@ -52,11 +60,15 @@ class Customer extends Column
                 try {
                     $customer = $this->customerRepository->getById($customerId);
                     if ($customer && $customer->getId()) {
-                        $item['user_id'] = $customer->getFirstname() . ' ' . $customer->getLastname() . ' <' . $customer->getEmail() . '>';
+                        $customerName = $customer->getFirstname();
+                        $customerEmail = $customer->getLastname();
                     } else {
-                        $item['user_id'] = $item['customer_name'] . ' <' . $item['customer_email'] . '>';
+                        $customerName = $item['customer_name'];
+                        $customerEmail = $item['customer_email'];
                     }
+                    $item['user_id'] = "$customerName <{$customerEmail}>";
                 } catch (NoSuchEntityException $e) {
+                    $this->logger->warning("Non existant Customer attempted to be loaded ID : {$customerId}");
                 }
             }
         }

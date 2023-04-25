@@ -19,7 +19,6 @@ class ActivityEventLog extends \Magento\Framework\Model\AbstractModel
      */
     protected $_eventPrefix = 'develodesign_logactivity';
     
-    
     /**
      * @param \Magento\Framework\Model\Context                                          $context
      * @param \Magento\Framework\Registry                                               $registry

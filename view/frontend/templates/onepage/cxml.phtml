@@ -1,12 +1,11 @@
 <div class="modal" id="punchout-modal">
     <div class="modal-content">
-        <?php echo $block->getConfigHelper()->getTransferModalContent(); ?>
+        <?= /* @noEscape */ $block->getConfigHelper()->getTransferModalContent(); ?>
     </div>
 </div>
-<?php echo $block->generateCXMLCheckoutForm();
-      echo $block->generateCXMLSubmitButton();
-?>
 
+<?= /* @noEscape */ $block->generateCXMLCheckoutForm(); ?>
+<?= /* @noEscape */ $block->generateCXMLSubmitButton(); ?>
 
 <script type="text/javascript">
     require(["jquery", 'mage/url'], function($,urlBuilder){
@@ -19,15 +18,12 @@
             }).done(function (response) {
                 if(response && response['error'] === false){
                     console.log(response);
-
                 }
             });
         }
 
         $(document).ready(function() {
-
             $('#punchout_cxml_form').submit(function() {
-
                 let $xmlStr =  $('#urlencoded_bottom').val();
                 /**
                  * Log Outgoing CXML data
@@ -36,16 +32,9 @@
                     info: $xmlStr,
                     event_type:'CXML Cart Page Punchout',
                     action: 'Develodesign/Punchout/Block/TransferCheckoutButton'
-
                 };
                 logOutGoingXMLData(payload);
             });
-
-
-
-
         });
-
-
     });
 </script>

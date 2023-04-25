@@ -5,10 +5,14 @@ namespace Develodesign\Punchout\Service;
 use Develodesign\Punchout\Exceptions\CxmlDocumentLoadingException;
 use Magento\Framework\Simplexml\Element;
 use RuntimeException;
+use SimpleXMLElement;
 
 class CxmlService
 {
-    public function parseXmlResponse($rawRequestBody)
+    /**
+     * Parse request body to Xml string
+     */
+    public function parseXmlResponse($rawRequestBody) : SimpleXMLElement
     {
         $libxml = libxml_use_internal_errors(true);
         $xml = simplexml_load_string($rawRequestBody, Element::class);
@@ -22,6 +26,9 @@ class CxmlService
         return $xml;
     }
 
+    /**
+     * Validation of incoming CXML data
+     */
     public function validateSetupRequest(Element $cxmlData): array
     {
         $errors = ['error' => false];
@@ -56,19 +63,29 @@ class CxmlService
         return $errors;
     }
 
+    /**
+     * Get Ariba Network ID from incoming Cxml Data
+     */
     public function getAribaNetworkId($cxmlData): ?string
     {
         $aribaNetworkId = false;
-        if (isset($cxmlData->Header->Sender->Credential['domain']) && stripos(strtolower((string)$cxmlData->Header->Sender->Credential['domain']), 'AribaNetwork') !== false) {
+        $domain = (string)$cxmlData->Header->Sender->Credential['domain'];
+        if (isset($cxmlData->Header->Sender->Credential['domain'])
+            && stripos(strtolower($domain), 'AribaNetwork') !== false) {
             $aribaNetworkId = (string)$cxmlData->Header->From->Credential->Identity;
         }
-
-        if (isset($cxmlData->Header->To->Credential['domain']) && stripos(strtolower((string)$cxmlData->Header->To->Credential['domain']), 'transactionnetworkId') !== false) {
-            $aribaNetworkId = (string)$cxmlData->Header->From->Credential->Identity;
+        if (isset($cxmlData->Header->To->Credential['domain'])) {
+            $domain = strtolower((string)$cxmlData->Header->To->Credential['domain']);
+            if (stripos($domain, 'transactionnetworkId') !== false) {
+                $aribaNetworkId = (string)$cxmlData->Header->From->Credential->Identity;
+            }
         }
         return $aribaNetworkId;
     }
 
+    /**
+     * Get ExtrinsicData array from Xml object
+     */
     public function getExtrinsicData($extrinsic): array
     {
         $result = [];
@@ -80,20 +97,25 @@ class CxmlService
         return $result;
     }
 
+    /**
+     * Check if incoming cxml data request is create operation
+     */
     public function isCreate($cxmlData): bool
     {
         return $cxmlData->Request->PunchOutSetupRequest->getAttribute('operation') === 'create';
     }
 
     /**
+     * Fetch email from Cxml data or extrinsicData array
      * @throws \Zend_Validate_Exception
      */
     public function fetchEmail($extrinsicData, $cxmlData): string
     {
         $useEmail = '';
-        if (isset($extrinsicData['UserEmail']) && !empty($extrinsicData['UserEmail']) && \Zend_Validate::is($extrinsicData['UserEmail'], 'EmailAddress')) {
+        if (isset($extrinsicData['UserEmail']) && \Zend_Validate::is($extrinsicData['UserEmail'], 'EmailAddress')) {
             $useEmail = $extrinsicData['UserEmail'];
-        } elseif (isset($cxmlData->Request->PunchOutSetupRequest->Contact->Email) && !empty($cxmlData->Request->PunchOutSetupRequest->Contact->Email)
+        } elseif (isset($cxmlData->Request->PunchOutSetupRequest->Contact->Email)
+                 && !empty($cxmlData->Request->PunchOutSetupRequest->Contact->Email)
             && \Zend_Validate::is(
                 $cxmlData->Request->PunchOutSetupRequest->Contact->Email,
                 'EmailAddress'
@@ -104,6 +126,7 @@ class CxmlService
     }
     
     /**
+     * Create usable email from punchout group domain and cxml data
      * @throws \Zend_Validate_Exception
      */
     public function createEmail($extrinsicData, $cxmlData, $punchoutGroupEmail): string
@@ -125,6 +148,9 @@ class CxmlService
         return  sprintf('%s_%s', $name, $punchoutGroupEmail);
     }
     
+    /**
+     * Get First and Last Names from posted extrinsic Data or fallback to default
+     */
     public function getFirstLastName($extrinsicData)
     {
         $data = [];
@@ -139,6 +165,7 @@ class CxmlService
     }
     
     /**
+     * ParseOrderRequest from string to SimpleXMLElement
      * @throws CxmlDocumentLoadingException
      */
     public function parseOrderRequest(string $orderXMLRequest):\SimpleXMLElement
@@ -170,7 +197,10 @@ class CxmlService
         return simplexml_import_dom($dom);
     }
     
-    public function parseAddress($address)
+    /**
+     * Parse Address from object to data array
+     */
+    public function parseAddress($address) : array
     {
         $extAddressId = (string)$address->attributes()->addressID;
         $deliverName = [];
@@ -220,7 +250,10 @@ class CxmlService
         ];
     }
     
-    private function getDefaultFirstLastName($name): array
+    /**
+     * Return a default name if non sent in request
+     */
+    private function getDefaultFirstLastName(string $name): array
     {
         $nameArray = [];
         preg_match('/^(.+) ([^ ]+)$/', $name, $s);
@@ -234,7 +267,10 @@ class CxmlService
         return $nameArray;
     }
     
-    public function getItemOutExtrinsic($extrinsic, $nonDefault = false)
+    /**
+     *  Get Item out data from Extrinsic xml
+     */
+    public function getItemOutExtrinsic(array $extrinsic, bool $nonDefault = false) : array
     {
         $result = [];
         foreach ($extrinsic as $ext) {

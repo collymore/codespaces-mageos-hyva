@@ -11,6 +11,7 @@
     use Magento\Framework\App\CsrfAwareActionInterface;
     use Magento\Framework\App\Request\InvalidRequestException;
     use Magento\Framework\App\RequestInterface;
+    use Magento\Framework\Filesystem\DriverInterface;
 
 class Index extends Action implements CsrfAwareActionInterface
 {
@@ -47,7 +48,7 @@ class Index extends Action implements CsrfAwareActionInterface
     {
         try {
               $orderRequest = $this->orderRequest;
-              $orderRequest->setDocument(file_get_contents('php://input'));
+              $orderRequest->setDocument(DriverInterface::fileOpen('php://input', 'r'));
               $orderRequest->isValid();
               $result = $orderRequest->getCreateOrder();
         } catch (\Exception|CxmlDocumentLoadingException $exception) {

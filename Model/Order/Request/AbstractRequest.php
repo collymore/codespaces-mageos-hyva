@@ -1,36 +1,27 @@
 <?php
     
-    namespace Develodesign\Punchout\Model\Order\Request;
+namespace Develodesign\Punchout\Model\Order\Request;
 
-    use Develodesign\Punchout\Service\CustomerService;
-    use Develodesign\Punchout\Service\PunchoutGroupService;
-    use Develodesign\Punchout\Service\SetupRequestService;
+use Develodesign\Punchout\Service\CustomerService;
+use Develodesign\Punchout\Service\PunchoutGroupService;
+use Develodesign\Punchout\Service\SetupRequestService;
 
 abstract class AbstractRequest extends \Magento\Framework\Model\AbstractModel
 {
     protected $document;
-    
     protected $customer;
-    
     protected $companyId;
-        
     protected $punchoutGroup;
     protected $shippingCode;
     protected $shippingPrice;
-        
     protected $tax;
     protected $poNumber;
-        
     protected $paymentMethod;
     protected $grandTotal;
     protected $shipTo;
-        
     protected $cxmlService;
-        
     protected $customerService;
-        
     protected $punchoutGroupService;
-        
     protected $setupRequestService;
     
     public function __construct(
@@ -91,7 +82,6 @@ abstract class AbstractRequest extends \Magento\Framework\Model\AbstractModel
     {
         $this->companyId = $companyId;
     }
-        
     
     public function setPoNumber($poNumber): void
     {
@@ -102,13 +92,11 @@ abstract class AbstractRequest extends \Magento\Framework\Model\AbstractModel
     {
         return $this->poNumber;
     }
-        
     
     public function getPaymentMethod()
     {
         return $this->paymentMethod;
     }
-        
     
     public function getGrandTotal()
     {

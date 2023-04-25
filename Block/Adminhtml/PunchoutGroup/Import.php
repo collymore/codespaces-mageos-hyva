@@ -13,15 +13,6 @@ class Import extends Widget
     protected $_template = 'Develodesign_Punchout::importPunchoutGroup.phtml';
 
     /**
-     * @param Context $context
-     * @param array $data
-     */
-    public function __construct(Context $context, array $data = [])
-    {
-        parent::__construct($context, $data);
-    }
-
-    /**
      * Get URL for back (reset) button
      *
      * @return string

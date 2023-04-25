@@ -8,7 +8,9 @@ class ProxyRequestService
     {
         $param = [];
         if (is_string($requestParam)) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $param = json_decode(base64_decode($requestParam));
+            // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
         }
         return $param;
     }

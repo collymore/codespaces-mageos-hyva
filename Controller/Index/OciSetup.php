@@ -66,10 +66,12 @@ class OciSetup extends Action implements CsrfAwareActionInterface
             $params = $this->getRequest()->getParams();
             $requestBody = $this->ociService->prepareOCIRequestBody($params);
             $validatedPostBody = $this->ociService->validateRequest($requestBody);
+            $userName = (string)$validatedPostBody['username'];
+
             if (!is_array($validatedPostBody)) {
                 return $this->jsonResponse->sendResponse(
                     400,
-                    'Request Parameter(s) Username, Password and Hook URL are required to perform this action'
+                    'Request Parameters are invalid'
                 );
             }
             if (!isset($validatedPostBody['~target'])) {
@@ -83,29 +85,36 @@ class OciSetup extends Action implements CsrfAwareActionInterface
                     $configParam
                 );
             }
-            if (!$this->ociService->isValidEmail((string)$validatedPostBody['username'])) {
+            if (!$this->ociService->isValidEmail($userName)) {
                 return $this->jsonResponse->sendResponse(
                     422,
-                    sprintf('Valid email is required to perform this action, %s provided', $validatedPostBody['username'])
+                    sprintf(
+                        'Valid email is required to perform this action, %s provided',
+                        $validatedPostBody['username']
+                    )
                 );
         
             }
     
             $matchingPunchoutGroup = $this->punchoutGroupService->loadPunchOutGroupByOciCredentials(
-                $validatedPostBody['username'],
+                $userName,
                 $validatedPostBody['password']
             );
             if (null === $matchingPunchoutGroup) {
                 return $this->jsonResponse->sendResponse(
                     404,
-                    sprintf('No such PunchoutGroup entity with the provided credentials %s', $validatedPostBody['username'])
+                    "No PunchoutGroup Exists {$userName} / {$validatedPostBody['password']}"
                 );
         
             }
-            $matchingCustomer = $this->customerService->getCustomerByEmail($validatedPostBody['username']);
+            $matchingCustomer = $this->customerService->getCustomerByEmail($userName);
             if (!$matchingCustomer->getId()) {
                 $nameData = $this->ociService->getFirstLastName($matchingPunchoutGroup->getGroupName());
-                $customerDTO = $this->customerService->prepareCustomerData($matchingPunchoutGroup, $validatedPostBody['username'], $nameData);
+                $customerDTO = $this->customerService->prepareCustomerData(
+                    $matchingPunchoutGroup,
+                    $userName,
+                    $nameData
+                );
                 $matchingCustomer = $this->customerService->createCustomer($customerDTO);
                 $this->customerService->createCustomerAddress($matchingCustomer, $matchingPunchoutGroup);
         
@@ -122,7 +131,12 @@ class OciSetup extends Action implements CsrfAwareActionInterface
                 $this->customerSessionService->clearAuthUserCartSessionData();
             }
             $info = 'Successful OCI PunchOutSetupResponse and Store Login';
-            $this->eventServiceProvider->dispatchOciSetupRequestEvent($matchingCustomer->getId(), $matchingPunchoutGroup->getPunchoutgroupId(), $info);
+            $matchingGroupId = $matchingPunchoutGroup->getPunchoutgroupId();
+            $this->eventServiceProvider->dispatchOciSetupRequestEvent(
+                $matchingCustomer->getId(),
+                $matchingGroupId,
+                $info
+            );
             return $this->_redirect('/');
                 
         } catch (\Exception $exception) {

@@ -155,7 +155,10 @@ class ImportFileHandler
             if (null !== $headers) {
                 $processedRawDataRows = $this->filterFileData($csvRawData);
                 foreach ($processedRawDataRows as $processedRawData) {
-                    $modelData = $this->punchoutGroupCollectionFactory->create()->addFieldToFilter('group_email', $processedRawData['Email Address'])->getData();
+                    $modelData = $this->punchoutGroupCollectionFactory
+                        ->create()
+                        ->addFieldToFilter('group_email', $processedRawData['Email Address'])
+                        ->getData();
                     try {
                         if ($modelData) {
                             $id = (int)$modelData[0]['punchoutgroup_id'];

@@ -105,7 +105,8 @@ class LoginProxy extends Action implements HttpGetActionInterface
                 );
             }
             if (!$this->proxyRequestService->isTokenExpired($matchingCustomer->getExpiryDate())) {
-                 $refreshedToken = $this->setupRequestService->getRefreshedToken($queryParam->user_id, $this->proxyRequestService->getCurrentTimeStamp());
+                $timeStamp = $this->proxyRequestService->getCurrentTimeStamp();
+                $refreshedToken = $this->setupRequestService->getRefreshedToken($queryParam->user_id, $timeStamp);
                 if (!$refreshedToken) {
                     return $this->jsonResponse->sendResponse(
                         200,
@@ -125,8 +126,6 @@ class LoginProxy extends Action implements HttpGetActionInterface
             if ($customerSession) {
                 $this->customerSessionService->clearAuthUserCartSessionData();
             }
-               
-                
         } catch (NoSuchEntityException|LocalizedException $e) {
             $this->eventServiceProvider->dispatchExceptionPunchoutRequestEvent(
                 'CXML PunchOutSetupRequest Store Login',

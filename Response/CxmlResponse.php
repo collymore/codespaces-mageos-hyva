@@ -52,17 +52,17 @@ class CxmlResponse
         $result = $this->resultRawFactory->create();
         $result->setHeader('Content-Type', 'text/xml');
         $result->setContents('<?xml version="1.0" encoding="UTF-8"?>
-                       <!DOCTYPE cXML SYSTEM "http://xml.cxml.org/schemas/cXML/1.1.010/cXML.dtd">
-                        <cXML payloadID="'.$payloadId.'" version="1.1.007" xml:lang="en" timestamp="' . $this->getTimeStamp() . '">
-                           <Response>
-                            <Status code="' . $statusCode . '" text="success"></Status>
-                            <PunchOutSetupResponse>
-                              <StartPage>
-                                 <URL>' . $startUrl . '</URL>
-                              </StartPage>
-                            </PunchOutSetupResponse>
-                          </Response>
-                        </cXML>');
+            <!DOCTYPE cXML SYSTEM "http://xml.cxml.org/schemas/cXML/1.1.010/cXML.dtd">
+            <cXML payloadID="'.$payloadId.'" version="1.1.007" xml:lang="en" timestamp="' . $this->getTimeStamp() . '">
+                <Response>
+                <Status code="' . $statusCode . '" text="success"></Status>
+                <PunchOutSetupResponse>
+                    <StartPage>
+                        <URL>' . $startUrl . '</URL>
+                    </StartPage>
+                </PunchOutSetupResponse>
+                </Response>
+            </cXML>');
         $result->setStatusHeader($statusCode);
         return $result;
     }

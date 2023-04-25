@@ -87,7 +87,7 @@ class SetupRequestService
     private function generateUUID(): string
     {
         // ripemd128 is 128-bit hex
-        $hash = hash('ripemd128', uniqid(mt_rand(), true));
+        $hash = hash('ripemd128', uniqid(random_int(), true));
         $uuid = '';
         // UUID format is XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX for readability
         $uuid .= substr($hash, 0, 8) .
@@ -126,7 +126,9 @@ class SetupRequestService
             'user_id' => $punchoutSetupRequestModel->getCustomerId(),
             'payloadId' => $punchoutSetupRequestModel->getPayloadId()
         ];
-        return sprintf('%s%s?Bearer=%s', $this->url->getUrl(), $this->getPunchoutSetUpLoginUrl(), base64_encode(json_encode($postBody)));
+
+        $postBodyEncoded = base64_encode(json_encode($postBody));
+        return sprintf('%s%s?Bearer=%s', $this->url->getUrl(), $this->getPunchoutSetUpLoginUrl(), $postBodyEncoded);
     }
 
     private function getPunchoutSetUpLoginUrl(): string
@@ -162,7 +164,9 @@ class SetupRequestService
         ->addFieldToFilter('sender_identity', $dunsNetwork);
         
         if ($result->count() > 0) {
-            throw new \RuntimeException(sprintf('An Order already created for the customer with purchase order number %s', $poNumber));
+            throw new \RuntimeException(
+                "Order exists with purchase order : {$poNumber}"
+            );
         }
         return false;
     }

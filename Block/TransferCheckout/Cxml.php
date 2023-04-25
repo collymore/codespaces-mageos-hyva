@@ -40,9 +40,13 @@ class Cxml
         $xml .= '</PunchOutOrderMessage>
                             </Message>
                         </cXML>';
-        return sprintf("<form id=\"punchout_cxml_form\"  action=\"%s\" method=\"post\" enctype=\"application/x-www-form-urlencoded\" >
-                        <input name=\"cXML-urlencoded\" id=\"urlencoded_bottom\" type=\"hidden\" value= '%s'>
-                    </form>", $cxmlSessionData['return_url'], $xml);
+        return sprintf("<form id=\"punchout_cxml_form\" 
+                            action=\"%s\" method=\"post\" 
+                            enctype=\"application/x-www-form-urlencoded\">
+                        <input name=\"cXML-urlencoded\" 
+                            id=\"urlencoded_bottom\" 
+                            type=\"hidden\" value= '%s'>
+                        </form>", $cxmlSessionData['return_url'], $xml);
     }
     
     /**
@@ -55,12 +59,9 @@ class Cxml
             if ($item->getParentItemId()) {
                 continue;
             }
-            
             //remove double and single quotes from product names as it's breaking punchout
             $name = str_replace("'", "", $item->getName());
             $name = str_replace('"', "", $name);
-    
-    
             $unspsc = $this->getUnspscCode($item->getSku());
             $itemCode .= sprintf(
                 '<ItemIn quantity="%s">

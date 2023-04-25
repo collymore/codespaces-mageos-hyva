@@ -12,8 +12,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\Template\Context;
 
 /**
- * Class Login
- * @package Develodesign\Punchout\Block
+ * Class Login used to render punchout login page in adminhtml
  */
 class Login extends \Magento\Framework\View\Element\Template
 {

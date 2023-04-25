@@ -2,22 +2,22 @@
 
 namespace Develodesign\Punchout\Model;
 
-    use Develodesign\Punchout\Api\ActivityEventLogRepositoryInterface;
-    use Develodesign\Punchout\Api\Data\ActivityEventLogInterface;
-    use Develodesign\Punchout\Api\Data\ActivityEventLogInterfaceFactory;
-    use Develodesign\Punchout\Api\Data\ActivityEventLogSearchResultsInterfaceFactory;
-    use Develodesign\Punchout\Model\ResourceModel\ActivityEventLog as ResourceActivityEventLog;
-    use Develodesign\Punchout\Model\ResourceModel\ActivityEventLog\CollectionFactory as ActivityEventLogCollectionFactory;
-    use Magento\Framework\Api\DataObjectHelper;
-    use Magento\Framework\Api\ExtensibleDataObjectConverter;
-    use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
-    use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
-    use Magento\Framework\Api\SearchCriteriaInterface;
-    use Magento\Framework\Exception\CouldNotDeleteException;
-    use Magento\Framework\Exception\CouldNotSaveException;
-    use Magento\Framework\Exception\NoSuchEntityException;
-    use Magento\Framework\Reflection\DataObjectProcessor;
-    use Magento\Store\Model\StoreManagerInterface;
+use Develodesign\Punchout\Api\ActivityEventLogRepositoryInterface;
+use Develodesign\Punchout\Api\Data\ActivityEventLogInterface;
+use Develodesign\Punchout\Api\Data\ActivityEventLogInterfaceFactory;
+use Develodesign\Punchout\Api\Data\ActivityEventLogSearchResultsInterfaceFactory;
+use Develodesign\Punchout\Model\ResourceModel\ActivityEventLog as ResourceActivityEventLog;
+use Develodesign\Punchout\Model\ResourceModel\ActivityEventLog\CollectionFactory as ActivityEventLogCollectionFactory;
+use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\Api\ExtensibleDataObjectConverter;
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Exception\CouldNotDeleteException;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\Store\Model\StoreManagerInterface;
 
 class ActivityEventLogRepository implements ActivityEventLogRepositoryInterface
 {

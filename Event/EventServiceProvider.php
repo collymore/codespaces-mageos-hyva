@@ -1,8 +1,8 @@
 <?php
     
-    namespace Develodesign\Punchout\Event;
+namespace Develodesign\Punchout\Event;
 
-    use Magento\Framework\Event\ManagerInterface as EventManager;
+use Magento\Framework\Event\ManagerInterface as EventManager;
 
 class EventServiceProvider
 {
@@ -19,7 +19,6 @@ class EventServiceProvider
     {
         $this->eventManager = $eventManager;
     }
-        
     
     public function dispatchCxmlSetupRequestEvent(int $customerId, int $punchoutgroupId, string $info): void
     {
@@ -48,7 +47,6 @@ class EventServiceProvider
                 ]
         );
     }
-    
     
     public function dispatchOciSetupRequestEvent(int $customerId, int $punchoutgroupId, string $info): void
     {
