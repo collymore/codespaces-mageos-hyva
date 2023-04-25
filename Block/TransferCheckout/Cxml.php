@@ -6,6 +6,7 @@
     use Develodesign\Punchout\Service\CxmlService;
     use Magento\Catalog\Model\ProductRepository;
     use Magento\Framework\Exception\NoSuchEntityException;
+    use Develodesign\Punchout\Helper\PunchoutConfigHelper;
 
     class Cxml
     {
@@ -14,16 +15,20 @@
         protected $productRepository;
     
         protected $cxmlService;
+
+        protected $configHelper;
     
         public function __construct(
             CxmlResponse $cxmlResponse,
             ProductRepository $productRepository,
-            CxmlService $cxmlService
+            CxmlService $cxmlService,
+            PunchoutConfigHelper $configHelper
         )
         {
             $this->cxmlResponse = $cxmlResponse;
             $this->productRepository = $productRepository;
             $this->cxmlService = $cxmlService;
+            $this->configHelper = $configHelper;
         }
     
         /**
@@ -111,8 +116,13 @@
         /**
          * @throws NoSuchEntityException
          */
-        private function getUnspscCode($sku)
+        private function getUnspscCode($sku) : string
         {
             return $this->productRepository->get($sku)->getUnspsc();
+        }
+
+        public function getConfigHelper() : PunchoutConfigHelper
+        {
+            return $this->configHelper;
         }
     }

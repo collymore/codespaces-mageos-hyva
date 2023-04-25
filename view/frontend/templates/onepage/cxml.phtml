@@ -1,9 +1,10 @@
 <div class="modal" id="punchout-modal">
     <div class="modal-content">
+        <?php echo $block->getConfigHelper()->getTransferModalContent(); ?>
     </div>
 </div>
-<?php echo $this->generateCXMLCheckoutForm();
-      echo $this->generateCXMLSubmitButton();
+<?php echo $block->generateCXMLCheckoutForm();
+      echo $block->generateCXMLSubmitButton();
 ?>
 
 
