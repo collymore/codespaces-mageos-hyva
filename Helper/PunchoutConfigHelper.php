@@ -98,9 +98,6 @@ class PunchoutConfigHelper extends AbstractHelper
      */
     public function getConfiguredValue($config_path, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT):string
     {
-        if (!$scope) {
-            $scope = $this->storeManager->getStore()->getId();
-        }
         return $this->scopeConfig->getValue($config_path, $scope);
     }
     
@@ -109,9 +106,6 @@ class PunchoutConfigHelper extends AbstractHelper
      */
     public function getConfiguredFlag($config_path, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT): bool
     {
-        if (!$scope) {
-            $scope = $this->storeManager->getStore()->getId();
-        }
         return $this->scopeConfig->isSetFlag($config_path, $scope);
     }
 }
