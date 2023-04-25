@@ -110,19 +110,20 @@ class Login extends \Magento\Framework\View\Element\Template
      * @return array|false
      * @throws LocalizedException
      */
-    public function getCxmlPunchout($groupId): bool|array
+    public function getCxmlPunchout($groupId): array
     {
         if (!$group = $this->punchoutGroupRepository->get($groupId)) {
-            return false;
+            return [];
         }
     
         if (
             !$group->getSharedSecret() &&
             (!$group->getDunsIdentity() || !$group->getAribaNetworkId())
         ) {
-            return false;
+            return [];
         }
         $customer = $this->customerService->getCustomerByPunchoutGroupId($groupId);
+        
         return [
             "shared_secret"    => $group->getSharedSecret(),
             "duns_identity"    => $group->getDunsIdentity(),
@@ -136,16 +137,16 @@ class Login extends \Magento\Framework\View\Element\Template
      * @param $groupId
      * @return array|false
      */
-    public function getOciPunchout($groupId): bool|array
+    public function getOciPunchout($groupId): array
     {
         if (!$group = $this->getPunchoutGroup($groupId)) {
-            return false;
+            return [];
         }
         if (
             !$group->getOciUsername() &&
             !$group->getOciPassword()
         ) {
-            return false;
+            return [];
         }
         return array(
             "oci_username" => $group->getOciUsername(),
@@ -163,6 +164,19 @@ class Login extends \Magento\Framework\View\Element\Template
             $name = substr($name, 0, 24) . ' ...';
         }
         return $name;
+    }
+
+    /**
+     * Gets a random string for cxml value
+     */
+    public function getRandomValue($length = 10){
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[random_int(0, $charactersLength - 1)];
+        }
+        return $randomString;
     }
     
 }

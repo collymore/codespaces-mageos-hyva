@@ -93,7 +93,7 @@
                         $useEmail = $this->cxmlService->createEmail($extrinsicData, $parsedXMLData,
                             $matchingPunchoutGroup->getGroupEmail());
                     }
-                    $matchingCustomer = $this->customerService->fetchCustomer($useEmail);
+                    $matchingCustomer = $this->customerService->getCustomerByEmail($useEmail);
                     if (!$matchingCustomer->getId()) {
                         $nameData = $this->cxmlService->getFirstLastName($extrinsicData);
                         $customerDTO = $this->customerService->prepareCustomerData($matchingPunchoutGroup, $useEmail,

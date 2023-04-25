@@ -29,8 +29,8 @@
                            <?php if($cxmlInfo = $block->getCxmlPunchout($punchoutGroup->getId())): ?>
                                  <span class="punchout-option cxml">CXML</span>
                                 <input type="hidden" name="cxml-url" class="cxml-url" value="<?= $block->getCXMLSetupUrl() ?>" />
-                                <input type="hidden" name="cxml-payload-id" class="cxml-payload-id" value="<?= substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(10/strlen($x)) )),1,10) ?>" />
-                                <input type="hidden" name="cxml-buyer-cookie" class="cxml-buyer-cookie" value="<?= substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(20/strlen($x)) )),1,20) ?>" />
+                                <input type="hidden" name="cxml-payload-id" class="cxml-payload-id" value="<?= $block->getRandonString(10) ?>" />
+                                <input type="hidden" name="cxml-buyer-cookie" class="cxml-buyer-cookie" value="<?= $block->getRandonString(20) ?>" />
                                 <input type="hidden" name="cxml-shared-secret" class="cxml-shared-secret" value="<?= $cxmlInfo["shared_secret"] ?>" />
                                 <input type="hidden" name="cxml-request-operation" class="cxml-request-operation" value="create" />
                                 <input type="hidden" name="cxml-sender-identity" class="cxml-sender-identity" value="<?= $cxmlInfo["duns_identity"] ?>" />

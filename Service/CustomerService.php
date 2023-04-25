@@ -5,6 +5,7 @@ namespace Develodesign\Punchout\Service;
     use Develodesign\Punchout\Model\PunchoutGroup;
     use Magento\Customer\Api\Data\AddressInterface;
     use Magento\Customer\Api\Data\CustomerInterface;
+    use Magento\Customer\Api\CustomerRepositoryInterface;
     use Magento\Customer\Model\AddressFactory;
     use Magento\Customer\Model\Customer;
     use Magento\Customer\Model\CustomerFactory;
@@ -58,7 +59,7 @@ namespace Develodesign\Punchout\Service;
             AddressFactory $addressFactory,
             AddressResource $addressResource,
             CollectionFactory $collectionFactory,
-            \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
+            CustomerRepositoryInterface $customerRepository
         ) {
             $this->storeManager = $storeManager;
             $this->customerFactory = $customerFactory;
@@ -76,18 +77,6 @@ namespace Develodesign\Punchout\Service;
         public function getCustomerByEmail($customerEmail): CustomerInterface
         {
            return $this->customerRepository->get($customerEmail);
-        }
-
-        /**
-         * @param $customerEmail
-         *
-         * @return Customer
-         * @throws LocalizedException
-         * @throws NoSuchEntityException
-         */
-        public function fetchCustomer($customerEmail): Customer
-        {
-            return $this->customerFactory->create()->setWebsiteId($this->storeManager->getStore()->getWebsiteId())->loadByEmail($customerEmail);
         }
 
         /**
@@ -161,12 +150,18 @@ namespace Develodesign\Punchout\Service;
             return (int)$proxyUser->getIsActive() === 1;
         }
 
-        private function getRandomPassword()
+        /**
+         * Generates a random password string
+         */
+        private function getRandomPassword() : string
         {
             return uniqid('M181#Ha73y' . rand(), false);
         }
         
-        public function getPunchoutGroupId(int $customerId)
+        /**
+         * Returns the customers groupID
+         */
+        public function getPunchoutGroupId(int $customerId) : int
         {
             $customer = $this->customerCollection->create()
                 ->addFieldToFilter('entity_id', $customerId)
@@ -174,13 +169,18 @@ namespace Develodesign\Punchout\Service;
             return $customer->getPunchoutGroup();
         }
         
+        /**
+         * Returns the first customer available for that punchoutGroupID
+         */
         public function getCustomerByPunchoutGroupId(int $punchoutGroupId)
         {
             $customer = $this->customerCollection->create()
                 ->addFieldToFilter('punchout_group', $punchoutGroupId);
+
             if($customer->count() > 0){
                 return $customer->getFirstItem();
             }
+            
             return null;
         }
     
@@ -192,7 +192,11 @@ namespace Develodesign\Punchout\Service;
             return $this->storeManager->getStore();
         }
     
-        public function getExistingCustomerAddress($data, CustomerInterface $customer): bool|array
+        /**
+         * Gets the customers Address formatted for Cxml
+         * @return array
+         */
+        public function getExistingCustomerAddress($data, CustomerInterface $customer) : array
         {
             /** @var AddressInterface $address */
             foreach ($customer->getAddresses() as $address) {

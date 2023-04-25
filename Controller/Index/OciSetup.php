@@ -102,7 +102,7 @@ namespace Develodesign\Punchout\Controller\Index;
                     );
         
                 }
-                $matchingCustomer = $this->customerService->fetchCustomer($validatedPostBody['username']);
+                $matchingCustomer = $this->customerService->getCustomerByEmail($validatedPostBody['username']);
                 if(!$matchingCustomer->getId()){
                     $nameData = $this->ociService->getFirstLastName($matchingPunchoutGroup->getGroupName());
                     $customerDTO = $this->customerService->prepareCustomerData($matchingPunchoutGroup,$validatedPostBody['username'],$nameData);
