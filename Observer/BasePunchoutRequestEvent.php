@@ -4,17 +4,16 @@
     
     use Develodesign\Punchout\Model\ActivityEventLogFactory;
 
-    abstract class BasePunchoutRequestEvent
-    {
-        /**
-         * @var ActivityEventLogFactory
-         */
-        protected $activityEventLogFactory;
+abstract class BasePunchoutRequestEvent
+{
+    /**
+     * @var ActivityEventLogFactory
+     */
+    protected $activityEventLogFactory;
     
-        public function __construct(
-            ActivityEventLogFactory $activityEventLogFactory
-        )
-        {
-            $this->activityEventLogFactory = $activityEventLogFactory;
-        }
+    public function __construct(
+        ActivityEventLogFactory $activityEventLogFactory
+    ) {
+        $this->activityEventLogFactory = $activityEventLogFactory;
     }
+}

@@ -20,4 +20,3 @@ class PunchoutGroup extends AbstractDb
         $this->_init('develodesign_punchout_punchoutgroup', 'punchoutgroup_id');
     }
 }
-

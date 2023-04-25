@@ -2,29 +2,27 @@
 
 namespace Develodesign\Punchout\Service;
 
-    class ProxyRequestService
+class ProxyRequestService
+{
+    public function getRequestParam($requestParam)
     {
-        public function getRequestParam($requestParam)
-        {
-            $param = [];
-            if (is_string($requestParam)) {
-                $param = json_decode(base64_decode($requestParam));
-            }
-            return $param;
+        $param = [];
+        if (is_string($requestParam)) {
+            $param = json_decode(base64_decode($requestParam));
         }
-
-        public function isTokenExpired(string $tokenExpiryDate): bool
-        {
-            $tokenExpiryDate = new \DateTime($tokenExpiryDate);
-            return $tokenExpiryDate > $this->getCurrentTimeStamp();
-        }
-
-        public function getCurrentTimeStamp()
-        {
-            $timestamp = new \DateTime('now', new \DateTimeZone('UTC'));
-            $timestamp->format('Y-m-d H:i:s');
-            return $timestamp;
-        }
-    
-    
+        return $param;
     }
+
+    public function isTokenExpired(string $tokenExpiryDate): bool
+    {
+        $tokenExpiryDate = new \DateTime($tokenExpiryDate);
+        return $tokenExpiryDate > $this->getCurrentTimeStamp();
+    }
+
+    public function getCurrentTimeStamp()
+    {
+        $timestamp = new \DateTime('now', new \DateTimeZone('UTC'));
+        $timestamp->format('Y-m-d H:i:s');
+        return $timestamp;
+    }
+}

@@ -47,4 +47,3 @@ class Delete extends \Develodesign\Punchout\Controller\Adminhtml\PunchoutGroup
         return $resultRedirect->setPath('*/*/');
     }
 }
-

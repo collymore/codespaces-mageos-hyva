@@ -26,4 +26,3 @@ interface PunchoutGroupSearchResultsInterface extends \Magento\Framework\Api\Sea
      */
     public function setItems(array $items);
 }
-

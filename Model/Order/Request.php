@@ -78,8 +78,7 @@ class Request extends DataObject
         CreateOrderService $createOrderService,
         SessionService $sessionService,
         EventServiceProvider $eventServiceProvider
-    )
-    {
+    ) {
         $this->cxmlService = $cxmlService;
         $this->customerService = $customerService;
         $this->punchoutGroupService = $punchoutGroupService;
@@ -135,11 +134,10 @@ class Request extends DataObject
      */
     public function getPunchoutGroup()
     {
-        if($this->punchoutGroup === null){
+        if ($this->punchoutGroup === null) {
             $this->punchoutGroup = $this->getDocument()->getPunchoutGroup();
         }
         return $this->punchoutGroup;
-    
     }
 
     /**
@@ -154,10 +152,12 @@ class Request extends DataObject
         $poNumber = (string)$sourceXML->Request->OrderRequest->OrderRequestHeader['orderID'];
         $dunsIdentity = (string)$sourceXML->Header->Sender->Credential->Identity;
         
-        $isAlreadyExists = $this->setupRequestService->orderAlreadyExists($poNumber,
-            (int)$this->getCustomer()->getId(), $dunsIdentity);
+        $isAlreadyExists = $this->setupRequestService->orderAlreadyExists(
+            $poNumber,
+            (int)$this->getCustomer()->getId(),
+            $dunsIdentity
+        );
         return $this->getCustomer() && $this->getPunchoutGroup() !== null && !$isAlreadyExists;
-        
     }
 
 
@@ -188,7 +188,7 @@ class Request extends DataObject
             $quote->setCurrency();
             $quote->setCustomerIsGuest(false);
             $outItems = $this->getDocument()->getItems()->getData();
-            $quoteItems =  $this->createOrderService->getQuoteItem($outItems,$quote,$store);
+            $quoteItems =  $this->createOrderService->getQuoteItem($outItems, $quote, $store);
             $this->sessionService->getCustomerSession()->setId($customer->getId());
             foreach ($quoteItems as $quoteItem) {
                 $quote->addItem($quoteItem);
@@ -196,7 +196,7 @@ class Request extends DataObject
             if ($quote->getAllVisibleItems()) {
                 $quote->getBillingAddress()->addData($billingAddressData);
                 $quote->getBillingAddress()->setCustomerAddressId('');
-                $existAddress = $this->customerService->getExistingCustomerAddress($shippingAddressData,$customer);
+                $existAddress = $this->customerService->getExistingCustomerAddress($shippingAddressData, $customer);
                 if ($existAddress) {
                     $quote->getShippingAddress()->addData($existAddress);
                 } else {
@@ -208,7 +208,7 @@ class Request extends DataObject
                     ->collectShippingRates()
                     ->setShippingMethod($shippingMethodCode);
     
-                if ($this->createOrderService->isPaymentAvailable($store->getId(),$quote) === true) {
+                if ($this->createOrderService->isPaymentAvailable($store->getId(), $quote) === true) {
                     $quote->setInventoryProcessed(false);
                     $quote->save();
         
@@ -222,8 +222,11 @@ class Request extends DataObject
                     if ($order->getEntityId()) {
                         $this->createOrder = $order;
                         $sourceXml = $this->document->getCxml();
-                        $orderSetupRequestData = $this->setupRequestService->getOrderSetupRequestData($sourceXml,
-                            $customer->getId(), $order);
+                        $orderSetupRequestData = $this->setupRequestService->getOrderSetupRequestData(
+                            $sourceXml,
+                            $customer->getId(),
+                            $order
+                        );
                         $orderSetupRequestData['purchase_order_number'] = $purchaseOrderNo;
                         $result['payloadId'] = $orderSetupRequestData['payloadId'];
                         $setupId = $this->setupRequestService->createOrderSetUpRequest($orderSetupRequestData);
@@ -235,33 +238,43 @@ class Request extends DataObject
                         $this->createOrderService->invoiceOrder($this->createOrder);
                         $this->createOrder->save();
                         $result['order_id'] = $order->getRealOrderId();
-                        $result['message'] = sprintf('Order created successfully - web reference: %s for customer %s',
-                            $order->getIncrementId(), $this->getPunchoutGroup()->getGroupName());
+                        $result['message'] = sprintf(
+                            'Order created successfully - web reference: %s for customer %s',
+                            $order->getIncrementId(),
+                            $this->getPunchoutGroup()->getGroupName()
+                        );
                         $result['punchoutGroupId'] = $this->getPunchoutGroup()->getPunchoutgroupId();
-                        $this->eventServiceProvider->dispatchCxmlOrderRequestEvent($customer->getId(),
+                        $this->eventServiceProvider->dispatchCxmlOrderRequestEvent(
+                            $customer->getId(),
                             $this->getPunchoutGroup()->getPunchoutgroupId(),
-                            $result['message']);
+                            $result['message']
+                        );
                     } else {
-                        $this->eventServiceProvider->dispatchCxmlOrderRequestEvent($customer->getId(),
+                        $this->eventServiceProvider->dispatchCxmlOrderRequestEvent(
+                            $customer->getId(),
                             $this->getPunchoutGroup()->getPunchoutgroupId(),
-                            'Order failed to create');
+                            'Order failed to create'
+                        );
                     }
         
                 } else {
-                    $this->eventServiceProvider->dispatchCxmlOrderRequestEvent($customer->getId(),
+                    $this->eventServiceProvider->dispatchCxmlOrderRequestEvent(
+                        $customer->getId(),
                         $this->getPunchoutGroup()->getPunchoutgroupId(),
-                        'Payment is unavailable for the quote items raised');
+                        'Payment is unavailable for the quote items raised'
+                    );
                 }
     
             } else {
-                $this->eventServiceProvider->dispatchCxmlOrderRequestEvent( $customer->getId(),
+                $this->eventServiceProvider->dispatchCxmlOrderRequestEvent(
+                    $customer->getId(),
                     $this->getPunchoutGroup()->getPunchoutgroupId(),
-                    'Failure to get all visible cart items');
+                    'Failure to get all visible cart items'
+                );
             }
             
             
         }
         return $result;
     }
-
 }

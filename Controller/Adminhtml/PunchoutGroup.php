@@ -46,4 +46,3 @@ abstract class PunchoutGroup extends \Magento\Backend\App\Action
         return $resultPage;
     }
 }
-

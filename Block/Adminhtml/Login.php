@@ -41,9 +41,8 @@ class Login extends \Magento\Framework\View\Element\Template
         PunchoutGroupRepositoryInterface $punchoutGroupRepository,
         PunchoutGroupCollectionFactory $CollectionFactory,
         CustomerService $customerService,
-        array $data = array()
-    )
-    {
+        array $data = []
+    ) {
         $this->punchoutGroupRepository = $punchoutGroupRepository;
         $this->punchoutGroupCollection = $CollectionFactory;
         $this->customerService = $customerService;
@@ -67,12 +66,12 @@ class Login extends \Magento\Framework\View\Element\Template
      */
     public function getCXMLSetupUrl(): string
     {
-        return  sprintf('%s%s',$this->getBaseUrl(),'develo_punchout/index/cxmlsetup');
+        return  sprintf('%s%s', $this->getBaseUrl(), 'develo_punchout/index/cxmlsetup');
     }
     
     public function getOCISetupUrl(): string
     {
-        return sprintf('%s%s',$this->getBaseUrl(),'develo_punchout/index/ocisetup');
+        return sprintf('%s%s', $this->getBaseUrl(), 'develo_punchout/index/ocisetup');
     }
     
     /**
@@ -116,8 +115,7 @@ class Login extends \Magento\Framework\View\Element\Template
             return [];
         }
     
-        if (
-            !$group->getSharedSecret() &&
+        if (!$group->getSharedSecret() &&
             (!$group->getDunsIdentity() || !$group->getAribaNetworkId())
         ) {
             return [];
@@ -131,7 +129,6 @@ class Login extends \Magento\Framework\View\Element\Template
             'contactName'  => sprintf('%s %s', $customer->getFirstname(), $customer->getLastname()) ?? 'Test User',
             'contactEmail' => $customer->getEmail() ?? $group->getGroupEmail()
         ];
-    
     }
     /**
      * @param $groupId
@@ -142,16 +139,15 @@ class Login extends \Magento\Framework\View\Element\Template
         if (!$group = $this->getPunchoutGroup($groupId)) {
             return [];
         }
-        if (
-            !$group->getOciUsername() &&
+        if (!$group->getOciUsername() &&
             !$group->getOciPassword()
         ) {
             return [];
         }
-        return array(
+        return [
             "oci_username" => $group->getOciUsername(),
             "oci_password" => $group->getOciPassword()
-        );
+        ];
     }
 
     /**
@@ -169,7 +165,8 @@ class Login extends \Magento\Framework\View\Element\Template
     /**
      * Gets a random string for cxml value
      */
-    public function getRandomValue($length = 10){
+    public function getRandomValue($length = 10)
+    {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);
         $randomString = '';
@@ -178,5 +175,4 @@ class Login extends \Magento\Framework\View\Element\Template
         }
         return $randomString;
     }
-    
 }

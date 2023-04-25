@@ -2,7 +2,6 @@
 
 namespace Develodesign\Punchout\Model\Config\Source;
 
-
 use Magento\Framework\Data\OptionSourceInterface;
 use Develodesign\Punchout\Model\Provider\PunchGroupProvider;
 

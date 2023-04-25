@@ -8,7 +8,7 @@ use RuntimeException;
 
 class CxmlService
 {
-    public function parseXmlResponse($rawRequestBody): Element|\SimpleXMLElement
+    public function parseXmlResponse($rawRequestBody)
     {
         $libxml = libxml_use_internal_errors(true);
         $xml = simplexml_load_string($rawRequestBody, Element::class);
@@ -56,7 +56,7 @@ class CxmlService
         return $errors;
     }
 
-    public function getAribaNetworkId($cxmlData): false|string
+    public function getAribaNetworkId($cxmlData): ?string
     {
         $aribaNetworkId = false;
         if (isset($cxmlData->Header->Sender->Credential['domain']) && stripos(strtolower((string)$cxmlData->Header->Sender->Credential['domain']), 'AribaNetwork') !== false) {
@@ -91,13 +91,12 @@ class CxmlService
     public function fetchEmail($extrinsicData, $cxmlData): string
     {
         $useEmail = '';
-        if (isset($extrinsicData['UserEmail']) && !empty($extrinsicData['UserEmail']) && \Zend_Validate::is(value:$extrinsicData['UserEmail'],classBaseName:'EmailAddress'
-        )) {
+        if (isset($extrinsicData['UserEmail']) && !empty($extrinsicData['UserEmail']) && \Zend_Validate::is($extrinsicData['UserEmail'], 'EmailAddress')) {
             $useEmail = $extrinsicData['UserEmail'];
         } elseif (isset($cxmlData->Request->PunchOutSetupRequest->Contact->Email) && !empty($cxmlData->Request->PunchOutSetupRequest->Contact->Email)
             && \Zend_Validate::is(
                 $cxmlData->Request->PunchOutSetupRequest->Contact->Email,
-                classBaseName:'EmailAddress'
+                'EmailAddress'
             )) {
             $useEmail = (string)$cxmlData->Request->PunchOutSetupRequest->Contact->Email;
         }
@@ -110,29 +109,29 @@ class CxmlService
     public function createEmail($extrinsicData, $cxmlData, $punchoutGroupEmail): string
     {
         $domain = substr($punchoutGroupEmail, strpos($punchoutGroupEmail, '@') + 1);
-        if(isset($extrinsicData['FirstName'],$extrinsicData['LastName'])){
-            $name = sprintf('%s_%s@',$extrinsicData['FirstName'],$extrinsicData['LastName']);
-        }elseif (isset($extrinsicData['UniqueName'])){
+        if (isset($extrinsicData['FirstName'], $extrinsicData['LastName'])) {
+            $name = sprintf('%s_%s@', $extrinsicData['FirstName'], $extrinsicData['LastName']);
+        } elseif (isset($extrinsicData['UniqueName'])) {
             $name = $extrinsicData['UniqueName'];
-        } else if(isset($cxmlData->Request->PunchOutSetupRequest->Contact->Name)){
+        } elseif (isset($cxmlData->Request->PunchOutSetupRequest->Contact->Name)) {
             $name = (string)$cxmlData->Request->PunchOutSetupRequest->Contact->Name;
-        }else {
-            $name = uniqid('',false);
+        } else {
+            $name = uniqid('', false);
         }
-        $email = sprintf('%s%s',$name,$domain);
-        if(\Zend_Validate::is($email, classBaseName:'EmailAddress')) {
+        $email = sprintf('%s%s', $name, $domain);
+        if (\Zend_Validate::is($email, 'EmailAddress')) {
             return $email;
         }
-        return  sprintf('%s_%s',$name,$punchoutGroupEmail);
+        return  sprintf('%s_%s', $name, $punchoutGroupEmail);
     }
     
     public function getFirstLastName($extrinsicData)
     {
         $data = [];
-        if(isset($extrinsicData['FirstName'],$extrinsicData['LastName'])){
+        if (isset($extrinsicData['FirstName'], $extrinsicData['LastName'])) {
             $data['first_name'] = $extrinsicData['FirstName'];
             $data['last_name'] = $extrinsicData['LastName'];
-        }else{
+        } else {
             $data['first_name'] = 'Punchout';
             $data['last_name'] =  'User';
         }
@@ -159,7 +158,7 @@ class CxmlService
         }
         $libxml = libxml_use_internal_errors(true);
         $isValid = $dom->validate();
-        if(!$isValid){
+        if (!$isValid) {
             $errors = \libxml_get_errors();
             \libxml_use_internal_errors($libxml);
             throw new RuntimeException(sprintf(
@@ -169,7 +168,6 @@ class CxmlService
         }
     
         return simplexml_import_dom($dom);
-    
     }
     
     public function parseAddress($address)
@@ -177,14 +175,14 @@ class CxmlService
         $extAddressId = (string)$address->attributes()->addressID;
         $deliverName = [];
         $argsName = (string)$address->Name;
-        if(isset($address->PostalAddress->DeliverTo)){
-            foreach ($address->PostalAddress->DeliverTo as $deliverTo){
+        if (isset($address->PostalAddress->DeliverTo)) {
+            foreach ($address->PostalAddress->DeliverTo as $deliverTo) {
                 if (trim((string)$deliverTo) !== '') {
                     $deliverName[] = (string)$deliverTo;
                 }
             }
-            if($deliverName){
-                $argsName = implode(',',$deliverName);
+            if ($deliverName) {
+                $argsName = implode(',', $deliverName);
             }
         }
         $nameData = $this->getDefaultFirstLastName($argsName);
@@ -199,13 +197,15 @@ class CxmlService
             }
         }
         
-        $tel = isset($address->Phone->TelephoneNumber->CountryCode,
+        $tel = isset(
+            $address->Phone->TelephoneNumber->CountryCode,
             $address->Phone->TelephoneNumber->AreaOrCityCode,
-            $address->Phone->TelephoneNumber->Number) ? $address->Phone->TelephoneNumber->CountryCode .
+            $address->Phone->TelephoneNumber->Number
+        ) ? $address->Phone->TelephoneNumber->CountryCode .
             $address->Phone->TelephoneNumber->AreaOrCityCode .
             $address->Phone->TelephoneNumber->Number : '0';
         
-        return array (
+        return  [
             'ext_address_id' => $extAddressId,
             'firstname' => $nameData[0],
             'lastname' => $nameData[1],
@@ -217,13 +217,12 @@ class CxmlService
             'country_id' => $countryId,
             'email' => (string)$address->Email,
             'telephone' => $tel
-        );
-        
+        ];
     }
     
     private function getDefaultFirstLastName($name): array
     {
-        $nameArray = array();
+        $nameArray = [];
         preg_match('/^(.+) ([^ ]+)$/', $name, $s);
         if (count($s) > 2) {
             $nameArray[] = $s[1];
@@ -241,14 +240,12 @@ class CxmlService
         foreach ($extrinsic as $ext) {
             $key = strtolower(trim((string)$ext['name']));
             $value = (string)$ext;
-            if($nonDefault){
+            if ($nonDefault) {
                 $result[$key] = "{$key}: " .$value;
-            }else{
+            } else {
                 $result[$key] = $value;
             }
         }
         return $result;
     }
-    
-    
 }

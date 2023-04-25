@@ -6,19 +6,19 @@
     use Magento\Framework\Event\Observer;
     use Magento\Framework\Event\ObserverInterface;
 
-    class CxmlOrderRequestEvent extends BasePunchoutRequestEvent implements ObserverInterface
+class CxmlOrderRequestEvent extends BasePunchoutRequestEvent implements ObserverInterface
+{
+    
+    public function execute(Observer $observer)
     {
+        $activityEvent = $this->activityEventLogFactory->create();
     
-        public function execute(Observer $observer)
-        {
-            $activityEvent = $this->activityEventLogFactory->create();
-    
-            return $activityEvent->setData([
-                'event_type'       => $observer->getEvent()->getEventType(),
-                'action'           => $observer->getEvent()->getAction(),
-                'user_id'          => $observer->getEvent()->getUserId(),
-                'punchoutgroup_id' => $observer->getEvent()->getPunchoutgroupId(),
-                'info'             => $observer->getEvent()->getInfo()
-            ])->save();
-        }
+        return $activityEvent->setData([
+            'event_type'       => $observer->getEvent()->getEventType(),
+            'action'           => $observer->getEvent()->getAction(),
+            'user_id'          => $observer->getEvent()->getUserId(),
+            'punchoutgroup_id' => $observer->getEvent()->getPunchoutgroupId(),
+            'info'             => $observer->getEvent()->getInfo()
+        ])->save();
     }
+}

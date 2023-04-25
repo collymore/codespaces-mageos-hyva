@@ -168,6 +168,4 @@ class PunchoutSetupRequest extends AbstractModel implements PunchoutSetupRequest
     {
         return $this->setData(self::ORDER_STATUS, $orderStatus);
     }
-
-    
 }
