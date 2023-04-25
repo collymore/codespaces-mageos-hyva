@@ -34,6 +34,9 @@
                 <field id="transfer_button_label" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Transfer Button Label</label>
                 </field>
+                <field id="transfer_modal_content" translate="label" type="textarea" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Transfer Modal Content</label>
+                </field>
             </group>
             <group id="customer" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1"
                    showInStore="1">
