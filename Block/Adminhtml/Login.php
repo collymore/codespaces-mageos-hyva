@@ -155,23 +155,14 @@ class Login extends \Magento\Framework\View\Element\Template
             "oci_password" => $group->getOciPassword()
         ];
     }
-
-    /**
-     * @param $name
-     * @return string
-     */
-    public function getShortName($name): string
-    {
-        if (strlen($name) > 24) {
-            $name = substr($name, 0, 24) . ' ...';
-        }
-        return $name;
-    }
-
+    
+    
     /**
      * Gets a random string for cxml value
+     *
+     * @throws \Exception
      */
-    public function getRandomValue($length = 10)
+    public function getRandomString($length = 10): string
     {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);

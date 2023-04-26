@@ -4,7 +4,7 @@
            name="punchout-search"
            id="punchout-search"
            class="input-text admin__control-text data-grid-search-control"
-           placeholder="<?= /* @noEscape */ $block->__('Search Punchout Groups...'); ?>"
+           placeholder="<?= /* @noEscape */ __('Search Punchout Groups...') ?>"
            data-mage-init='{"Develodesign_Punchout/js/search":{}}'
            style="margin-bottom: 24px; text-align: center; width:300px"
     />
@@ -33,10 +33,10 @@
                                     value="<?= /* @noEscape */ $block->getCXMLSetupUrl() ?>" />
                                 <input type="hidden" name="cxml-payload-id"
                                     class="cxml-payload-id"
-                                    value="<?= /* @noEscape */ $block->getRandomValue(10) ?>" />
+                                    value="<?= /* @noEscape */ $block->getRandomString() ?>" />
                                 <input type="hidden" name="cxml-buyer-cookie"
                                     class="cxml-buyer-cookie"
-                                    value="<?= /* @noEscape */ $block->getRandomValue(20) ?>" />
+                                    value="<?= /* @noEscape */ $block->getRandomString(20) ?>" />
                                 <input type="hidden" name="cxml-shared-secret"
                                     class="cxml-shared-secret"
                                     value="<?= /* @noEscape */ $cxmlInfo["shared_secret"] ?>" />
