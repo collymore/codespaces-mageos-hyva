@@ -65,7 +65,9 @@ class Edit extends \Develodesign\Punchout\Controller\Adminhtml\PunchoutGroup
             $id ? __('Edit Punchout Group') : __('New Punchout Group')
         );
         $resultPage->getConfig()->getTitle()->prepend(__('Punchout Groups'));
-        $resultPage->getConfig()->getTitle()->prepend($model->getId() ? __('Edit Punchout Group %1', $model->getId()) : __('New Punchout Group'));
+        $resultPage->getConfig()->getTitle()->prepend(
+            $model->getId() ? __('Edit Punchout Group %1', $model->getId()) : __('New Punchout Group')
+        );
         return $resultPage;
     }
 }

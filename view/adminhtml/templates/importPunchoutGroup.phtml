@@ -1,42 +1,50 @@
-<div class="page-actions" data-ui-id="page-actions-toolbar-content-header"><div class="page-actions-inner" data-title="Import Account Manager"><div class="page-actions-buttons">
-            <button id="back" title="<?php echo __('Back') ?>" type="button" class="action- scalable primary" onclick="location.href = '<?php echo $block->getBackUrl() ?>';" data-ui-id="add-button">
-                <span><?php echo __('Back') ?></span>
+<div class="page-actions" data-ui-id="page-actions-toolbar-content-header">
+    <div class="page-actions-inner" data-title="Import Account Manager">
+        <div class="page-actions-buttons">
+            <button id="back" title="<?= /* @noEscape */ __('Back') ?>" type="button"
+            class="action- scalable primary" 
+            onclick="location.href = '<?= /* @noEscape */ $block->getBackUrl() ?>';" 
+            data-ui-id="add-button">
+                <span><?= /* @noEscape */ __('Back') ?></span>
             </button>
-        </div></div></div>
+        </div>
+    </div>
+</div>
 <div class="account-manager-import">
     <div class="admin__page-section">
         <div class="admin__page-section-title">
             <div class="admin__page-section-title">
-                <span class="title"><?php echo __('Import Mass Punchout Group Data') ?></span>
+                <span class="title"><?= /* @noEscape */ __('Import Mass Punchout Group Data') ?></span>
             </div>
-            <form id="import-form" class="admin__fieldset" action="<?= /* @escapeNotVerified */
-                $block->getFormAction() ?>" method="post" enctype="multipart/form-data" >
-                <input type="hidden" name="form_key" value="<?php echo $block->getFormKey() ?>">
+            <form id="import-form" class="admin__fieldset" action="<?= /* @noEscape */ $block->getFormAction() ?>"
+                 method="post" enctype="multipart/form-data" >
+                <input type="hidden" name="form_key" value="<?= /* @noEscape */ $block->getFormKey() ?>">
                 <div class="fieldset admin__field">
-                    <label for="import_punchout_group_file" class="admin__field-label"><span><?= /* @escapeNotVerified */
-                                __('Import File') ?></span></label>
+                    <label for="import_punchout_group_file" class="admin__field-label">
+                        <span>
+                            <?= /* @noEscape */ __('Import File') ?>
+                        </span>
+                    </label>
                     <div class="admin__field-control">
-                         <span><b><?= /* @escapeNotVerified */
-                                     __('CSV File(s) Only') ?></b></span>
+                         <span><b><?= /* @noEscape */ __('CSV File(s) Only') ?></b></span>
                         <input type="file" id="import_punchout_group_file" name="import_punchout_group_file"
                                class="input-file required-entry">
-                        <?= $block->getButtonHtml(__('Import Punchout Group'), '', 'import-submit') ?>
+                        <?= /* @noEscape */ $block->getButtonHtml(__('Import Punchout Group'), '', 'import-submit') ?>
                     
                     </div>
                 </div>
-            
             </form>
             <div>
-                <a class="download-link-file-sample" href="<?=  /* @escapeNotVerified */ $block->getDownloadSampleUrl() ?>" target="_blank" rel="nofollow">
-                    <?= $block->escapeHtml(__('Download Sample')) ?>
+                <a class="download-link-file-sample" 
+                    href="<?= /* @noEscape */ $block->getDownloadSampleUrl() ?>" 
+                    target="_blank" rel="nofollow">
+                    <?= /* @noEscape */  __('Download Sample') ?>
                 </a> |
             </div>
     </div>
-    
     <script>
         require(['jquery', "mage/mage"], function (jQuery) {
             jQuery('#import-form').mage('form').mage('validation');
-
             (function ($) {
                 $('.import-submit').click(function () {
                     if ($(':input[name="import_punchout_group_file"]').val()) {
@@ -44,8 +52,6 @@
                     }
                 });
             })(jQuery);
-
-
         });
     </script>
 </div>

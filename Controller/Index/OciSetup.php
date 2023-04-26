@@ -17,133 +17,152 @@ namespace Develodesign\Punchout\Controller\Index;
     use Magento\Framework\Exception\LocalizedException;
     use Magento\Framework\Exception\NoSuchEntityException;
 
-    class OciSetup extends Action implements CsrfAwareActionInterface
-    {
-        protected $ociService;
+class OciSetup extends Action implements CsrfAwareActionInterface
+{
+    protected $ociService;
 
-        protected $jsonResponse;
+    protected $jsonResponse;
         
-        protected $punchoutGroupService;
-        protected $customerService;
+    protected $punchoutGroupService;
+    protected $customerService;
     
-        /**
-         * @var SessionService
-         */
-        protected $customerSessionService;
+    /**
+     * @var SessionService
+     */
+    protected $customerSessionService;
     
-        /**
-         * @var EventServiceProvider
-         */
-        protected $eventServiceProvider;
+    /**
+     * @var EventServiceProvider
+     */
+    protected $eventServiceProvider;
     
-        public function __construct(
-            ActionContext $context,
-            OciService $ociService,
-            PunchoutGroupService $punchoutGroupService,
-            JsonResponse $jsonResponse,
-            CustomerService $customerService,
-            SessionService $sessionService,
-            EventServiceProvider $eventServiceProvider
-        ) {
-            $this->ociService = $ociService;
-            $this->punchoutGroupService = $punchoutGroupService;
-            $this->jsonResponse = $jsonResponse;
-            $this->customerService = $customerService;
-            $this->customerSessionService = $sessionService;
-            $this->eventServiceProvider = $eventServiceProvider;
-            parent::__construct($context);
-        }
+    public function __construct(
+        ActionContext $context,
+        OciService $ociService,
+        PunchoutGroupService $punchoutGroupService,
+        JsonResponse $jsonResponse,
+        CustomerService $customerService,
+        SessionService $sessionService,
+        EventServiceProvider $eventServiceProvider
+    ) {
+        $this->ociService = $ociService;
+        $this->punchoutGroupService = $punchoutGroupService;
+        $this->jsonResponse = $jsonResponse;
+        $this->customerService = $customerService;
+        $this->customerSessionService = $sessionService;
+        $this->eventServiceProvider = $eventServiceProvider;
+        parent::__construct($context);
+    }
     
-        /**
-         * @throws \Zend_Validate_Exception
-         * @throws NoSuchEntityException
-         * @throws AlreadyExistsException
-         * @throws LocalizedException
-         */
-        public function execute()
-        {
-            try {
-                $params = $this->getRequest()->getParams();
-                $requestBody = $this->ociService->prepareOCIRequestBody($params);
-                $validatedPostBody = $this->ociService->validateRequest($requestBody);
-                if (!is_array($validatedPostBody)) {
-                    return $this->jsonResponse->sendResponse(
-                        400,
-                        'Request Parameter(s) Username, Password and Hook URL are required to perform this action'
-                    );
-                }
-                if (!isset($validatedPostBody['~target'])) {
-                    $validatedPostBody['~target'] = '_BLANK';
-                }
-                $configParam = $this->ociService->validateSetupConfiguredParam($validatedPostBody);
-    
-                if (!is_array($configParam)) {
-                    return $this->jsonResponse->sendResponse(
-                        422,
-                        $configParam
-                    );
-                }
-                if  (!$this->ociService->isValidEmail((string)$validatedPostBody['username'])) {
-                    return $this->jsonResponse->sendResponse(
-                        422,
-                        sprintf('Valid email is required to perform this action, %s provided', $validatedPostBody['username'])
-                    );
-        
-                }
-    
-                $matchingPunchoutGroup = $this->punchoutGroupService->loadPunchOutGroupByOciCredentials(
-                   $validatedPostBody['username'],
-                   $validatedPostBody['password']
-                );
-                if (null === $matchingPunchoutGroup) {
-                    return $this->jsonResponse->sendResponse(
-                        404,
-                        sprintf('No such PunchoutGroup entity with the provided credentials %s',$validatedPostBody['username'])
-                    );
-        
-                }
-                $matchingCustomer = $this->customerService->fetchCustomer($validatedPostBody['username']);
-                if(!$matchingCustomer->getId()){
-                    $nameData = $this->ociService->getFirstLastName($matchingPunchoutGroup->getGroupName());
-                    $customerDTO = $this->customerService->prepareCustomerData($matchingPunchoutGroup,$validatedPostBody['username'],$nameData);
-                    $matchingCustomer = $this->customerService->createCustomer($customerDTO);
-                    $this->customerService->createCustomerAddress($matchingCustomer,$matchingPunchoutGroup);
-        
-                }
-                if (!$this->customerSessionService->authoriseCustomer($matchingCustomer->getId())) {
-                    return $this->jsonResponse->sendResponse(
-                        401,
-                        'Failure to authorise customer login'
-                    );
-        
-                }
-                $customerSession = $this->customerSessionService->createOCISessionData($validatedPostBody);
-                if($customerSession){
-                    $this->customerSessionService->clearAuthUserCartSessionData();
-                }
-                $info = 'Successful OCI PunchOutSetupResponse and Store Login';
-                $this->eventServiceProvider->dispatchOciSetupRequestEvent($matchingCustomer->getId(),$matchingPunchoutGroup->getPunchoutgroupId(),$info);
-                return $this->_redirect('/');
-                
-            } catch (\Exception $exception) {
-                $this->eventServiceProvider->dispatchExceptionPunchoutRequestEvent('OCI PunchOutSetupRequest',
-                    'OciSetup', sprintf('Message:%s File:%s', $exception->getMessage(),
-                        $exception->getFile()));
+    /**
+     * @throws \Zend_Validate_Exception
+     * @throws NoSuchEntityException
+     * @throws AlreadyExistsException
+     * @throws LocalizedException
+     */
+    public function execute()
+    {
+        try {
+            $params = $this->getRequest()->getParams();
+            $requestBody = $this->ociService->prepareOCIRequestBody($params);
+            $validatedPostBody = $this->ociService->validateRequest($requestBody);
+            $userName = (string)$validatedPostBody['username'];
+
+            if (!is_array($validatedPostBody)) {
                 return $this->jsonResponse->sendResponse(
-                    500,
-                    $exception->getMessage()
+                    400,
+                    'Request Parameters are invalid'
                 );
             }
-            
-        }
-
-        public function createCsrfValidationException(RequestInterface $request): ?InvalidRequestException
-        {
-            return null;
-        }
-
-        public function validateForCsrf(RequestInterface $request): ?bool
-        {
-            return true;
+            if (!isset($validatedPostBody['~target'])) {
+                $validatedPostBody['~target'] = '_BLANK';
+            }
+            $configParam = $this->ociService->validateSetupConfiguredParam($validatedPostBody);
+    
+            if (!is_array($configParam)) {
+                return $this->jsonResponse->sendResponse(
+                    422,
+                    $configParam
+                );
+            }
+            if (!$this->ociService->isValidEmail($userName)) {
+                return $this->jsonResponse->sendResponse(
+                    422,
+                    sprintf(
+                        'Valid email is required to perform this action, %s provided',
+                        $validatedPostBody['username']
+                    )
+                );
+        
+            }
+    
+            $matchingPunchoutGroup = $this->punchoutGroupService->loadPunchOutGroupByOciCredentials(
+                $userName,
+                $validatedPostBody['password']
+            );
+            if (null === $matchingPunchoutGroup) {
+                return $this->jsonResponse->sendResponse(
+                    404,
+                    "No PunchoutGroup Exists {$userName} / {$validatedPostBody['password']}"
+                );
+        
+            }
+            $matchingCustomer = $this->customerService->getCustomerByEmail($userName);
+            if (!$matchingCustomer->getId()) {
+                $nameData = $this->ociService->getFirstLastName($matchingPunchoutGroup->getGroupName());
+                $customerDTO = $this->customerService->prepareCustomerData(
+                    $matchingPunchoutGroup,
+                    $userName,
+                    $nameData
+                );
+                $matchingCustomer = $this->customerService->createCustomer($customerDTO);
+                $this->customerService->createCustomerAddress($matchingCustomer, $matchingPunchoutGroup);
+        
+            }
+            if (!$this->customerSessionService->authoriseCustomer($matchingCustomer->getId())) {
+                return $this->jsonResponse->sendResponse(
+                    401,
+                    'Failure to authorise customer login'
+                );
+        
+            }
+            $customerSession = $this->customerSessionService->createOCISessionData($validatedPostBody);
+            if ($customerSession) {
+                $this->customerSessionService->clearAuthUserCartSessionData();
+            }
+            $info = 'Successful OCI PunchOutSetupResponse and Store Login';
+            $matchingGroupId = $matchingPunchoutGroup->getPunchoutgroupId();
+            $this->eventServiceProvider->dispatchOciSetupRequestEvent(
+                $matchingCustomer->getId(),
+                $matchingGroupId,
+                $info
+            );
+            return $this->_redirect('/');
+                
+        } catch (\Exception $exception) {
+            $this->eventServiceProvider->dispatchExceptionPunchoutRequestEvent(
+                'OCI PunchOutSetupRequest',
+                'OciSetup',
+                sprintf(
+                    'Message:%s File:%s',
+                    $exception->getMessage(),
+                    $exception->getFile()
+                )
+            );
+            return $this->jsonResponse->sendResponse(
+                500,
+                $exception->getMessage()
+            );
         }
     }
+
+    public function createCsrfValidationException(RequestInterface $request): ?InvalidRequestException
+    {
+        return null;
+    }
+
+    public function validateForCsrf(RequestInterface $request): ?bool
+    {
+        return true;
+    }
+}

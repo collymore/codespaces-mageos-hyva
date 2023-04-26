@@ -6,60 +6,65 @@
     use Develodesign\Punchout\Service\CxmlService;
     use Magento\Catalog\Model\ProductRepository;
     use Magento\Framework\Exception\NoSuchEntityException;
+    use Develodesign\Punchout\Helper\PunchoutConfigHelper;
 
-    class Cxml
-    {
-        protected $cxmlResponse;
+class Cxml
+{
+    protected $cxmlResponse;
         
-        protected $productRepository;
+    protected $productRepository;
     
-        protected $cxmlService;
+    protected $cxmlService;
+
+    protected $configHelper;
     
-        public function __construct(
-            CxmlResponse $cxmlResponse,
-            ProductRepository $productRepository,
-            CxmlService $cxmlService
-        )
-        {
-            $this->cxmlResponse = $cxmlResponse;
-            $this->productRepository = $productRepository;
-            $this->cxmlService = $cxmlService;
-        }
+    public function __construct(
+        CxmlResponse $cxmlResponse,
+        ProductRepository $productRepository,
+        CxmlService $cxmlService,
+        PunchoutConfigHelper $configHelper
+    ) {
+        $this->cxmlResponse = $cxmlResponse;
+        $this->productRepository = $productRepository;
+        $this->cxmlService = $cxmlService;
+        $this->configHelper = $configHelper;
+    }
     
-        /**
-         * @throws NoSuchEntityException
-         */
-        public function getCxmlForm($cxmlSessionData, $punchoutOrder, $quote, $uom): string
-        {
-            $xml = $this->cxmlResponse->getPunchoutOrderMessage($cxmlSessionData, $punchoutOrder);
-            $xml .= $this->getCXMLItems($quote->getAllItems(),$uom);
-            $xml .= '</PunchOutOrderMessage>
+    /**
+     * @throws NoSuchEntityException
+     */
+    public function getCxmlForm($cxmlSessionData, $punchoutOrder, $quote, $uom): string
+    {
+        $xml = $this->cxmlResponse->getPunchoutOrderMessage($cxmlSessionData, $punchoutOrder);
+        $xml .= $this->getCXMLItems($quote->getAllItems(), $uom);
+        $xml .= '</PunchOutOrderMessage>
                             </Message>
                         </cXML>';
-            return sprintf("<form id=\"punchout_cxml_form\"  action=\"%s\" method=\"post\" enctype=\"application/x-www-form-urlencoded\" >
-                        <input name=\"cXML-urlencoded\" id=\"urlencoded_bottom\" type=\"hidden\" value= '%s'>
-                    </form>", $cxmlSessionData['return_url'], $xml);
-        }
+        return sprintf("<form id=\"punchout_cxml_form\" 
+                            action=\"%s\" method=\"post\" 
+                            enctype=\"application/x-www-form-urlencoded\">
+                        <input name=\"cXML-urlencoded\" 
+                            id=\"urlencoded_bottom\" 
+                            type=\"hidden\" value= '%s'>
+                        </form>", $cxmlSessionData['return_url'], $xml);
+    }
     
-        /**
-         * @throws NoSuchEntityException
-         */
-        private function getCXMLItems($items, $uom): string
-        {
-            $itemCode = '';
-            foreach ($items as $item) {
-                if ($item->getParentItemId()) {
-                    continue;
-                }
-            
-                //remove double and single quotes from product names as it's breaking punchout
-                $name = str_replace("'","",$item->getName());
-                $name = str_replace('"',"",$name);
-    
-    
-                $unspsc = $this->getUnspscCode($item->getSku());
-                $itemCode .= sprintf(
-                    '<ItemIn quantity="%s">
+    /**
+     * @throws NoSuchEntityException
+     */
+    private function getCXMLItems($items, $uom): string
+    {
+        $itemCode = '';
+        foreach ($items as $item) {
+            if ($item->getParentItemId()) {
+                continue;
+            }
+            //remove double and single quotes from product names as it's breaking punchout
+            $name = str_replace("'", "", $item->getName());
+            $name = str_replace('"', "", $name);
+            $unspsc = $this->getUnspscCode($item->getSku());
+            $itemCode .= sprintf(
+                '<ItemIn quantity="%s">
                         <ItemID>
                             <SupplierPartID>%s</SupplierPartID>
                             <SupplierPartAuxiliaryID>%s</SupplierPartAuxiliaryID>
@@ -74,26 +79,26 @@
                             <ManufacturerName>%s</ManufacturerName>
                         </ItemDetail>
                     </ItemIn>',
-                    $item->getQty(),
-                    $item->getSku(),
-                    $item->getId(),
-                    $item->getPrice(),
-                    $name,
-                    $uom,
-                    $unspsc,
-                    $item->getBrand()
-                );
-            }
-            return $itemCode;
+                $item->getQty(),
+                $item->getSku(),
+                $item->getId(),
+                $item->getPrice(),
+                $name,
+                $uom,
+                $unspsc,
+                $item->getBrand()
+            );
         }
+        return $itemCode;
+    }
         
-        public function getSubmitButton(string $configLabel)
-        {
-            $form = '#punchout_cxml_form';
-            $modal = '#punchout-modal';
-            $label = $configLabel ?? 'Transfer Basket Items With Punchout';
+    public function getSubmitButton(string $configLabel)
+    {
+        $form = '#punchout_cxml_form';
+        $modal = '#punchout-modal';
+        $label = $configLabel ?? 'Transfer Basket Items With Punchout';
     
-            return '<button class=" button btn-proceed-checkout btn-checkout" id="punchout-button-submit" type="button">
+        return '<button class=" button btn-proceed-checkout btn-checkout" id="punchout-button-submit" type="button">
                                 <span>
                                     <span>' . $label . '</span>
                                 </span>
@@ -106,13 +111,18 @@
                         });
                     });
                     </script>';
-        }
-    
-        /**
-         * @throws NoSuchEntityException
-         */
-        private function getUnspscCode($sku)
-        {
-            return $this->productRepository->get($sku)->getUnspsc();
-        }
     }
+    
+    /**
+     * @throws NoSuchEntityException
+     */
+    private function getUnspscCode($sku) : string
+    {
+        return $this->productRepository->get($sku)->getUnspsc();
+    }
+
+    public function getConfigHelper() : PunchoutConfigHelper
+    {
+        return $this->configHelper;
+    }
+}

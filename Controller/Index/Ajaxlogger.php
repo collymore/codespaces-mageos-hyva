@@ -12,76 +12,76 @@ namespace Develodesign\Punchout\Controller\Index;
     use Magento\Framework\Controller\Result\JsonFactory;
     use Magento\Framework\Controller\ResultInterface;
 
-    class Ajaxlogger extends Action
-    {
+class Ajaxlogger extends Action
+{
 
-        /**
-         * @var JsonFactory
-         */
-        protected $jsonFactory;
+    /**
+     * @var JsonFactory
+     */
+    protected $jsonFactory;
 
-        /**
-         * @var ActivityEventLogFactory
-         */
-        protected $activityEventLogFactory;
+    /**
+     * @var ActivityEventLogFactory
+     */
+    protected $activityEventLogFactory;
 
-        /**
-         * @var CustomerSession
-         */
-        protected $customerSession;
+    /**
+     * @var CustomerSession
+     */
+    protected $customerSession;
 
-        /**
-         * @var PunchoutGroupService
-         */
-        protected $punchoutGroupService;
+    /**
+     * @var PunchoutGroupService
+     */
+    protected $punchoutGroupService;
 
-        public function __construct(
-            Context $context,
-            JsonFactory $jsonFactory,
-            \Develodesign\Punchout\Model\ActivityEventLogFactory $activityEventLogFactory,
-            CustomerSession $customerSession,
-            PunchoutGroupService $punchoutGroupService
-        ) {
-            $this->jsonFactory = $jsonFactory;
-            $this->activityEventLogFactory = $activityEventLogFactory;
-            $this->customerSession = $customerSession;
-            $this->punchoutGroupService = $punchoutGroupService;
-            parent::__construct($context);
-        }
-
-        /**
-         * @return ResponseInterface|Json|ResultInterface
-         */
-        public function execute()
-        {
-            $resultJson = $this->jsonFactory->create();
-            $requestPostData = $this->getRequest()->getPost()->toArray();
-            $response['error'] = true;
-            $activityEventLog = $this->activityEventLogFactory->create();
-
-            try {
-                $punchoutGroupId = '';
-                $customer = $this->customerSession->getCustomer();
-                if ($customer) {
-                    $punchoutGroup = $this->punchoutGroupService->loadPunchOutGroupById((int)$customer->getPunchoutGroup());
-                    if ($punchoutGroup) {
-                        $punchoutGroupId = $punchoutGroup->getPunchoutgroupId();
-                    }
-                }
-
-                $activityEventLog->setData([
-                    'event_type' => (string)$requestPostData['event_type'],
-                    'action' => (string)$requestPostData['action'],
-                    'user_id' => $this->customerSession->getId(),
-                    'punchoutgroup_id' => $punchoutGroupId,
-                    'info' => (string)$requestPostData['info']
-                ]);
-
-                $activityEventLog->save();
-                $response['error'] = false;
-            } catch (\Exception $e) {
-                $response['error'] = true;
-            }
-            return $resultJson->setData($response);
-        }
+    public function __construct(
+        Context $context,
+        JsonFactory $jsonFactory,
+        \Develodesign\Punchout\Model\ActivityEventLogFactory $activityEventLogFactory,
+        CustomerSession $customerSession,
+        PunchoutGroupService $punchoutGroupService
+    ) {
+        $this->jsonFactory = $jsonFactory;
+        $this->activityEventLogFactory = $activityEventLogFactory;
+        $this->customerSession = $customerSession;
+        $this->punchoutGroupService = $punchoutGroupService;
+        parent::__construct($context);
     }
+
+    /**
+     * @return ResponseInterface|Json|ResultInterface
+     */
+    public function execute()
+    {
+        $resultJson = $this->jsonFactory->create();
+        $requestPostData = $this->getRequest()->getPost()->toArray();
+        $response['error'] = true;
+        $activityEventLog = $this->activityEventLogFactory->create();
+
+        try {
+            $punchoutGroupId = '';
+            $customer = $this->customerSession->getCustomer();
+            if ($customer) {
+                $punchoutGroup = $this->punchoutGroupService->loadPunchOutGroupById((int)$customer->getPunchoutGroup());
+                if ($punchoutGroup) {
+                    $punchoutGroupId = $punchoutGroup->getPunchoutgroupId();
+                }
+            }
+
+            $activityEventLog->setData([
+                'event_type' => (string)$requestPostData['event_type'],
+                'action' => (string)$requestPostData['action'],
+                'user_id' => $this->customerSession->getId(),
+                'punchoutgroup_id' => $punchoutGroupId,
+                'info' => (string)$requestPostData['info']
+            ]);
+
+            $activityEventLog->save();
+            $response['error'] = false;
+        } catch (\Exception $e) {
+            $response['error'] = true;
+        }
+        return $resultJson->setData($response);
+    }
+}

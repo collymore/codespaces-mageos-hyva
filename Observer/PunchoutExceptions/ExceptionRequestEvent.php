@@ -9,37 +9,35 @@
     use Magento\Framework\Event\Observer;
     use Magento\Framework\Event\ObserverInterface;
 
-    class ExceptionRequestEvent extends BasePunchoutRequestEvent implements ObserverInterface
-    {
-        protected $sessionService;
+class ExceptionRequestEvent extends BasePunchoutRequestEvent implements ObserverInterface
+{
+    protected $sessionService;
         
-        protected $customerService;
+    protected $customerService;
     
-        public function __construct(
-            ActivityEventLogFactory $activityEventLogFactory,
-            SessionService $sessionService,
-            CustomerService $customerService
-        )
-        {
-            $this->sessionService = $sessionService;
-            $this->customerService = $customerService;
-            parent::__construct($activityEventLogFactory);
-        }
+    public function __construct(
+        ActivityEventLogFactory $activityEventLogFactory,
+        SessionService $sessionService,
+        CustomerService $customerService
+    ) {
+        $this->sessionService = $sessionService;
+        $this->customerService = $customerService;
+        parent::__construct($activityEventLogFactory);
+    }
     
-        public function execute(Observer $observer): void
-        {
-            $activityEvent = $this->activityEventLogFactory->create();
-            $customerId = $this->sessionService->getCustomerSession()->getCustomerId();
-            if($customerId){
-                $punchoutGroupId = $this->customerService->getPunchoutGroupId($customerId);
-                 $activityEvent->setData([
-                    'event_type'       => $observer->getEvent()->getEventType(),
-                    'action'           => $observer->getEvent()->getAction(),
-                    'user_id'          => $customerId,
-                    'punchoutgroup_id' => $punchoutGroupId,
-                    'info'             => $observer->getEvent()->getInfo()
-                ])->save();
-            }
-            
+    public function execute(Observer $observer): void
+    {
+        $activityEvent = $this->activityEventLogFactory->create();
+        $customerId = $this->sessionService->getCustomerSession()->getCustomerId();
+        if ($customerId) {
+            $punchoutGroupId = $this->customerService->getPunchoutGroupId($customerId);
+             $activityEvent->setData([
+                'event_type'       => $observer->getEvent()->getEventType(),
+                'action'           => $observer->getEvent()->getAction(),
+                'user_id'          => $customerId,
+                'punchoutgroup_id' => $punchoutGroupId,
+                'info'             => $observer->getEvent()->getInfo()
+             ])->save();
         }
     }
+}

@@ -12,8 +12,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\Template\Context;
 
 /**
- * Class Login
- * @package Develodesign\Punchout\Block
+ * Class Login used to render punchout login page in adminhtml
  */
 class Login extends \Magento\Framework\View\Element\Template
 {
@@ -41,9 +40,8 @@ class Login extends \Magento\Framework\View\Element\Template
         PunchoutGroupRepositoryInterface $punchoutGroupRepository,
         PunchoutGroupCollectionFactory $CollectionFactory,
         CustomerService $customerService,
-        array $data = array()
-    )
-    {
+        array $data = []
+    ) {
         $this->punchoutGroupRepository = $punchoutGroupRepository;
         $this->punchoutGroupCollection = $CollectionFactory;
         $this->customerService = $customerService;
@@ -67,12 +65,12 @@ class Login extends \Magento\Framework\View\Element\Template
      */
     public function getCXMLSetupUrl(): string
     {
-        return  sprintf('%s%s',$this->getBaseUrl(),'develo_punchout/index/cxmlsetup');
+        return  sprintf('%s%s', $this->getBaseUrl(), 'develo_punchout/index/cxmlsetup');
     }
     
     public function getOCISetupUrl(): string
     {
-        return sprintf('%s%s',$this->getBaseUrl(),'develo_punchout/index/ocisetup');
+        return sprintf('%s%s', $this->getBaseUrl(), 'develo_punchout/index/ocisetup');
     }
     
     /**
@@ -110,54 +108,45 @@ class Login extends \Magento\Framework\View\Element\Template
      * @return array|false
      * @throws LocalizedException
      */
-    public function getCxmlPunchout($groupId): bool|array
+    public function getCxmlPunchout($groupId): array
     {
         if (!$group = $this->punchoutGroupRepository->get($groupId)) {
-            return false;
+            return [];
         }
     
-        if (
-            !$group->getSharedSecret() &&
+        if (!$group->getSharedSecret() &&
             (!$group->getDunsIdentity() || !$group->getAribaNetworkId())
         ) {
-            return false;
+            return [];
         }
-        $customerName = 'Test User';
-        $email = $group->getGroupEmail();
         $customer = $this->customerService->getCustomerByPunchoutGroupId($groupId);
-        if($customer){
-            $customerName = sprintf('%s %s', $customer->getFirstname(), $customer->getLastname());
-            $email = $customer->getEmail();
-        }
         
         return [
             "shared_secret"    => $group->getSharedSecret(),
             "duns_identity"    => $group->getDunsIdentity(),
             "ariba_network_id" => $group->getAribaNetworkId(),
-            'contactName'  => $customerName,
-            'contactEmail' => $email
+            'contactName'  => sprintf('%s %s', $customer->getFirstname(), $customer->getLastname()) ?? 'Test User',
+            'contactEmail' => $customer->getEmail() ?? $group->getGroupEmail()
         ];
-    
     }
     /**
      * @param $groupId
      * @return array|false
      */
-    public function getOciPunchout($groupId): bool|array
+    public function getOciPunchout($groupId): array
     {
         if (!$group = $this->getPunchoutGroup($groupId)) {
-            return false;
+            return [];
         }
-        if (
-            !$group->getOciUsername() &&
+        if (!$group->getOciUsername() &&
             !$group->getOciPassword()
         ) {
-            return false;
+            return [];
         }
-        return array(
+        return [
             "oci_username" => $group->getOciUsername(),
             "oci_password" => $group->getOciPassword()
-        );
+        ];
     }
 
     /**
@@ -171,5 +160,18 @@ class Login extends \Magento\Framework\View\Element\Template
         }
         return $name;
     }
-    
+
+    /**
+     * Gets a random string for cxml value
+     */
+    public function getRandomValue($length = 10)
+    {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[random_int(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
 }

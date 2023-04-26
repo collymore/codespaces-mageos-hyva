@@ -65,11 +65,17 @@ class Save extends \Magento\Backend\App\Action
             } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the Punchout group record.'));
+                $this->messageManager->addExceptionMessage(
+                    $e,
+                    __('Something went wrong while saving the Punchout group record.')
+                );
             }
 
             $this->dataPersistor->set('develodesign_punchout_punchoutgroup', $data);
-            return $resultRedirect->setPath('*/*/edit', ['punchoutgroup_id' => $this->getRequest()->getParam('punchoutgroup_id')]);
+            return $resultRedirect->setPath(
+                '*/*/edit',
+                ['punchoutgroup_id' => $this->getRequest()->getParam('punchoutgroup_id')]
+            );
         }
         return $resultRedirect->setPath('*/*/');
     }

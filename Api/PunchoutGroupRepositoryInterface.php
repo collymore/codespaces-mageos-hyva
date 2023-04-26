@@ -65,4 +65,3 @@ interface PunchoutGroupRepositoryInterface
      */
     public function deleteById($punchoutgroupId);
 }
-

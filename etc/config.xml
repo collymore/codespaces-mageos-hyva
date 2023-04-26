@@ -9,6 +9,7 @@
                 </defaults>
                 <display>
                     <transfer_button_label><![CDATA[Transfer Basket Items With Punchout]]></transfer_button_label>
+                    <transfer_modal_content><![CDATA[Please Wait, Transfering Basket Items Via Punchout...]]></transfer_modal_content>
                 </display>
                  <customer>
                     <auto_create_user>1</auto_create_user>

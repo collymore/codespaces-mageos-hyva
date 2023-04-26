@@ -28,7 +28,7 @@ class PunchoutGroupRepository implements PunchoutGroupRepositoryInterface
 
     protected PunchoutGroupCollectionFactory $punchoutGroupCollectionFactory;
     
-    protected PunchoutGroupSearchResultsInterfaceFactory|PunchoutGroup $searchResultsFactory;
+    protected PunchoutGroupSearchResultsInterfaceFactory $searchResultsFactory;
 
     /**
      * @param ResourcePunchoutGroup $resource

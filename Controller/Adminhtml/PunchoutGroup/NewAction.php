@@ -43,4 +43,3 @@ class NewAction extends \Develodesign\Punchout\Controller\Adminhtml\PunchoutGrou
         return $this->resultForwardFactory->create()->forward('edit');
     }
 }
-

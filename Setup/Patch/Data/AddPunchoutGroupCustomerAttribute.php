@@ -71,7 +71,7 @@ class AddPunchoutGroupCustomerAttribute implements DataPatchInterface, PatchReve
                 'label' => 'Assigned Punchout Group',
                 'input' => 'select',
                 'type' => 'static',
-                'source' => 'Develodesign\Punchout\Model\Customer\Attribute\Source\PunchoutGroup',
+                'source' => \Develodesign\Punchout\Model\Customer\Attribute\Source\PunchoutGroup::class,
                 'required' => false,
                 'position' => 333,
                 'visible' => true,

@@ -1,8 +1,7 @@
 <?php
     
     namespace Develodesign\Punchout\Controller\PurchaseOrder;
-    
-  
+
     use Develodesign\Punchout\Event\EventServiceProvider;
     use Develodesign\Punchout\Exceptions\CxmlDocumentLoadingException;
     use Develodesign\Punchout\Model\Order\Request;
@@ -12,62 +11,68 @@
     use Magento\Framework\App\CsrfAwareActionInterface;
     use Magento\Framework\App\Request\InvalidRequestException;
     use Magento\Framework\App\RequestInterface;
+    use Magento\Framework\Filesystem\DriverInterface;
 
-    class Index extends Action implements CsrfAwareActionInterface
-    {
-        /**
-         * @var Request
-         */
-        protected $orderRequest;
+class Index extends Action implements CsrfAwareActionInterface
+{
+    /**
+     * @var Request
+     */
+    protected $orderRequest;
     
-        /**
-         * @var CxmlResponse
-         */
-        protected $cxmlResponse;
+    /**
+     * @var CxmlResponse
+     */
+    protected $cxmlResponse;
     
-        /**
-         * @var EventServiceProvider
-         */
-        protected $eventServiceProvider;
+    /**
+     * @var EventServiceProvider
+     */
+    protected $eventServiceProvider;
     
-        public function __construct(
-            Context $context,
-            Request $orderRequest,
-            CxmlResponse $cxmlResponse,
-            EventServiceProvider $eventServiceProvider
-        )
-        {
-            $this->cxmlResponse = $cxmlResponse;
-            $this->orderRequest = $orderRequest;
-            $this->eventServiceProvider = $eventServiceProvider;
-            parent::__construct($context);
-        }
-    
-        /**
-         */
-        public function execute()
-        {
-             try {
-                $orderRequest = $this->orderRequest;
-                $orderRequest->setDocument(file_get_contents('php://input'));
-                $orderRequest->isValid();
-                $result = $orderRequest->getCreateOrder();
-                } catch (\Exception|CxmlDocumentLoadingException $exception) {
-                 $this->eventServiceProvider->dispatchExceptionPunchoutRequestEvent('CXML PunchOut Order Request',
-                    'CXML OrderRequest', sprintf('Message:%s File:%s', $exception->getMessage(),
-                         $exception->getFile()));
-                     return $this->cxmlResponse->respondWithData(500, $exception->getMessage());
-                 }
-                return $this->cxmlResponse->respondWithData(200, $result['message']);
-        }
-    
-        public function createCsrfValidationException(RequestInterface $request): ?InvalidRequestException
-        {
-           return null;
-        }
-    
-        public function validateForCsrf(RequestInterface $request): ?bool
-        {
-            return true;
-        }
+    public function __construct(
+        Context $context,
+        Request $orderRequest,
+        CxmlResponse $cxmlResponse,
+        EventServiceProvider $eventServiceProvider
+    ) {
+        $this->cxmlResponse = $cxmlResponse;
+        $this->orderRequest = $orderRequest;
+        $this->eventServiceProvider = $eventServiceProvider;
+        parent::__construct($context);
     }
+    
+    /**
+     */
+    public function execute()
+    {
+        try {
+              $orderRequest = $this->orderRequest;
+              $orderRequest->setDocument(DriverInterface::fileOpen('php://input', 'r'));
+              $orderRequest->isValid();
+              $result = $orderRequest->getCreateOrder();
+        } catch (\Exception|CxmlDocumentLoadingException $exception) {
+            $this->eventServiceProvider->dispatchExceptionPunchoutRequestEvent(
+                'CXML PunchOut Order Request',
+                'CXML OrderRequest',
+                sprintf(
+                    'Message:%s File:%s',
+                    $exception->getMessage(),
+                    $exception->getFile()
+                )
+            );
+             return $this->cxmlResponse->respondWithData(500, $exception->getMessage());
+        }
+            return $this->cxmlResponse->respondWithData(200, $result['message']);
+    }
+    
+    public function createCsrfValidationException(RequestInterface $request): ?InvalidRequestException
+    {
+        return null;
+    }
+    
+    public function validateForCsrf(RequestInterface $request): ?bool
+    {
+        return true;
+    }
+}

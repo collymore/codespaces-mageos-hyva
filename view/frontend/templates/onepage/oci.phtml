@@ -1,8 +1,10 @@
-
-<?php
-    echo $this->generateOciCheckoutForm();
-    echo $this->generateOCISubmitButton();
-?>
+<div class="modal" id="punchout-modal">
+    <div class="modal-content">
+        <?= /* @noEscape */ $block->getConfigHelper()->getTransferModalContent(); ?>
+    </div>
+</div>
+<?= /* @noEscape */ $block->generateOciCheckoutForm(); ?>
+<?= /* @noEscape */ $block->generateOCISubmitButton(); ?>
 
 <script type="text/javascript">
     require(["jquery", 'mage/url'], function($,urlBuilder){
@@ -15,15 +17,11 @@
             }).done(function (response) {
                 if(response && response['error'] === false){
                     console.log(response);
-
                 }
             });
         }
-
         $(document).ready(function() {
-
             $('#punchout_oci_form').submit(function() {
-
                 let fields = $(this).serializeArray();
                 /**
                  * Log Outgoing CXML data
@@ -36,12 +34,6 @@
                 };
                 logOutGoingXMLData(payload);
             });
-
-
-
-
         });
-
-
     });
 </script>
