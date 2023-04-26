@@ -26,8 +26,12 @@
                 <?php if ($block->hasPunchout($punchoutGroup->getId())):?>
                     <td class="group-name"><?= /* @noEscape */ $punchoutGroup->getGroupName();?></td>
                     <td class="punchout-options cxml-login">
-                           <?php if ($cxmlInfo = $block->getCxmlPunchout($punchoutGroup->getId())): ?>
-                                 <span class="punchout-option cxml">CXML</span>
+                           <?php if ($cxmlInfo = $block->getCxmlPunchout($punchoutGroup->getId())):
+                            if($cxmlInfo['contactEmail']):?>
+                                <span class="punchout-option cxml">CXML</span>
+                            <?php else:?>
+                                    <?= __("No customers set to this group");?>
+                            <?php endif;?>
                                 <input type="hidden" name="cxml-url"
                                     class="cxml-url"
                                     value="<?= /* @noEscape */ $block->getCXMLSetupUrl() ?>" />

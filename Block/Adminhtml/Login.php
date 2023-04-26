@@ -120,8 +120,8 @@ class Login extends \Magento\Framework\View\Element\Template
             return [];
         }
     
-        $customerName = 'Test User';
-        $customerEmail = $group->getGroupEmail();
+        $customerName = '';
+        $customerEmail = '';
         $customer = $this->customerService->getCustomerByPunchoutGroupId($groupId);
         if($customer){
             $customerName = sprintf('%s %s', $customer->getFirstname(), $customer->getLastname());
