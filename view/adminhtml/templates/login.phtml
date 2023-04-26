@@ -28,35 +28,35 @@
                     <td class="punchout-options cxml-login">
                            <?php if ($cxmlInfo = $block->getCxmlPunchout($punchoutGroup->getId())): ?>
                                  <span class="punchout-option cxml">CXML</span>
-                                <input type="hidden" name="cxml-url" 
-                                    class="cxml-url" 
+                                <input type="hidden" name="cxml-url"
+                                    class="cxml-url"
                                     value="<?= /* @noEscape */ $block->getCXMLSetupUrl() ?>" />
-                                <input type="hidden" name="cxml-payload-id" 
-                                    class="cxml-payload-id" 
-                                    value="<?= /* @noEscape */ $block->getRandonString(10) ?>" />
-                                <input type="hidden" name="cxml-buyer-cookie" 
-                                    class="cxml-buyer-cookie" 
-                                    value="<?= /* @noEscape */ $block->getRandonString(20) ?>" />
-                                <input type="hidden" name="cxml-shared-secret" 
-                                    class="cxml-shared-secret" 
+                                <input type="hidden" name="cxml-payload-id"
+                                    class="cxml-payload-id"
+                                    value="<?= /* @noEscape */ $block->getRandomValue(10) ?>" />
+                                <input type="hidden" name="cxml-buyer-cookie"
+                                    class="cxml-buyer-cookie"
+                                    value="<?= /* @noEscape */ $block->getRandomValue(20) ?>" />
+                                <input type="hidden" name="cxml-shared-secret"
+                                    class="cxml-shared-secret"
                                     value="<?= /* @noEscape */ $cxmlInfo["shared_secret"] ?>" />
-                                <input type="hidden" name="cxml-request-operation" 
+                                <input type="hidden" name="cxml-request-operation"
                                     class="cxml-request-operation" value="create" />
-                                <input type="hidden" name="cxml-sender-identity" 
-                                    class="cxml-sender-identity" 
+                                <input type="hidden" name="cxml-sender-identity"
+                                    class="cxml-sender-identity"
                                     value="<?= /* @noEscape */ $cxmlInfo["duns_identity"] ?>" />
-                                <input type="hidden" name="cxml-ariba-network-id" 
-                                    class="cxml-ariba-network-id" 
+                                <input type="hidden" name="cxml-ariba-network-id"
+                                    class="cxml-ariba-network-id"
                                     value="<?= /* @noEscape */ $cxmlInfo["ariba_network_id"] ?>" />
                                 <input type="hidden" name="cxml-extrinsic-data"
                                     class="cxml-extrinsic-data" value="test" />
-                                <input type="hidden" name="cxml-contact-data-name" 
-                                    class="cxml-contact-data-name" 
+                                <input type="hidden" name="cxml-contact-data-name"
+                                    class="cxml-contact-data-name"
                                     value="<?= /* @noEscape */ $cxmlInfo["contactName"] ?>" />
-                                <input type="hidden" name="cxml-contact-data-email" 
-                                    class="cxml-contact-data-email" 
+                                <input type="hidden" name="cxml-contact-data-email"
+                                    class="cxml-contact-data-email"
                                     value="<?= /* @noEscape */ $cxmlInfo["contactEmail"] ?>" />
-                                <input type="hidden" name="cxml-return-url" 
+                                <input type="hidden" name="cxml-return-url"
                                     class="cxml-return-url" value="<?= /* @noEscape */ $block->getBaseUrl() ?>" />
                             <?php endif; ?>
                         </span>
@@ -64,13 +64,13 @@
                     <td class="punchout-options oci-login">
                         <?php if ($ociInfo = $block->getOciPunchout($punchoutGroup->getId())): ?>
                                 <span class="punchout-option oci">OCI</span>
-                                <input type="hidden" name="oci-url" 
+                                <input type="hidden" name="oci-url"
                                     class="oci-url" value="<?= /* @noEscape */ $block->getOCISetupUrl() ?>" />
-                                <input type="hidden" name="oci-hook" 
+                                <input type="hidden" name="oci-hook"
                                     class="oci-hook" value="<?= /* @noEscape */ $block->getBaseUrl() ?>" />
-                                <input type="hidden" name="oci-username" 
+                                <input type="hidden" name="oci-username"
                                     class="oci-username" value="<?= /* @noEscape */ $ociInfo["oci_username"] ?>" />
-                                <input type="hidden" name="oci-password" 
+                                <input type="hidden" name="oci-password"
                                     class="oci-password" value="<?= /* @noEscape */ $ociInfo["oci_password"] ?>" />
                              <?php endif; ?>
                     </td>
