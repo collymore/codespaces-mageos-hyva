@@ -122,13 +122,20 @@ class Login extends \Magento\Framework\View\Element\Template
         ) {
             return false;
         }
+        $customerName = 'Test User';
+        $email = $group->getGroupEmail();
         $customer = $this->customerService->getCustomerByPunchoutGroupId($groupId);
+        if($customer){
+            $customerName = sprintf('%s %s', $customer->getFirstname(), $customer->getLastname());
+            $email = $customer->getEmail();
+        }
+        
         return [
             "shared_secret"    => $group->getSharedSecret(),
             "duns_identity"    => $group->getDunsIdentity(),
             "ariba_network_id" => $group->getAribaNetworkId(),
-            'contactName'  => sprintf('%s %s', $customer->getFirstname(), $customer->getLastname()) ?? 'Test User',
-            'contactEmail' => $customer->getEmail() ?? $group->getGroupEmail()
+            'contactName'  => $customerName,
+            'contactEmail' => $email
         ];
     
     }
