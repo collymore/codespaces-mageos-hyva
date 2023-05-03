@@ -12,6 +12,7 @@
     use Magento\Framework\App\Request\InvalidRequestException;
     use Magento\Framework\App\RequestInterface;
     use Magento\Framework\Filesystem\DriverInterface;
+    use Magento\Framework\Exception\NoSuchEntityException;
 
 class CxmlSetup extends Action implements \Magento\Framework\App\CsrfAwareActionInterface
 {
@@ -74,7 +75,7 @@ class CxmlSetup extends Action implements \Magento\Framework\App\CsrfAwareAction
         try {
             $xmlRawData = $this->driverInterface->fileGetContents('php://input');
             if (!$xmlRawData) {
-                $this->eventServiceProvider->dispatchCxmlSetupRequestEvent('', '', 'No POST data included in request');
+                $this->eventServiceProvider->dispatchCxmlSetupRequestEvent(0, 0, 'No POST data included in request');
                 return $this->cxmlResponse->respondWithData(400, 'Post body is missing or XML appears invalid');
             }
     
@@ -82,8 +83,8 @@ class CxmlSetup extends Action implements \Magento\Framework\App\CsrfAwareAction
             $violations = $this->cxmlService->validateSetupRequest($parsedXMLData);
             if ($violations['error'] === true) {
                 $this->eventServiceProvider->dispatchCxmlSetupRequestEvent(
-                    '',
-                    '',
+                    0,
+                    0,
                     "Validation Error : " . json_encode($violations)
                 );
         
@@ -93,18 +94,25 @@ class CxmlSetup extends Action implements \Magento\Framework\App\CsrfAwareAction
             $dunsIdentity = $parsedXMLData->Header->Sender->Credential->Identity;
             $aribaNetworkId = $this->cxmlService->getAribaNetworkId($parsedXMLData);
     
-            $matchingPunchoutGroup = $this->punchoutGroupService->loadPunchOutGroupByCredentials(
-                $sharedSecret,
-                $dunsIdentity,
-                $aribaNetworkId
-            );
-    
+            try{
+                $matchingPunchoutGroup = $this->punchoutGroupService->loadPunchOutGroupByCredentials(
+                    $sharedSecret,
+                    $dunsIdentity,
+                    $aribaNetworkId
+                );
+            } catch(\Exception $e){
+                $this->eventServiceProvider->dispatchCxmlSetupRequestEvent(0, 0, $e->getMessage());
+                throw new NoSuchEntityException(__($e->getMessage()));
+            }
+
             $extrinsicData = $this->cxmlService->getExtrinsicData(
                 $parsedXMLData->Request->PunchOutSetupRequest->Extrinsic
             );
-    
+     
             if ($this->cxmlService->isCreate($parsedXMLData) === true) {
+             
                 $useEmail = $this->cxmlService->fetchEmail($extrinsicData, $parsedXMLData);
+           
                 if (empty(trim($useEmail))) {
                     $useEmail = $this->cxmlService->createEmail(
                         $extrinsicData,
@@ -112,8 +120,10 @@ class CxmlSetup extends Action implements \Magento\Framework\App\CsrfAwareAction
                         $matchingPunchoutGroup->getGroupEmail()
                     );
                 }
-                $matchingCustomer = $this->customerService->getCustomerByEmail($useEmail);
-                if (!$matchingCustomer->getId()) {
+
+                try{
+                    $matchingCustomer = $this->customerService->getCustomerByEmail($useEmail);
+                }catch(\Exception $e){
                     $nameData = $this->cxmlService->getFirstLastName($extrinsicData);
                     $customerDTO = $this->customerService->prepareCustomerData(
                         $matchingPunchoutGroup,
@@ -123,6 +133,7 @@ class CxmlSetup extends Action implements \Magento\Framework\App\CsrfAwareAction
                     $matchingCustomer = $this->customerService->createCustomer($customerDTO);
                     $this->customerService->createCustomerAddress($matchingCustomer, $matchingPunchoutGroup);
                 }
+                
                 $setupRequestDTO = $this->setupRequestService->prepareSetupData(
                     $matchingCustomer->getId(),
                     $parsedXMLData

@@ -66,8 +66,13 @@
                         </span>
                     </td>
                     <td class="punchout-options oci-login">
-                        <?php if ($ociInfo = $block->getOciPunchout($punchoutGroup->getId())): ?>
-                                <span class="punchout-option oci">OCI</span>
+                        <?php if ($ociInfo = $block->getOciPunchout($punchoutGroup->getId())): 
+                            if($ociInfo["has_customer"]): ?>
+                                  <span class="punchout-option oci">OCI</span>
+                            <?php else:?>
+                                    <?= __("No customers set to this group");?>
+                            <?php endif;?>
+                             
                                 <input type="hidden" name="oci-url"
                                     class="oci-url" value="<?= /* @noEscape */ $block->getOCISetupUrl() ?>" />
                                 <input type="hidden" name="oci-hook"

@@ -74,6 +74,23 @@ class ActivityEventLog extends \Magento\Framework\Api\AbstractExtensibleObject i
     {
         return $this->setData(self::USER_ID, $userId);
     }
+
+    /**
+     * @return string|null
+     */
+    public function getIp()
+    {
+        return $this->_get(self::IP);
+    }
+    
+    /**
+     * @param string $ip
+     * @return ActivityEventLogInterface|ActivityEventLog
+     */
+    public function setIp($ip)
+    {
+        return $this->setData(self::IP, $ip);
+    }
     
     /**
      * @return string|null

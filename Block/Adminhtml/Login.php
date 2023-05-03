@@ -138,13 +138,16 @@ class Login extends \Magento\Framework\View\Element\Template
     }
     /**
      * @param $groupId
-     * @return array|false
+     * @return array
      */
     public function getOciPunchout($groupId): array
     {
         if (!$group = $this->getPunchoutGroup($groupId)) {
             return [];
         }
+
+        $customer = $this->customerService->getCustomerByPunchoutGroupId($groupId);
+
         if (!$group->getOciUsername() &&
             !$group->getOciPassword()
         ) {
@@ -152,7 +155,8 @@ class Login extends \Magento\Framework\View\Element\Template
         }
         return [
             "oci_username" => $group->getOciUsername(),
-            "oci_password" => $group->getOciPassword()
+            "oci_password" => $group->getOciPassword(),
+            "has_customer" => !empty($customer)
         ];
     }
     

@@ -60,7 +60,7 @@ class PunchoutGroupService
         if (!$punchoutGroup->getPunchoutgroupId()) {
             throw new NoSuchEntityException(
                 __(
-                    'NoSuch PunchoutGroup Shared Secret: %fieldValue, Duns: %field2Value, Ariba: %field3Value',
+                    'No PunchoutGroup Shared Secret: %fieldValue, Duns: %field2Value, Ariba: %field3Value',
                     [
                         'fieldName'   => 'sharedSecret',
                         'fieldValue'  => $sharedSecret,

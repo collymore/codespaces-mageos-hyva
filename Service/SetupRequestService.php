@@ -87,7 +87,7 @@ class SetupRequestService
     private function generateUUID(): string
     {
         // ripemd128 is 128-bit hex
-        $hash = hash('ripemd128', uniqid(random_int(), true));
+        $hash = hash('ripemd128', uniqid(random_int(0, 20), true));
         $uuid = '';
         // UUID format is XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX for readability
         $uuid .= substr($hash, 0, 8) .

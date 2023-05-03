@@ -71,6 +71,8 @@ class LoginProxy extends Action implements HttpGetActionInterface
     public function execute()
     {
         try {
+            $this->eventServiceProvider->dispatchLoginProxyRequestEvent(0, 0, "Login Proxy Request with Params : " .json_encode($this->getRequest()->getParams()));
+
             if (!array_key_exists('Bearer', $this->getRequest()->getParams())) {
                 throw new \Magento\Framework\Webapi\Exception(
                     __('Request Parameter: Bearer is required to perform this action'),

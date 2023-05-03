@@ -19,11 +19,24 @@ namespace Develodesign\Punchout\Controller\Index;
 
 class OciSetup extends Action implements CsrfAwareActionInterface
 {
+    /**
+     * @var OciService
+     */
     protected $ociService;
 
+    /**
+     * @var JsonResponse
+     */
     protected $jsonResponse;
         
+    /**
+     * @var PunchoutGroupService
+     */
     protected $punchoutGroupService;
+
+    /**
+     * @var CustomerService
+     */
     protected $customerService;
     
     /**

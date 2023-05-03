@@ -52,11 +52,11 @@ class PunchoutGroup extends Column
                     if ($punchoutGroup) {
                         $groupName = $punchoutGroup->getGroupName();
                         $groupEmail = $punchoutGroup->getGroupEmail();
+                        $item['punchoutgroup_id'] = "{$groupName} <{$groupEmail}>";
                     } else {
-                        $groupName = $item['group_name'];
-                        $groupEmail = $item['group_email'];
+                        $item['punchoutgroup_id'] = "";
                     }
-                    $item['punchoutgroup_id'] = "{$groupName} <{$groupEmail}>";
+                   
                 } catch (NoSuchEntityException $e) {
                     $this->logger->warning("Non existant Punchout group attempted to be loaded : {$punchoutGroupId}");
                 }

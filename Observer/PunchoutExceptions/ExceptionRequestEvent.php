@@ -8,20 +8,34 @@
     use Develodesign\Punchout\Service\SessionService;
     use Magento\Framework\Event\Observer;
     use Magento\Framework\Event\ObserverInterface;
+    use \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 
 class ExceptionRequestEvent extends BasePunchoutRequestEvent implements ObserverInterface
 {
+    /**
+     * @var SessionService
+     */
     protected $sessionService;
         
+    /**
+     * @var CustomerService
+     */
     protected $customerService;
+
+    /**
+     * @var RemoteAddress
+     */
+    protected $remote;
     
     public function __construct(
         ActivityEventLogFactory $activityEventLogFactory,
         SessionService $sessionService,
-        CustomerService $customerService
+        CustomerService $customerService,
+        RemoteAddress $remote
     ) {
         $this->sessionService = $sessionService;
         $this->customerService = $customerService;
+        $this->remote = $remote;
         parent::__construct($activityEventLogFactory);
     }
     
@@ -36,7 +50,8 @@ class ExceptionRequestEvent extends BasePunchoutRequestEvent implements Observer
                 'action'           => $observer->getEvent()->getAction(),
                 'user_id'          => $customerId,
                 'punchoutgroup_id' => $punchoutGroupId,
-                'info'             => $observer->getEvent()->getInfo()
+                'info'             => $observer->getEvent()->getInfo(),
+                'ip'          => $this->remote->getRemoteAddress()
              ])->save();
         }
     }

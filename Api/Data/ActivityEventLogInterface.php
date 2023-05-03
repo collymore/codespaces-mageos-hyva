@@ -8,6 +8,7 @@ interface ActivityEventLogInterface extends \Magento\Framework\Api\ExtensibleDat
     const EVENT_TYPE = 'event_type';
     const ACTION = 'action';
     const USER_ID = 'user_id';
+    const IP = 'ip';
     const PUNCHOUTGROUP_ID = 'punchoutgroup_id';
 
     const INFO = 'info';
@@ -67,6 +68,19 @@ interface ActivityEventLogInterface extends \Magento\Framework\Api\ExtensibleDat
      * @return \Develodesign\Punchout\Api\Data\ActivityEventLogInterface
      */
     public function setUserId($userId);
+
+    /**
+     * Get ip
+     * @return string|null
+     */
+    public function getIp();
+
+    /**
+     * Set ip
+     * @param string $ip
+     * @return \Develodesign\Punchout\Api\Data\ActivityEventLogInterface
+     */
+    public function setIp($ip);
 
     /**
      * Get punchoutgroup_id

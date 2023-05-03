@@ -64,6 +64,7 @@
 		<column name="event_type" nullable="true" xsi:type="varchar" length="255" comment="Event type"/>
 		<column name="action" nullable="true" xsi:type="varchar" length="255" comment="Action performed by the user"/>
 		<column name="user_id" nullable="true" xsi:type="int" comment="User performing the action"/>
+		<column name="ip" nullable="true" xsi:type="int" comment="Users ip performing the action"/>
 		<column name="punchoutgroup_id" nullable="true" xsi:type="int" comment="The Punchout group the user performing the action belongs to"/>
 		<column name="info" nullable="true" xsi:type="text" comment="Data generated during event"/>
 		<column name="error_message" nullable="true" xsi:type="text" comment="Error generated during event"/>

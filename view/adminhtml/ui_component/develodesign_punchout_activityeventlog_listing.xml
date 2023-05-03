@@ -105,6 +105,15 @@
                 </item>
             </argument>
         </column>
+        <column name="ip">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">IP</item>
+                    <item name="sortOrder" xsi:type="number">60</item>
+                </item>
+            </argument>
+        </column>
         <column name="created_at">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">

@@ -2,15 +2,16 @@
 
 namespace Develodesign\Punchout\Controller\Index;
 
-    use Develodesign\Punchout\Model\ActivityEventLogFactory;
-    use Develodesign\Punchout\Service\PunchoutGroupService;
-    use Magento\Customer\Model\Session as CustomerSession;
-    use Magento\Framework\App\Action\Action;
-    use Magento\Framework\App\Action\Context;
-    use Magento\Framework\App\ResponseInterface;
-    use Magento\Framework\Controller\Result\Json;
-    use Magento\Framework\Controller\Result\JsonFactory;
-    use Magento\Framework\Controller\ResultInterface;
+use Develodesign\Punchout\Model\ActivityEventLogFactory;
+use Develodesign\Punchout\Service\PunchoutGroupService;
+use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Controller\ResultInterface;
+use \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 
 class Ajaxlogger extends Action
 {
@@ -35,17 +36,24 @@ class Ajaxlogger extends Action
      */
     protected $punchoutGroupService;
 
+    /**
+     * @var RemoteAddress
+     */
+    protected $remote;
+
     public function __construct(
         Context $context,
         JsonFactory $jsonFactory,
-        \Develodesign\Punchout\Model\ActivityEventLogFactory $activityEventLogFactory,
+        ActivityEventLogFactory $activityEventLogFactory,
         CustomerSession $customerSession,
-        PunchoutGroupService $punchoutGroupService
+        PunchoutGroupService $punchoutGroupService,
+        RemoteAddress $remote
     ) {
         $this->jsonFactory = $jsonFactory;
         $this->activityEventLogFactory = $activityEventLogFactory;
         $this->customerSession = $customerSession;
         $this->punchoutGroupService = $punchoutGroupService;
+        $this->remote = $remote;
         parent::__construct($context);
     }
 
@@ -55,7 +63,7 @@ class Ajaxlogger extends Action
     public function execute()
     {
         $resultJson = $this->jsonFactory->create();
-        $requestPostData = $this->getRequest()->getPost()->toArray();
+        $requestPostData = $this->getRequest()->getParams();
         $response['error'] = true;
         $activityEventLog = $this->activityEventLogFactory->create();
 
@@ -73,6 +81,7 @@ class Ajaxlogger extends Action
                 'event_type' => (string)$requestPostData['event_type'],
                 'action' => (string)$requestPostData['action'],
                 'user_id' => $this->customerSession->getId(),
+                'ip' => $this->remote->getRemoteAddress(),
                 'punchoutgroup_id' => $punchoutGroupId,
                 'info' => (string)$requestPostData['info']
             ]);
