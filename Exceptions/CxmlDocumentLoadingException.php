@@ -1,11 +1,10 @@
 <?php
     
-    namespace Develodesign\Punchout\Exceptions;
+namespace Develodesign\Punchout\Exceptions;
 
-    use LibXMLError;
-    use PharIo\Manifest\Exception;
+use LibXMLError;
 
-class CxmlDocumentLoadingException extends \Exception implements Exception
+class CxmlDocumentLoadingException extends \Exception
 {
     /** @var LibXMLError[] */
     private $libxmlErrors;
