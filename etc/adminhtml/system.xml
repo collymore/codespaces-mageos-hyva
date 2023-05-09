@@ -28,6 +28,12 @@
                     <label>Identity (DUNS)</label>
                     <comment>This is our domain identifier (DUN/Network ID) </comment>
                 </field>
+                <field id="default_shipping" translate="label comment" type="select" sortOrder="21" showInDefault="1" showInWebsite="1"
+                       showInStore="1">
+                    <label>Default Shipping Method</label>
+                    <comment>This shipping Method will be used when no method code has been passed through with incoming CXML</comment>
+                    <source_model>Magento\Shipping\Model\Config\Source\Allmethods</source_model>
+                </field>
             </group>
             <group id="display" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" >
                 <label>Display Settings</label>

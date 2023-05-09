@@ -28,6 +28,14 @@ class PunchoutConfigHelper extends AbstractHelper
     {
         return $this->getConfiguredValue('develodesign_punchout/defaults/uom');
     }
+
+    /**
+     * Returns the default shipping method value
+     */
+    public function getDefaultShippingMethod()
+    {
+        return $this->getConfiguredValue('develodesign_punchout/defaults/default_shipping');
+    }
         
     /**
      * Returns if Punchout should Auto create customers

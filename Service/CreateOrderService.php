@@ -118,9 +118,11 @@ class CreateOrderService
         $result = [];
         /** @var DataObject $item */
         foreach ($outItems as $item) {
+           
             $sku = $item->getProductSku();
             $productId = $item->getInternalReferenceId();
             $qty = (int)filter_var($item->getQuantity(), FILTER_SANITIZE_NUMBER_INT);
+
             $product = $this->getProductByIdOrSku($productId, $sku, $store->getId());
             $price = $item->getUnitPrice() * $qty;
             
@@ -161,13 +163,17 @@ class CreateOrderService
     {
         $product = null;
         if ((int)$productId !== 0) {
-            $matchingProduct = $this->productRepository->getById($productId, false, $storeId, true);
-            if ($matchingProduct && (int)$matchingProduct->getId() === (int)$productId) {
-                $product = $matchingProduct;
-            }
+           try{
+                $matchingProduct = $this->productRepository->getById($productId, false, $storeId, true);
+                if ($matchingProduct && (int)$matchingProduct->getId() === (int)$productId) {
+                      $product = $matchingProduct;
+                }
+           } catch (NoSuchEntityException $exception){
+                $product = false;
+           }
         }
         
-        if ($product === null) {
+        if (!$product) {
             $matchingSKUProduct = $this->productRepository->get($sku, false, $storeId, true);
             if ($matchingSKUProduct) {
                 $product = $matchingSKUProduct;

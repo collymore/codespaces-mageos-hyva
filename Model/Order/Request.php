@@ -12,6 +12,7 @@ use Develodesign\Punchout\Service\CxmlService;
 use Develodesign\Punchout\Service\PunchoutGroupService;
 use Develodesign\Punchout\Service\SessionService;
 use Develodesign\Punchout\Service\SetupRequestService;
+use Develodesign\Punchout\Helper\PunchoutConfigHelper;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -70,6 +71,11 @@ class Request extends DataObject
      */
     protected $eventServiceProvider;
 
+    /**
+     * @var PunchoutConfigHelper
+     */
+    protected $punchoutConfigHelper;
+
     public function __construct(
         CxmlService $cxmlService,
         CustomerService $customerService,
@@ -77,7 +83,8 @@ class Request extends DataObject
         SetupRequestService $setupRequestService,
         CreateOrderService $createOrderService,
         SessionService $sessionService,
-        EventServiceProvider $eventServiceProvider
+        EventServiceProvider $eventServiceProvider,
+        PunchoutConfigHelper $punchoutConfigHelper
     ) {
         $this->cxmlService = $cxmlService;
         $this->customerService = $customerService;
@@ -87,6 +94,7 @@ class Request extends DataObject
         $this->createOrderService = $createOrderService;
         $this->sessionService = $sessionService;
         $this->eventServiceProvider = $eventServiceProvider;
+        $this->punchoutConfigHelper = $punchoutConfigHelper;
     }
 
     public function setDocument($document)
@@ -101,7 +109,8 @@ class Request extends DataObject
                 $this->cxmlService,
                 $this->customerService,
                 $this->punchoutGroupService,
-                $this->setupRequestService
+                $this->setupRequestService,
+                $this->punchoutConfigHelper
             );
         
             $this->document->setDocument($document);
@@ -205,7 +214,6 @@ class Request extends DataObject
                 $shippingAddress->setCollectShippingRates(true)
                     ->collectShippingRates()
                     ->setShippingMethod($shippingMethodCode);
-    
                 if ($this->createOrderService->isPaymentAvailable($store->getId(), $quote) === true) {
                     $quote->setInventoryProcessed(false);
                     $quote->save();

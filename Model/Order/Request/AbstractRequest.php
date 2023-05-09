@@ -5,6 +5,7 @@ namespace Develodesign\Punchout\Model\Order\Request;
 use Develodesign\Punchout\Service\CustomerService;
 use Develodesign\Punchout\Service\PunchoutGroupService;
 use Develodesign\Punchout\Service\SetupRequestService;
+use Develodesign\Punchout\Helper\PunchoutConfigHelper;
 
 abstract class AbstractRequest extends \Magento\Framework\Model\AbstractModel
 {
@@ -23,17 +24,25 @@ abstract class AbstractRequest extends \Magento\Framework\Model\AbstractModel
     protected $customerService;
     protected $punchoutGroupService;
     protected $setupRequestService;
+
+    /**
+     * @var PunchoutConfigHelper
+     */
+    protected $punchoutConfigHelper;
+    
     
     public function __construct(
         \Develodesign\Punchout\Service\CxmlService $cxmlService,
         CustomerService $customerService,
         PunchoutGroupService $punchoutGroupService,
-        SetupRequestService $setupRequestService
+        SetupRequestService $setupRequestService,
+        PunchoutConfigHelper $punchoutConfigHelper
     ) {
         $this->cxmlService = $cxmlService;
         $this->customerService = $customerService;
         $this->punchoutGroupService = $punchoutGroupService;
         $this->setupRequestService = $setupRequestService;
+        $this->punchoutConfigHelper = $punchoutConfigHelper;
     }
     
     public function setDocument($document): void

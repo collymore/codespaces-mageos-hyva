@@ -29,16 +29,23 @@ class Index extends Action implements CsrfAwareActionInterface
      * @var EventServiceProvider
      */
     protected $eventServiceProvider;
+
+    /**
+     * @var DriverInterface
+     */
+    protected $driver;
     
     public function __construct(
         Context $context,
         Request $orderRequest,
         CxmlResponse $cxmlResponse,
-        EventServiceProvider $eventServiceProvider
+        EventServiceProvider $eventServiceProvider,
+        DriverInterface $driver
     ) {
         $this->cxmlResponse = $cxmlResponse;
         $this->orderRequest = $orderRequest;
         $this->eventServiceProvider = $eventServiceProvider;
+        $this->driver = $driver;
         parent::__construct($context);
     }
     
@@ -48,7 +55,8 @@ class Index extends Action implements CsrfAwareActionInterface
     {
         try {
               $orderRequest = $this->orderRequest;
-              $orderRequest->setDocument(DriverInterface::fileOpen('php://input', 'r'));
+              $document = stream_get_contents($this->driver->fileOpen('php://input', 'r'));
+              $orderRequest->setDocument($document);
               $orderRequest->isValid();
               $result = $orderRequest->getCreateOrder();
         } catch (\Exception|CxmlDocumentLoadingException $exception) {

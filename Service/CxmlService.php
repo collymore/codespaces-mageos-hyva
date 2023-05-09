@@ -274,7 +274,15 @@ class CxmlService
     {
         $result = [];
         foreach ($extrinsic as $ext) {
-            $key = strtolower(trim((string)$ext['name']));
+            if(isset($ext['name'])){
+                $key = strtolower(trim((string)$ext['name']));
+            }else{
+                $key = strtolower(trim((string)$ext));
+            }
+
+            if(is_array($ext)){
+                $ext = array_shift($ext);
+            }
             $value = (string)$ext;
             if ($nonDefault) {
                 $result[$key] = "{$key}: " .$value;

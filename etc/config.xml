@@ -6,6 +6,7 @@
                 <defaults>
                     <punchout_toggle>1</punchout_toggle>
                     <uom>EA</uom>
+                    <default_shipping><![CDATA[freeshipping_freeshipping]]></default_shipping>
                 </defaults>
                 <display>
                     <transfer_button_label><![CDATA[Transfer Basket Items With Punchout]]></transfer_button_label>

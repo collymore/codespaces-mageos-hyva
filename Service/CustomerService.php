@@ -242,6 +242,6 @@ class CustomerService
                 ];
             }
         }
-        return false;
+        return [];
     }
 }

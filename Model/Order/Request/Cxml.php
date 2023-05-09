@@ -131,7 +131,7 @@ class Cxml extends AbstractRequest
                 $extrinsic = [];
                    
                 if (isset($itemOut->ItemDetail->Extrinsic)) {
-                    $extrinsic = [$this->cxmlService->getItemOutExtrinsic($itemOut->ItemDetail->Extrinsic)];
+                    $extrinsic = [$this->cxmlService->getItemOutExtrinsic((array)$itemOut->ItemDetail->Extrinsic)];
                 }
                 if (isset(
                     $itemOut->Distribution,
@@ -210,7 +210,7 @@ class Cxml extends AbstractRequest
     public function getShippingCode(): string
     {
         if (null === $this->shippingCode) {
-            $this->shippingCode = 'freeshipping_freeshipping';
+            $this->shippingCode = $this->punchoutConfigHelper->getDefaultShippingMethod();
         }
         return $this->shippingCode;
     }
