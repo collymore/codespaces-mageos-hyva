@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE cXML SYSTEM "http://xml.cxml.org/schemas/cXML/1.2.044/cXML.dtd">
+<cXML payloadID="1678464158573.450345278@prodeu-c2-buyer-s2-z3-3.eu2.gcpint.ariba.com" timestamp="2023-03-10T08:02:38-08:00" version="1.2.044" xml:lang="en">
+    <Header>
+        <From>
+            <Credential domain="NetworkId">
+                <Identity>218171436</Identity>
+            </Credential>
+        </From>
+        <To>
+            <Credential domain="DUNS">
+                <Identity>acme</Identity>
+            </Credential>
+        </To>
+        <Sender>
+            <Credential domain="NetworkId">
+                <Identity>123</Identity>
+                <SharedSecret>123</SharedSecret>
+            </Credential>
+            <UserAgent>Application Name v1.2.3</UserAgent>
+        </Sender>
+    </Header>
+    <Request deploymentMode="production">
+        <PunchOutSetupRequest operation="create">
+            <BuyerCookie>550bce3e592023b2e7b015307f965133</BuyerCookie>
+            <Extrinsic name="UserEmail">test@develodesign.co.uk</Extrinsic>
+            <Extrinsic name="FirstName">Luke</Extrinsic>
+            <Extrinsic name="LastName">Collymore</Extrinsic>
+            <Extrinsic name="PhoneNumber">555-555-5555</Extrinsic>
+            <BrowserFormPost>
+                <URL>https://example.com/cxml_cart</URL>
+            </BrowserFormPost>
+            <Contact role="endUser">
+                <Name xml:lang="en-GB">Jake Green</Name>
+                <Email>Jake.Greensmith@google.com</Email>
+            </Contact>
+            <ShipTo>
+                <Address addressID="TEST">
+                    <Name xml:lang="en">My Address</Name>
+                    <PostalAddress>
+                        <Street>123 Street Address</Street>
+                        <City>Mountain View</City>
+                        <State>CA</State>
+                        <PostalCode>94040</PostalCode>
+                        <Country isoCountryCode="US">US</Country>
+                    </PostalAddress>
+                </Address>
+            </ShipTo>
+        </PunchOutSetupRequest>
+    </Request>
+</cXML>

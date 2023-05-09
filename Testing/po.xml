@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE cXML SYSTEM "http://xml.cxml.org/schemas/cXML/1.2.014/cXML.dtd">
+<cXML xml:lang="en-US" payloadID="1541072923.7280901@prd734utl2.int.coupahost.com" timestamp="2018-11-01T11:48:45+00:00">
+    <Header>
+        <From>
+            <Credential domain="DUNS">
+                <Identity>22761222</Identity>
+            </Credential>
+        </From>
+        <To>
+            <Credential domain="DUNS">
+                <Identity>123452222</Identity>
+            </Credential>
+        </To>
+        <Sender>
+            <Credential domain="DUNS">
+                <Identity>AN0154652222-T</Identity>
+                <SharedSecret>Sapariba12345</SharedSecret>
+            </Credential>
+            <UserAgent>Coupa Procurement 1.0</UserAgent>
+        </Sender>
+    </Header>
+    <Request>
+        <OrderRequest>
+            <OrderRequestHeader orderID="7280901" orderDate="2018-11-01T11:48:45+00:00" type="new">
+                <Total>
+                    <Money currency="GBP">35.48</Money>
+                </Total>
+                <ShipTo>
+                    <Address isoCountryCode="GB" addressID="5404">
+                        <Name xml:lang="en">Develo INDUSTRIES UK LIMITED</Name>
+                        <PostalAddress name="default">
+                            <DeliverTo>Luke Collymore</DeliverTo>
+                            <Street>Street 1</Street>
+                            <Street>Street 2</Street>
+                            <City>Birmingham</City>
+                            <State>West Midlands</State>
+                            <PostalCode>B55SE</PostalCode>
+                            <Country isoCountryCode="GB">United Kingdom</Country>
+                        </PostalAddress>
+                        <Email name="default">roni_cost@example.com</Email>
+                    </Address>
+                </ShipTo>
+                <BillTo>
+                    <Address isoCountryCode="GB" addressID="477">
+                        <Name xml:lang="en">Develo INDUSTRIES UK LIMITED</Name>
+                        <PostalAddress name="default">
+                            <DeliverTo>Luke Collymore</DeliverTo>
+                            <Street>Street 1</Street>
+                            <Street>Street 2</Street>
+                            <City>Birmingham</City>
+                            <State>West Midlands</State>
+                            <PostalCode>B55SE</PostalCode>
+                            <Country isoCountryCode="GB">United Kingdom</Country>
+                        </PostalAddress>
+                        <Email name="default">roni_cost@example.com</Email>
+                    </Address>
+                </BillTo>
+                <Shipping>
+                    <Money currency="GBP">0.0</Money>
+                    <Description xml:lang="en-US"/>
+                </Shipping>
+                <Contact role="endUser">
+                    <Name xml:lang="en">Punchout</Name>
+                    <Email name="default">roni_cost@example.com</Email>
+                </Contact>
+            </OrderRequestHeader>
+            <ItemOut quantity="1" lineNumber="1">
+                <ItemID>
+                    <SupplierPartID>24-MB03</SupplierPartID>
+                    <SupplierPartAuxiliaryID>4035</SupplierPartAuxiliaryID>
+                </ItemID>
+                <ItemDetail>
+                    <UnitPrice>
+                        <Money currency="GBP">13.98</Money>
+                    </UnitPrice>
+                    <Description xml:lang="en">B-Seen CARFORS Hi-Vis Fleece Jacket Orange with Aggregate Industries Logo Small</Description>
+                    <UnitOfMeasure>EA</UnitOfMeasure>
+                    <Classification domain="UNSPSC">unknown</Classification>
+                    <Extrinsic name="LineType">Quantity</Extrinsic>
+                </ItemDetail>
+                <Distribution>
+                    <Accounting name="Works-Garments general Protective &amp; Safety Equip.(PE01002)-Salford Exp Asp Production    ">
+                        <Segment type="Item" id="PE01002" description="Item"/>
+                        <Segment type="BU" id="1558051" description="BU"/>
+                    </Accounting>
+                    <Charge>
+                        <Money currency="GBP">13.98</Money>
+                    </Charge>
+                </Distribution>
+            </ItemOut>
+            <ItemOut quantity="1" lineNumber="2">
+                <ItemID>
+                    <SupplierPartID>24-MB01</SupplierPartID>
+                    <SupplierPartAuxiliaryID>4036</SupplierPartAuxiliaryID>
+                </ItemID>
+                <ItemDetail>
+                    <UnitPrice>
+                        <Money currency="GBP">21.5</Money>
+                    </UnitPrice>
+                    <Description xml:lang="en">Leo Workwear J01-O/M Hi-Vis Bomber Jacket Fleece</Description>
+                    <UnitOfMeasure>EA</UnitOfMeasure>
+                    <Classification domain="UNSPSC">unknown</Classification>
+                    <Extrinsic name="LineType">Quantity</Extrinsic>
+                </ItemDetail>
+                <Distribution>
+                    <Accounting name="Works-Garments general Protective &amp; Safety Equip.(PE01002)-Salford Exp Asp Production    ">
+                        <Segment type="Item" id="PE01002" description="Item"/>
+                        <Segment type="BU" id="1558051" description="BU"/>
+                    </Accounting>
+                    <Charge>
+                        <Money currency="GBP">21.5</Money>
+                    </Charge>
+                </Distribution>
+            </ItemOut>
+        </OrderRequest>
+    </Request>
+</cXML>
