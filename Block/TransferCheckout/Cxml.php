@@ -118,7 +118,7 @@ class Cxml
      */
     private function getUnspscCode($sku) : string
     {
-        return $this->productRepository->get($sku)->getUnspsc();
+        return $this->productRepository->get($sku)->getUnspscCode();
     }
 
     public function getConfigHelper() : PunchoutConfigHelper
