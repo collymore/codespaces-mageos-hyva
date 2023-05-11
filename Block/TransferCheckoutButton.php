@@ -2,18 +2,18 @@
 
 namespace Develodesign\Punchout\Block;
 
-    use Develodesign\Punchout\Block\TransferCheckout\Cxml as CxmlBlock;
-    use Develodesign\Punchout\Helper\PunchoutConfigHelper;
-    use Develodesign\Punchout\Service\CustomerService;
-    use Develodesign\Punchout\Service\PunchoutGroupService;
-    use Develodesign\Punchout\Service\SessionService;
-    use Magento\Checkout\Block\Onepage\Link;
-    use Magento\Checkout\Helper\Data;
-    use Magento\Checkout\Model\Cart;
-    use Magento\Checkout\Model\Session;
-    use Magento\Framework\Exception\NoSuchEntityException;
-    use Magento\Framework\View\Element\Template\Context;
-    use Develodesign\Punchout\Block\TransferCheckout\Oci as OciBlock;
+use Develodesign\Punchout\Block\TransferCheckout\Cxml as CxmlBlock;
+use Develodesign\Punchout\Helper\PunchoutConfigHelper;
+use Develodesign\Punchout\Service\CustomerService;
+use Develodesign\Punchout\Service\PunchoutGroupService;
+use Develodesign\Punchout\Service\SessionService;
+use Magento\Checkout\Block\Onepage\Link;
+use Magento\Checkout\Helper\Data;
+use Magento\Checkout\Model\Cart;
+use Magento\Checkout\Model\Session;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\View\Element\Template\Context;
+use Develodesign\Punchout\Block\TransferCheckout\Oci as OciBlock;
 
 class TransferCheckoutButton extends Link
 {
@@ -108,6 +108,14 @@ class TransferCheckoutButton extends Link
         } catch (\Exception $e) {
             return $e->getMessage();
         }
+    }
+    
+    /**
+    * @return PunchoutConfigHelper
+    */
+    public function getConfigHelper() : PunchoutConfigHelper
+    {
+        return $this->punchoutConfigHelper;
     }
     
     /**
