@@ -112,9 +112,13 @@ class CxmlService
     public function fetchEmail($extrinsicData, $cxmlData): string
     {
         $useEmail = '';
+
         if (isset($extrinsicData['UserEmail']) && \Zend_Validate::is($extrinsicData['UserEmail'], 'EmailAddress')) {
             $useEmail = $extrinsicData['UserEmail'];
-        } elseif (isset($cxmlData->Request->PunchOutSetupRequest->Contact->Email)
+        } elseif (isset($extrinsicData['User']) && \Zend_Validate::is($extrinsicData['User'], 'EmailAddress')) {
+            $useEmail = $extrinsicData['User'];
+        } elseif 
+        (isset($cxmlData->Request->PunchOutSetupRequest->Contact->Email)
                  && !empty($cxmlData->Request->PunchOutSetupRequest->Contact->Email)
             && \Zend_Validate::is(
                 $cxmlData->Request->PunchOutSetupRequest->Contact->Email,
