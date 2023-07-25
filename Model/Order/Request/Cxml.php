@@ -221,9 +221,9 @@ class Cxml extends AbstractRequest
     public function getShippingPrice(): string
     {
         if (null === $this->shippingPrice) {
-            $this->shippingCode = (string)$this->cxml->Request->OrderRequest->OrderRequestHeader->Shipping->Money;
+            $this->shippingPrice = (string)$this->cxml->Request->OrderRequest->OrderRequestHeader->Shipping->Money;
         }
-        return $this->shippingCode;
+        return $this->shippingPrice;
     }
     
     /**
