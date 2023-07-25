@@ -275,7 +275,7 @@ class CreateOrderService
         if (!$invoice) {
             throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t save the invoice right now.'));
         }
-        if (!$invoice->getTotalQty()) {
+        if ($this->configHelper->getValidateInvoiceQty() && !$invoice->getTotalQty()) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('You can\'t create an invoice without products.')
             );

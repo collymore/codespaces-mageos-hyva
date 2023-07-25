@@ -100,6 +100,14 @@ class PunchoutConfigHelper extends AbstractHelper
     {
         return $this->getConfiguredValue('develodesign_punchout/product/customizable_option_qty');
     }
+
+    /**
+     * Returns the config for if Invoice Qty should be validated
+     */
+    public function getValidateInvoiceQty(): bool
+    {
+        return $this->getConfiguredFlag('develodesign_punchout/invoice/validate_invoice_qty');
+    }
     
     /**
      * Returns the store level config value
@@ -116,4 +124,5 @@ class PunchoutConfigHelper extends AbstractHelper
     {
         return $this->scopeConfig->isSetFlag($config_path, $scope);
     }
+
 }
