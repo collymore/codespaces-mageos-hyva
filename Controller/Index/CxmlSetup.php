@@ -20,17 +20,17 @@ class CxmlSetup extends Action implements \Magento\Framework\App\CsrfAwareAction
      * @var CxmlService
      */
     protected $cxmlService;
-    
+        
     /**
      * @var CxmlResponse
      */
     protected $cxmlResponse;
-    
+        
     /**
      * @var PunchoutGroupService
      */
     protected $punchoutGroupService;
-    
+        
     /**
      * @var CustomerService
      */
@@ -110,10 +110,9 @@ class CxmlSetup extends Action implements \Magento\Framework\App\CsrfAwareAction
             );
      
             if ($this->cxmlService->isCreate($parsedXMLData) === true) {
-                
-                $xpathSelector = $this->cxmlService->getEmailByXPathConfig($matchingPunchoutGroup->getCxmlNodeXpathConfig(),$parsedXMLData);
-                $useEmail = $this->cxmlService->validateEmail($xpathSelector);
-                
+             
+                $useEmail = $this->cxmlService->fetchEmail($extrinsicData, $parsedXMLData);
+           
                 if (empty(trim($useEmail))) {
                     $useEmail = $this->cxmlService->createEmail(
                         $extrinsicData,
@@ -170,12 +169,12 @@ class CxmlSetup extends Action implements \Magento\Framework\App\CsrfAwareAction
     
         return $this->cxmlResponse->respondSuccess();
     }
-    
+        
     public function createCsrfValidationException(RequestInterface $request): ?InvalidRequestException
     {
         return null;
     }
-    
+        
     public function validateForCsrf(RequestInterface $request): ?bool
     {
         return true;
