@@ -26,6 +26,7 @@
 		<column name="region" nullable="true" xsi:type="varchar" comment="region" length="255"/>
 		<column name="postcode" nullable="false" xsi:type="varchar" comment="Postcode" length="255"/>
 		<column name="telephone" nullable="true" xsi:type="varchar" comment="Telephone" length="255"/>
+		<column name="cxml_node_xpath_config" nullable="true" xsi:type="varchar" comment="Use XPath to select the data from incoming cxml data" length="255" default="/Request/PunchOutSetupRequest/Contact/Email"/>
 		<column name="created_at" nullable="false" xsi:type="timestamp" comment="Punchout Group Created at" default="CURRENT_TIMESTAMP"/>
 		<index referenceId="DEVELODESIGN_PUNCHOUT_PUNCHOUTGROUP_CREATED_AT" indexType="btree">
 			<column name="created_at"/>

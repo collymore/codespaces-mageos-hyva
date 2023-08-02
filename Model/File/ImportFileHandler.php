@@ -200,7 +200,7 @@ class ImportFileHandler
                         }
                     } catch (\Exception $e) {
                         $php_errormsg = sprintf(
-                            'Failed to sabe new punchout group record'
+                            'Failed to save new punchout group record'
                         );
                         throw new CouldNotSaveException(__('Error:' . $php_errormsg));
                     }

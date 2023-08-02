@@ -124,9 +124,9 @@
 					</settings>
 				</select>
 			</formElements>
-		</field>-->	
+		</field>-->
 	</fieldset>
-	
+
 	<fieldset name="default_customer">
         <settings>
             <label translate="true">Group Defaults</label>
@@ -286,80 +286,95 @@
         </fieldset>
     </fieldset>
 
-	 <fieldset name="cxml">
-        <settings>
-            <label translate="true">CXML</label>
-        </settings>
-        <fieldset name="cxml_group">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string" translate="true">Credentials</item>
-                    <item name="collapsible" xsi:type="boolean">true</item>
-                    <item name="opened" xsi:type="boolean">false</item>
-                </item>
-            </argument>
-        		<field name="shared_secret" formElement="input" sortOrder="40">
+	<fieldset name="cxml">
+		<settings>
+			<label translate="true">CXML</label>
+		</settings>
+		<fieldset name="cxml_group">
 			<argument name="data" xsi:type="array">
 				<item name="config" xsi:type="array">
-					<item name="source" xsi:type="string">PunchoutGroup</item>
+					<item name="label" xsi:type="string" translate="true">Credentials</item>
+					<item name="collapsible" xsi:type="boolean">true</item>
+					<item name="opened" xsi:type="boolean">false</item>
 				</item>
 			</argument>
-			<settings>
-				<dataType>text</dataType>
-				<label translate="true">Shared Secret</label>
-				<dataScope>shared_secret</dataScope>
-				<validation>
-					<rule name="required-entry" xsi:type="boolean">false</rule>
-				</validation>
-			</settings>
-		</field>
-		<field name="duns_identity" formElement="input" sortOrder="50">
-			<argument name="data" xsi:type="array">
-				<item name="config" xsi:type="array">
-					<item name="source" xsi:type="string">PunchoutGroup</item>
-				</item>
-			</argument>
-			<settings>
-				<dataType>text</dataType>
-				<label translate="true">DUNS Identity</label>
-				<dataScope>duns_identity</dataScope>
-				<validation>
-					<rule name="required-entry" xsi:type="boolean">false</rule>
-				</validation>
-			</settings>
-		</field>
-		<field name="ariba_network_id" formElement="input" sortOrder="60">
-			<argument name="data" xsi:type="array">
-				<item name="config" xsi:type="array">
-					<item name="source" xsi:type="string">PunchoutGroup</item>
-				</item>
-			</argument>
-			<settings>
-				<dataType>text</dataType>
-				<label translate="true">Ariba Network ID</label>
-				<dataScope>ariba_network_id</dataScope>
-				<validation>
-					<rule name="required-entry" xsi:type="boolean">false</rule>
-				</validation>
-			</settings>
-		</field>
-				<field name="business_unit" formElement="input" sortOrder="70">
-			<argument name="data" xsi:type="array">
-				<item name="config" xsi:type="array">
-					<item name="source" xsi:type="string">PunchoutGroup</item>
-				</item>
-			</argument>
-			<settings>
-				<dataType>text</dataType>
-				<label translate="true">Business Unit</label>
-				<dataScope>business_unit</dataScope>
-				<validation>
-					<rule name="required-entry" xsi:type="boolean">false</rule>
-				</validation>
-			</settings>
-		</field>
-        </fieldset>
-    </fieldset>
+			<field name="shared_secret" formElement="input" sortOrder="40">
+				<argument name="data" xsi:type="array">
+					<item name="config" xsi:type="array">
+						<item name="source" xsi:type="string">PunchoutGroup</item>
+					</item>
+				</argument>
+				<settings>
+					<dataType>text</dataType>
+					<label translate="true">Shared Secret</label>
+					<dataScope>shared_secret</dataScope>
+					<validation>
+						<rule name="required-entry" xsi:type="boolean">false</rule>
+					</validation>
+				</settings>
+			</field>
+			<field name="duns_identity" formElement="input" sortOrder="50">
+				<argument name="data" xsi:type="array">
+					<item name="config" xsi:type="array">
+						<item name="source" xsi:type="string">PunchoutGroup</item>
+					</item>
+				</argument>
+				<settings>
+					<dataType>text</dataType>
+					<label translate="true">DUNS Identity</label>
+					<dataScope>duns_identity</dataScope>
+					<validation>
+						<rule name="required-entry" xsi:type="boolean">false</rule>
+					</validation>
+				</settings>
+			</field>
+			<field name="ariba_network_id" formElement="input" sortOrder="60">
+				<argument name="data" xsi:type="array">
+					<item name="config" xsi:type="array">
+						<item name="source" xsi:type="string">PunchoutGroup</item>
+					</item>
+				</argument>
+				<settings>
+					<dataType>text</dataType>
+					<label translate="true">Ariba Network ID</label>
+					<dataScope>ariba_network_id</dataScope>
+					<validation>
+						<rule name="required-entry" xsi:type="boolean">false</rule>
+					</validation>
+				</settings>
+			</field>
+			<field name="business_unit" formElement="input" sortOrder="70">
+				<argument name="data" xsi:type="array">
+					<item name="config" xsi:type="array">
+						<item name="source" xsi:type="string">PunchoutGroup</item>
+					</item>
+				</argument>
+				<settings>
+					<dataType>text</dataType>
+					<label translate="true">Business Unit</label>
+					<dataScope>business_unit</dataScope>
+					<validation>
+						<rule name="required-entry" xsi:type="boolean">false</rule>
+					</validation>
+				</settings>
+			</field>
+			<field name="cxml_node_xpath_config" formElement="input" sortOrder="73">
+				<argument name="data" xsi:type="array">
+					<item name="config" xsi:type="array">
+						<item name="source" xsi:type="string">PunchoutGroup</item>
+					</item>
+				</argument>
+				<settings>
+					<dataType>text</dataType>
+					<label translate="true">CXML XPath Configuration</label>
+					<dataScope>cxml_node_xpath_config</dataScope>
+					<validation>
+						<rule name="required-entry" xsi:type="boolean">false</rule>
+					</validation>
+				</settings>
+			</field>
+		</fieldset>
+	</fieldset>
 
 	 <fieldset name="oci">
         <settings>

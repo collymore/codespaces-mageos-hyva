@@ -38,7 +38,10 @@ interface PunchoutGroupInterface
 
     const TELEPHONE = 'telephone';
     const UPDATED_AT = 'updated_at';
+    
     const CREATED_AT = 'created_at';
+    
+    const CXML_NODE_XPATH_CONFIG = 'cxml_node_xpath_config';
 
     /**
      * Get punchoutgroup_id
@@ -369,4 +372,16 @@ interface PunchoutGroupInterface
      * @return \Develodesign\Punchout\PunchoutGroup\Api\Data\PunchoutGroupInterface
      */
     public function setUpdatedAt($updatedAt);
+    
+    /**
+     * @return string|null
+     */
+    public function getCxmlNodeXpathConfig();
+    
+    /**
+     * @param string $cxmlNodeXpathConfig
+     *
+     * @return \Develodesign\Punchout\PunchoutGroup\Api\Data\PunchoutGroupInterface
+     */
+    public function setCxmlNodeXpathConfig($cxmlNodeXpathConfig);
 }

@@ -104,29 +104,27 @@ class CxmlService
     {
         return $cxmlData->Request->PunchOutSetupRequest->getAttribute('operation') === 'create';
     }
-
+    
     /**
-     * Fetch email from Cxml data or extrinsicData array
+     * Validates email from Incoming cxml data
      * @throws \Zend_Validate_Exception
      */
-    public function fetchEmail($extrinsicData, $cxmlData): string
+    public function validateEmail($xpathSelector): string
     {
         $useEmail = '';
-
-        if (isset($extrinsicData['UserEmail']) && \Zend_Validate::is($extrinsicData['UserEmail'], 'EmailAddress')) {
-            $useEmail = $extrinsicData['UserEmail'];
-        } elseif (isset($extrinsicData['User']) && \Zend_Validate::is($extrinsicData['User'], 'EmailAddress')) {
-            $useEmail = $extrinsicData['User'];
-        } elseif 
-        (isset($cxmlData->Request->PunchOutSetupRequest->Contact->Email)
-                 && !empty($cxmlData->Request->PunchOutSetupRequest->Contact->Email)
-            && \Zend_Validate::is(
-                $cxmlData->Request->PunchOutSetupRequest->Contact->Email,
-                'EmailAddress'
-            )) {
-            $useEmail = (string)$cxmlData->Request->PunchOutSetupRequest->Contact->Email;
+        if (!empty($xpathSelector)) {
+            if ($xpathSelector === 'none') {
+                return $useEmail;
+            }
+            // $xpathSelector will be an array of SimpleXMLElement objects
+            // In this case, we expect only one result, so we access the first element
+            $email = (string)$xpathSelector[0];
+            if(\Zend_Validate::is($email, 'EmailAddress')){
+                $useEmail = $email;
+            }
         }
         return $useEmail;
+        
     }
     
     /**
@@ -295,5 +293,14 @@ class CxmlService
             }
         }
         return $result;
+    }
+    
+    public function getEmailByXPathConfig($cxmlNodeXpathConfig, SimpleXMLElement $parsedXMLData): array|string
+    {
+        $xpathSelector = $parsedXMLData->xpath($cxmlNodeXpathConfig);
+        if(!$xpathSelector){
+            return 'none';
+        }
+        return $xpathSelector;
     }
 }

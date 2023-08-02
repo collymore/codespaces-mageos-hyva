@@ -356,4 +356,14 @@ class PunchoutGroup extends AbstractModel implements PunchoutGroupInterface
     {
         return $this->setData(self::UPDATED_AT, $updatedAt);
     }
+    
+    public function getCxmlNodeXpathConfig()
+    {
+        return $this->getData(self::CXML_NODE_XPATH_CONFIG);
+    }
+    
+    public function setCxmlNodeXpathConfig($cxmlNodeXpathConfig)
+    {
+        return $this->setData(self::CXML_NODE_XPATH_CONFIG, $cxmlNodeXpathConfig);
+    }
 }
