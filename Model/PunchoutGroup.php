@@ -14,11 +14,16 @@ class PunchoutGroup extends AbstractModel implements PunchoutGroupInterface
 {
 
     /**
+     * @var PunchoutConfigHelper
+     */
+    protected $punchoutConfigHelper;
+
+    /**
      * @inheritDoc
      */
     public function _construct()
     {
-        $this->_init(\Develodesign\Punchout\Model\ResourceModel\PunchoutGroup::class);
+        $this->_init(\Develodesign\Punchout\Model\ResourceModel\PunchoutGroup::class,);
     }
 
     /**
@@ -357,13 +362,17 @@ class PunchoutGroup extends AbstractModel implements PunchoutGroupInterface
         return $this->setData(self::UPDATED_AT, $updatedAt);
     }
     
-    public function getCxmlNodeXpathConfig()
+    public function getCxmlNodeXpathConfigEmail()
     {
-        return $this->getData(self::CXML_NODE_XPATH_CONFIG);
+        $xpath = $this->getData(self::CXML_NODE_XPATH_CONFIG_EMAIL);
+        if(!$xpath){
+            $xpath = $this->punchoutConfigHelper->getCxmlNodeXpathConfigEmail();
+        }
+        return $xpath;
     }
     
-    public function setCxmlNodeXpathConfig($cxmlNodeXpathConfig)
+    public function setCxmlNodeXpathConfigEmail($cxmlNodeXpathConfigEmail)
     {
-        return $this->setData(self::CXML_NODE_XPATH_CONFIG, $cxmlNodeXpathConfig);
+        return $this->setData(self::CXML_NODE_XPATH_CONFIG_EMAIL, $cxmlNodeXpathConfigEmail);
     }
 }

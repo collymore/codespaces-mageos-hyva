@@ -20,7 +20,7 @@
       "region": true,
       "postcode": true,
       "telephone": true,
-      "cxml_node_xpath_config": true,
+      "cxml_node_xpath_config_email": true,
       "created_at": true,
       "updated_at": true
     },

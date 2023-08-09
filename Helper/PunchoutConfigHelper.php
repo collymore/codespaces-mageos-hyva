@@ -36,6 +36,14 @@ class PunchoutConfigHelper extends AbstractHelper
     {
         return $this->getConfiguredValue('develodesign_punchout/defaults/default_shipping');
     }
+
+     /**
+     * Returns the default Cxml Xpath selector for the incoming Email value
+     */
+    public function getCxmlNodeXpathConfigEmail()
+    {
+        return $this->getConfiguredValue('develodesign_punchout/defaults/cxml_node_xpath_config_email');
+    }
         
     /**
      * Returns if Punchout should Auto create customers

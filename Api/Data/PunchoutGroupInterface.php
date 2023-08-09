@@ -41,7 +41,7 @@ interface PunchoutGroupInterface
     
     const CREATED_AT = 'created_at';
     
-    const CXML_NODE_XPATH_CONFIG = 'cxml_node_xpath_config';
+    const CXML_NODE_XPATH_CONFIG_EMAIL = 'cxml_node_xpath_config_email';
 
     /**
      * Get punchoutgroup_id
@@ -376,12 +376,12 @@ interface PunchoutGroupInterface
     /**
      * @return string|null
      */
-    public function getCxmlNodeXpathConfig();
+    public function getCxmlNodeXpathConfigEmail();
     
     /**
-     * @param string $cxmlNodeXpathConfig
+     * @param string $cxmlNodeXpathConfigEmail
      *
      * @return \Develodesign\Punchout\PunchoutGroup\Api\Data\PunchoutGroupInterface
      */
-    public function setCxmlNodeXpathConfig($cxmlNodeXpathConfig);
+    public function setCxmlNodeXpathConfigEmail($cxmlNodeXpathConfigEmail);
 }

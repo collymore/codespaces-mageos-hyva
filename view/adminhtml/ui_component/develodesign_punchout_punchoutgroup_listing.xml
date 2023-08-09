@@ -314,10 +314,10 @@
 				</editor>
 			</settings>
 		</column>
-		<column name="cxml_node_xpath_config" sortOrder="85">
+		<column name="cxml_node_xpath_config_email" sortOrder="85">
 			<settings>
 				<filter>text</filter>
-				<label translate="true">CXML XPath Configuration</label>
+				<label translate="true">CXML Email XPath Selector</label>
 				<editor>
 					<editorType>text</editorType>
 					<validation>

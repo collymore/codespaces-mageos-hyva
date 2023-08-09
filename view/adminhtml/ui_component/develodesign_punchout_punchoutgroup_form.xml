@@ -358,7 +358,7 @@
 					</validation>
 				</settings>
 			</field>
-			<field name="cxml_node_xpath_config" formElement="input" sortOrder="73">
+			<field name="cxml_node_xpath_config_email" formElement="input" sortOrder="73">
 				<argument name="data" xsi:type="array">
 					<item name="config" xsi:type="array">
 						<item name="source" xsi:type="string">PunchoutGroup</item>
@@ -366,8 +366,8 @@
 				</argument>
 				<settings>
 					<dataType>text</dataType>
-					<label translate="true">CXML XPath Configuration</label>
-					<dataScope>cxml_node_xpath_config</dataScope>
+					<label translate="true">CXML Email XPath Selector</label>
+					<dataScope>cxml_node_xpath_config_email</dataScope>
 					<validation>
 						<rule name="required-entry" xsi:type="boolean">false</rule>
 					</validation>
