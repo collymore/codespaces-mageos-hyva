@@ -109,22 +109,18 @@ class CxmlService
      * Validates email from Incoming cxml data
      * @throws \Zend_Validate_Exception
      */
-    public function validateEmail($xpathSelector): string
+    public function validateEmail($email): string
     {
-        $useEmail = '';
-        if (!empty($xpathSelector)) {
-            if ($xpathSelector === 'none') {
-                return $useEmail;
+        $userEmail = '';
+        if (!empty($email)) {
+            if ($email === 'none') {
+                return $userEmail;
             }
-            // $xpathSelector will be an array of SimpleXMLElement objects
-            // In this case, we expect only one result, so we access the first element
-            $email = (string)$xpathSelector[0];
             if(\Zend_Validate::is($email, 'EmailAddress')){
-                $useEmail = $email;
+                $userEmail = $email;
             }
         }
-        return $useEmail;
-        
+        return $userEmail;
     }
     
     /**
@@ -295,12 +291,12 @@ class CxmlService
         return $result;
     }
     
-    public function getEmailByXPathConfig($cxmlNodeXpathConfig, SimpleXMLElement $parsedXMLData): array|string
+    public function getEmailByXPathConfig($cxmlNodeXpathConfig, SimpleXMLElement $parsedXMLData): string
     {
         $xpathSelector = $parsedXMLData->xpath($cxmlNodeXpathConfig);
         if(!$xpathSelector){
             return 'none';
         }
-        return $xpathSelector;
+        return (string)$xpathSelector[0];
     }
 }
