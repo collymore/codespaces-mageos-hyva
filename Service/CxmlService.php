@@ -104,29 +104,23 @@ class CxmlService
     {
         return $cxmlData->Request->PunchOutSetupRequest->getAttribute('operation') === 'create';
     }
-
+    
     /**
-     * Fetch email from Cxml data or extrinsicData array
+     * Validates email from Incoming cxml data
      * @throws \Zend_Validate_Exception
      */
-    public function fetchEmail($extrinsicData, $cxmlData): string
+    public function validateEmail($email): string
     {
-        $useEmail = '';
-
-        if (isset($extrinsicData['UserEmail']) && \Zend_Validate::is($extrinsicData['UserEmail'], 'EmailAddress')) {
-            $useEmail = $extrinsicData['UserEmail'];
-        } elseif (isset($extrinsicData['User']) && \Zend_Validate::is($extrinsicData['User'], 'EmailAddress')) {
-            $useEmail = $extrinsicData['User'];
-        } elseif 
-        (isset($cxmlData->Request->PunchOutSetupRequest->Contact->Email)
-                 && !empty($cxmlData->Request->PunchOutSetupRequest->Contact->Email)
-            && \Zend_Validate::is(
-                $cxmlData->Request->PunchOutSetupRequest->Contact->Email,
-                'EmailAddress'
-            )) {
-            $useEmail = (string)$cxmlData->Request->PunchOutSetupRequest->Contact->Email;
+        $userEmail = '';
+        if (!empty($email)) {
+            if ($email === 'none') {
+                return $userEmail;
+            }
+            if(\Zend_Validate::is($email, 'EmailAddress')){
+                $userEmail = $email;
+            }
         }
-        return $useEmail;
+        return $userEmail;
     }
     
     /**
@@ -295,5 +289,14 @@ class CxmlService
             }
         }
         return $result;
+    }
+    
+    public function getEmailByXPathConfig($cxmlNodeXpathConfig, SimpleXMLElement $parsedXMLData): string
+    {
+        $xpathSelector = $parsedXMLData->xpath($cxmlNodeXpathConfig);
+        if(!$xpathSelector){
+            return 'none';
+        }
+        return (string)$xpathSelector[0];
     }
 }

@@ -34,6 +34,11 @@
                     <comment>This shipping Method will be used when no method code has been passed through with incoming CXML</comment>
                     <source_model>Magento\Shipping\Model\Config\Source\Allmethods</source_model>
                 </field>
+                <field id="cxml_node_xpath_config_email" translate="label comment" type="text" sortOrder="25" showInDefault="1" showInWebsite="1"
+                       showInStore="1">
+                    <label>Default Email Cxml Xpath Selector</label>
+                    <comment>The default Xml Xpath selector for the customer email from the incoming Cxml document.</comment>
+                </field>
             </group>
             <group id="display" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" >
                 <label>Display Settings</label>

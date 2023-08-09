@@ -12,7 +12,6 @@ use Magento\Framework\Model\AbstractModel;
 
 class PunchoutGroup extends AbstractModel implements PunchoutGroupInterface
 {
-
     /**
      * @inheritDoc
      */
@@ -355,5 +354,17 @@ class PunchoutGroup extends AbstractModel implements PunchoutGroupInterface
     public function setUpdatedAt($updatedAt)
     {
         return $this->setData(self::UPDATED_AT, $updatedAt);
+    }
+    
+    public function getCxmlNodeXpathConfigEmail()
+    {
+        $xpath = $this->getData(self::CXML_NODE_XPATH_CONFIG_EMAIL);
+
+        return $xpath;
+    }
+    
+    public function setCxmlNodeXpathConfigEmail($cxmlNodeXpathConfigEmail)
+    {
+        return $this->setData(self::CXML_NODE_XPATH_CONFIG_EMAIL, $cxmlNodeXpathConfigEmail);
     }
 }

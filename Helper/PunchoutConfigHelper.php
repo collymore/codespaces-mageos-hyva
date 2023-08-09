@@ -36,6 +36,14 @@ class PunchoutConfigHelper extends AbstractHelper
     {
         return $this->getConfiguredValue('develodesign_punchout/defaults/default_shipping');
     }
+
+     /**
+     * Returns the default Cxml Xpath selector for the incoming Email value
+     */
+    public function getDefaultCxmlNodeXpathConfigEmail()
+    {
+        return $this->getConfiguredValue('develodesign_punchout/defaults/cxml_node_xpath_config_email');
+    }
         
     /**
      * Returns if Punchout should Auto create customers
@@ -112,7 +120,7 @@ class PunchoutConfigHelper extends AbstractHelper
     /**
      * Returns the store level config value
      */
-    public function getConfiguredValue($config_path, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT):string
+    public function getConfiguredValue($config_path, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT)
     {
         return $this->scopeConfig->getValue($config_path, $scope);
     }

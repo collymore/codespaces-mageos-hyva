@@ -314,6 +314,18 @@
 				</editor>
 			</settings>
 		</column>
+		<column name="cxml_node_xpath_config_email" sortOrder="85">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">CXML Email XPath Selector</label>
+				<editor>
+					<editorType>text</editorType>
+					<validation>
+						<rule name="required-entry" xsi:type="boolean">false</rule>
+					</validation>
+				</editor>
+			</settings>
+		</column>
 		<actionsColumn name="actions" class="Develodesign\Punchout\Ui\Component\Listing\Column\PunchoutGroupActions" sortOrder="99">
 			<settings>
 				<indexField>punchoutgroup_id</indexField>
