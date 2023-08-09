@@ -13,6 +13,8 @@
     use Magento\Framework\App\RequestInterface;
     use Magento\Framework\Filesystem\DriverInterface;
     use Magento\Framework\Exception\NoSuchEntityException;
+    use Develodesign\Punchout\Helper\PunchoutConfigHelper;
+
 
 class CxmlSetup extends Action implements \Magento\Framework\App\CsrfAwareActionInterface
 {
@@ -50,6 +52,12 @@ class CxmlSetup extends Action implements \Magento\Framework\App\CsrfAwareAction
      * @var DriverInterface
      */
     protected $driverInterface;
+
+    /**
+     * @var PunchoutConfigHelper
+     */
+    protected $punchoutConfigHelper;
+
     
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -59,7 +67,8 @@ class CxmlSetup extends Action implements \Magento\Framework\App\CsrfAwareAction
         CustomerService $customerService,
         SetupRequestService $setupRequestService,
         EventServiceProvider $eventServiceProvider,
-        DriverInterface $driverInterface
+        DriverInterface $driverInterface,
+        PunchoutConfigHelper $punchoutConfigHelper
     ) {
         parent::__construct($context);
         $this->cxmlService = $cxmlService;
@@ -69,6 +78,7 @@ class CxmlSetup extends Action implements \Magento\Framework\App\CsrfAwareAction
         $this->setupRequestService = $setupRequestService;
         $this->eventServiceProvider = $eventServiceProvider;
         $this->driverInterface = $driverInterface;
+        $this->punchoutConfigHelper = $punchoutConfigHelper;
     }
     public function execute()
     {
@@ -110,8 +120,12 @@ class CxmlSetup extends Action implements \Magento\Framework\App\CsrfAwareAction
             );
      
             if ($this->cxmlService->isCreate($parsedXMLData) === true) {
-             
-                $xpathSelectorEmail = $this->cxmlService->getEmailByXPathConfig($matchingPunchoutGroup->getCxmlNodeXpathConfigEmail(),$parsedXMLData);
+                $xpathEmail = $matchingPunchoutGroup->getCxmlNodeXpathConfigEmail();
+            
+                if(!$xpathEmail){
+                    $xpathEmail = $this->punchoutConfigHelper->getDefaultCxmlNodeXpathConfigEmail();
+                }
+                $xpathSelectorEmail = $this->cxmlService->getEmailByXPathConfig($xpathEmail,$parsedXMLData);
                 $useEmail = $this->cxmlService->validateEmail($xpathSelectorEmail);
            
                 if (empty(trim($useEmail))) {

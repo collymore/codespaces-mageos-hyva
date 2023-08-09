@@ -40,7 +40,7 @@ class PunchoutConfigHelper extends AbstractHelper
      /**
      * Returns the default Cxml Xpath selector for the incoming Email value
      */
-    public function getCxmlNodeXpathConfigEmail()
+    public function getDefaultCxmlNodeXpathConfigEmail()
     {
         return $this->getConfiguredValue('develodesign_punchout/defaults/cxml_node_xpath_config_email');
     }

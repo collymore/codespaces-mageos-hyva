@@ -9,23 +9,9 @@ namespace Develodesign\Punchout\Model;
 
 use Develodesign\Punchout\Api\Data\PunchoutGroupInterface;
 use Magento\Framework\Model\AbstractModel;
-use Develodesign\Punchout\Helper\PunchoutConfigHelper;
-
 
 class PunchoutGroup extends AbstractModel implements PunchoutGroupInterface
 {
-
-    /**
-     * @var PunchoutConfigHelper
-     */
-    protected $punchoutConfigHelper;
-
-    public function __construct(
-        PunchoutConfigHelper $punchoutConfigHelper
-    ) {
-        $this->punchoutConfigHelper = $punchoutConfigHelper;
-    }
-
     /**
      * @inheritDoc
      */
@@ -373,9 +359,7 @@ class PunchoutGroup extends AbstractModel implements PunchoutGroupInterface
     public function getCxmlNodeXpathConfigEmail()
     {
         $xpath = $this->getData(self::CXML_NODE_XPATH_CONFIG_EMAIL);
-        if(!$xpath){
-            $xpath = $this->punchoutConfigHelper->getCxmlNodeXpathConfigEmail();
-        }
+
         return $xpath;
     }
     
