@@ -9,6 +9,8 @@ namespace Develodesign\Punchout\Model;
 
 use Develodesign\Punchout\Api\Data\PunchoutGroupInterface;
 use Magento\Framework\Model\AbstractModel;
+use Develodesign\Punchout\Helper\PunchoutConfigHelper;
+
 
 class PunchoutGroup extends AbstractModel implements PunchoutGroupInterface
 {
@@ -18,12 +20,18 @@ class PunchoutGroup extends AbstractModel implements PunchoutGroupInterface
      */
     protected $punchoutConfigHelper;
 
+    public function __construct(
+        PunchoutConfigHelper $punchoutConfigHelper
+    ) {
+        $this->punchoutConfigHelper = $punchoutConfigHelper;
+    }
+
     /**
      * @inheritDoc
      */
     public function _construct()
     {
-        $this->_init(\Develodesign\Punchout\Model\ResourceModel\PunchoutGroup::class,);
+        $this->_init(\Develodesign\Punchout\Model\ResourceModel\PunchoutGroup::class);
     }
 
     /**

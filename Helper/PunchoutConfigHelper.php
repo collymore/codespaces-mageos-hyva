@@ -120,7 +120,7 @@ class PunchoutConfigHelper extends AbstractHelper
     /**
      * Returns the store level config value
      */
-    public function getConfiguredValue($config_path, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT):string
+    public function getConfiguredValue($config_path, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT)
     {
         return $this->scopeConfig->getValue($config_path, $scope);
     }
