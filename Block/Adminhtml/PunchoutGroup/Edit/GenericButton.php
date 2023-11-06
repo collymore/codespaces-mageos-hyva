@@ -12,7 +12,7 @@ use Magento\Backend\Block\Widget\Context;
 abstract class GenericButton
 {
 
-    protected Context $context;
+    protected $context;
 
     /**
      * @param Context $context

@@ -20,15 +20,15 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 class PunchoutGroupRepository implements PunchoutGroupRepositoryInterface
 {
-    protected ResourcePunchoutGroup $resource;
+    protected $resource;
 
-    protected PunchoutGroupInterfaceFactory $punchoutGroupFactory;
+    protected $punchoutGroupFactory;
 
-    protected CollectionProcessorInterface $collectionProcessor;
+    protected $collectionProcessor;
 
-    protected PunchoutGroupCollectionFactory $punchoutGroupCollectionFactory;
+    protected $punchoutGroupCollectionFactory;
     
-    protected PunchoutGroupSearchResultsInterfaceFactory $searchResultsFactory;
+    protected $searchResultsFactory;
 
     /**
      * @param ResourcePunchoutGroup $resource

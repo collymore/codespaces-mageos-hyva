@@ -16,7 +16,7 @@ class PunchoutGroupActions extends \Magento\Ui\Component\Listing\Columns\Column
     const URL_PATH_EDIT = 'develodesign_punchout/punchoutgroup/edit';
     const URL_PATH_DELETE = 'develodesign_punchout/punchoutgroup/delete';
 
-    protected UrlInterface $urlBuilder;
+    protected $urlBuilder;
     const URL_PATH_DETAILS = 'develodesign_punchout/punchoutgroup/details';
 
     /**
