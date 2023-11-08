@@ -1,27 +1,28 @@
 <?xml version="1.0"?>
-     <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
-        <default>
-            <develodesign_punchout>
-                <defaults>
-                    <punchout_toggle>1</punchout_toggle>
-                    <uom>EA</uom>
-                    <default_shipping><![CDATA[freeshipping_freeshipping]]></default_shipping>
-                    <cxml_node_xpath_config_email><![CDATA[/cXML/Request/PunchOutSetupRequest/Extrinsic[@name="UserEmail"]]]></cxml_node_xpath_config_email>
-                </defaults>
-                <display>
-                    <transfer_button_label><![CDATA[Transfer Basket Items With Punchout]]></transfer_button_label>
-                    <transfer_modal_content><![CDATA[Please Wait, Transfering Basket Items Via Punchout...]]></transfer_modal_content>
-                </display>
-                 <customer>
-                    <auto_create_user>1</auto_create_user>
-                </customer>
-                <product>
-                    <load_non_catalogue>0</load_non_catalogue>
-                </product>
-                <invoice>
-                    <validate_invoice_qty>0</validate_invoice_qty>
-                </invoice>
-            </develodesign_punchout>
-        </default>
-    </config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <develodesign_punchout>
+            <defaults>
+                <punchout_toggle>1</punchout_toggle>
+                <uom>EA</uom>
+                <default_shipping><![CDATA[freeshipping_freeshipping]]></default_shipping>
+                <cxml_node_xpath_config_email><![CDATA[/cXML/Request/PunchOutSetupRequest/Extrinsic[@name="UserEmail"]]]></cxml_node_xpath_config_email>
+            </defaults>
+            <display>
+                <transfer_button_label><![CDATA[Transfer Basket Items With Punchout]]></transfer_button_label>
+                <transfer_modal_content><![CDATA[Please Wait, Transfering Basket Items Via Punchout...]]></transfer_modal_content>
+                <redirect_checkout_path><![CDATA[/checkout/]]></redirect_checkout_path>
+            </display>
+            <customer>
+                <auto_create_user>1</auto_create_user>
+            </customer>
+            <product>
+                <load_non_catalogue>0</load_non_catalogue>
+            </product>
+            <invoice>
+                <validate_invoice_qty>0</validate_invoice_qty>
+            </invoice>
+        </develodesign_punchout>
+    </default>
+</config>
