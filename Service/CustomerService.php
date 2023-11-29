@@ -49,7 +49,7 @@ class CustomerService
      * @var CollectionFactory
      */
     private $customerCollection;
-        
+    
     private $customerRepository;
 
     public function __construct(
@@ -122,18 +122,20 @@ class CustomerService
         $this->addressResource->save($customerAddress);
     }
 
-    public function prepareCustomerData(DataObject $matchingPunchoutGroup, $email, $nameData): DataObject
+    public function prepareCustomerData(DataObject $matchingPunchoutGroup, $email, $nameData, array $attributes): DataObject
     {
+        $customerProps = [
+            'website_id' => $this->storeManager->getWebsite()->getId(),
+            'first_name' => $nameData['first_name'],
+            'last_name' => $nameData['last_name'],
+            'email' => $email,
+            'password' => $this->getRandomPassword(),
+            'group_id' => $matchingPunchoutGroup->getMagentoCustomerGroup(),
+            'punchout_group_id' => $matchingPunchoutGroup->getPunchoutgroupId()
+            
+        ] + $attributes;
         return new DataObject(
-            [
-                'website_id' => $this->storeManager->getWebsite()->getId(),
-                'first_name' => $nameData['first_name'],
-                'last_name' => $nameData['last_name'],
-                'email' => $email,
-                'password' => $this->getRandomPassword(),
-                'group_id' => $matchingPunchoutGroup->getMagentoCustomerGroup(),
-                'punchout_group_id' => $matchingPunchoutGroup->getPunchoutgroupId()
-            ]
+            $customerProps
         );
     }
 
@@ -157,7 +159,7 @@ class CustomerService
     {
         return uniqid('M181#Ha73y' . rand(), false);
     }
-        
+    
     /**
      * Returns the customers groupID
      */
@@ -168,7 +170,7 @@ class CustomerService
             ->getFirstItem();
         return $customer->getPunchoutGroup();
     }
-        
+    
     /**
      * Returns the first customer available for that punchoutGroupID
      */
@@ -180,7 +182,7 @@ class CustomerService
         if ($customer->count() > 0) {
             return $customer->getFirstItem();
         }
-            
+        
         return null;
     }
     
@@ -243,5 +245,15 @@ class CustomerService
             }
         }
         return [];
+    }
+    
+    /**
+     * @throws \JsonException
+     */
+    public function getDefaultCustomerAttributes(string $customerAttributes)
+    {
+        $customerAttributes = '{' . $customerAttributes . '}';
+        // Convert the JSON string to an associative array
+        return json_decode($customerAttributes, true, 512, JSON_THROW_ON_ERROR);
     }
 }
