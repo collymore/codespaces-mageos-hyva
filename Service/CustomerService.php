@@ -247,13 +247,24 @@ class CustomerService
         return [];
     }
     
-    /**
-     * @throws \JsonException
-     */
-    public function getDefaultCustomerAttributes(string $customerAttributes)
+    
+    public function getDefaultCustomerAttributes(string $customerAttributes): array
     {
-        $customerAttributes = '{' . $customerAttributes . '}';
-        // Convert the JSON string to an associative array
-        return json_decode($customerAttributes, true, 512, JSON_THROW_ON_ERROR);
+        $attributes = explode(',', str_replace('"', '', $customerAttributes));
+        $customerAttributeArray = [];
+        
+        foreach ($attributes as $attribute) {
+            // Split each attribute by colon
+            $pair = explode(':', $attribute, 2);
+            
+            // Trim any extra whitespace from keys and values
+            $key = trim($pair[0]);
+            $value = trim($pair[1]);
+            
+            // Add the key-value pair to the array
+            $customerAttributeArray[$key] = $value;
+        }
+
+        return $customerAttributeArray;
     }
 }
