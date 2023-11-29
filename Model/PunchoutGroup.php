@@ -358,13 +358,21 @@ class PunchoutGroup extends AbstractModel implements PunchoutGroupInterface
     
     public function getCxmlNodeXpathConfigEmail()
     {
-        $xpath = $this->getData(self::CXML_NODE_XPATH_CONFIG_EMAIL);
-
-        return $xpath;
+        return $this->getData(self::CXML_NODE_XPATH_CONFIG_EMAIL);
     }
     
     public function setCxmlNodeXpathConfigEmail($cxmlNodeXpathConfigEmail)
     {
         return $this->setData(self::CXML_NODE_XPATH_CONFIG_EMAIL, $cxmlNodeXpathConfigEmail);
+    }
+    
+    public function getCustomerAttributes()
+    {
+        return $this->getData(self::CUSTOMER_ATTRIBUTES);
+    }
+    
+    public function setCustomerAttributes($customerAttributes)
+    {
+        return $this->setData(self::CUSTOMER_ATTRIBUTES, $customerAttributes);
     }
 }
