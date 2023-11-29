@@ -122,7 +122,7 @@ class CustomerService
         $this->addressResource->save($customerAddress);
     }
 
-    public function prepareCustomerData(DataObject $matchingPunchoutGroup, $email, $nameData, array $attributes): DataObject
+    public function prepareCustomerData(DataObject $matchingPunchoutGroup, $email, $nameData, array $attributes = []): DataObject
     {
         $customerProps = [
             'website_id' => $this->storeManager->getWebsite()->getId(),
