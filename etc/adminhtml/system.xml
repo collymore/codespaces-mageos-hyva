@@ -59,7 +59,7 @@
                 </field>
                 <field id="default_attributes" translate="label" type="textarea" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Default Customer Attributes</label>
-                    <comment>Comma seperated default customer attribute code/value pair. For example, "gender: M", "taxvat :12374888NN".</comment>
+                    <comment>Comma seperated default customer attribute code/value pair. For example, "gender:M","taxvat:12374888NN","dob:1990-08-31".</comment>
                 </field>
             </group>
             <group id="product" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1"
