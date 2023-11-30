@@ -87,14 +87,8 @@ class CustomerService
     {
         $customer = $this->customerFactory->create();
         $customer->isObjectNew(true);
+        $customer->setData($customerDTO->toArray());
         $customer->setStoreId($this->storeManager->getStore()->getId())
-            ->setFirstname($customerDTO->getFirstName())
-            ->setLastname($customerDTO->getLastName())
-            ->setEmail($customerDTO->getEmail())
-            ->setPassword($customerDTO->getPassword())
-            ->setGroupId($customerDTO->getGroupId())
-            ->setPunchoutGroup($customerDTO->getPunchoutGroupId())
-            ->setWebsiteId($customerDTO->getWebsiteId())
             ->setIsActive(1)
             ->setForceConfirmed(true);
         $this->customerResource->save($customer);
@@ -126,8 +120,8 @@ class CustomerService
     {
         $customerProps = [
             'website_id' => $this->storeManager->getWebsite()->getId(),
-            'first_name' => $nameData['first_name'],
-            'last_name' => $nameData['last_name'],
+            'firstname' => $nameData['first_name'],
+            'lastname' => $nameData['last_name'],
             'email' => $email,
             'password' => $this->getRandomPassword(),
             'group_id' => $matchingPunchoutGroup->getMagentoCustomerGroup(),
