@@ -140,10 +140,20 @@ class CxmlSetup extends Action implements \Magento\Framework\App\CsrfAwareAction
                     $matchingCustomer = $this->customerService->getCustomerByEmail($useEmail);
                 }catch(\Exception $e){
                     $nameData = $this->cxmlService->getFirstLastName($extrinsicData);
+                    $customerAttributes = $matchingPunchoutGroup->getCustomerAttributes();
+                    if(empty($customerAttributes)){
+                        $customerAttributes = $this->punchoutConfigHelper->getDefaultCustomerAttributes();
+                    }
+                    $defaultCustomerAttributes = [];
+                    if(!empty($customerAttributes)){
+                        $defaultCustomerAttributes = $this->customerService->getDefaultCustomerAttributes($customerAttributes);
+                    }
+                    
                     $customerDTO = $this->customerService->prepareCustomerData(
                         $matchingPunchoutGroup,
                         $useEmail,
-                        $nameData
+                        $nameData,
+                        $defaultCustomerAttributes
                     );
                     $matchingCustomer = $this->customerService->createCustomer($customerDTO);
                     $this->customerService->createCustomerAddress($matchingCustomer, $matchingPunchoutGroup);

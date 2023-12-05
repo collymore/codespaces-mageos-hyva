@@ -49,7 +49,7 @@ class CustomerService
      * @var CollectionFactory
      */
     private $customerCollection;
-        
+    
     private $customerRepository;
 
     public function __construct(
@@ -87,14 +87,8 @@ class CustomerService
     {
         $customer = $this->customerFactory->create();
         $customer->isObjectNew(true);
+        $customer->setData($customerDTO->toArray());
         $customer->setStoreId($this->storeManager->getStore()->getId())
-            ->setFirstname($customerDTO->getFirstName())
-            ->setLastname($customerDTO->getLastName())
-            ->setEmail($customerDTO->getEmail())
-            ->setPassword($customerDTO->getPassword())
-            ->setGroupId($customerDTO->getGroupId())
-            ->setPunchoutGroup($customerDTO->getPunchoutGroupId())
-            ->setWebsiteId($customerDTO->getWebsiteId())
             ->setIsActive(1)
             ->setForceConfirmed(true);
         $this->customerResource->save($customer);
@@ -122,18 +116,20 @@ class CustomerService
         $this->addressResource->save($customerAddress);
     }
 
-    public function prepareCustomerData(DataObject $matchingPunchoutGroup, $email, $nameData): DataObject
+    public function prepareCustomerData(DataObject $matchingPunchoutGroup, $email, $nameData, array $attributes = []): DataObject
     {
+        $customerProps = [
+            'website_id' => $this->storeManager->getWebsite()->getId(),
+            'firstname' => $nameData['first_name'],
+            'lastname' => $nameData['last_name'],
+            'email' => $email,
+            'password' => $this->getRandomPassword(),
+            'group_id' => $matchingPunchoutGroup->getMagentoCustomerGroup(),
+            'punchout_group_id' => $matchingPunchoutGroup->getPunchoutgroupId()
+            
+        ] + $attributes;
         return new DataObject(
-            [
-                'website_id' => $this->storeManager->getWebsite()->getId(),
-                'first_name' => $nameData['first_name'],
-                'last_name' => $nameData['last_name'],
-                'email' => $email,
-                'password' => $this->getRandomPassword(),
-                'group_id' => $matchingPunchoutGroup->getMagentoCustomerGroup(),
-                'punchout_group_id' => $matchingPunchoutGroup->getPunchoutgroupId()
-            ]
+            $customerProps
         );
     }
 
@@ -157,7 +153,7 @@ class CustomerService
     {
         return uniqid('M181#Ha73y' . rand(), false);
     }
-        
+    
     /**
      * Returns the customers groupID
      */
@@ -168,7 +164,7 @@ class CustomerService
             ->getFirstItem();
         return $customer->getPunchoutGroup();
     }
-        
+    
     /**
      * Returns the first customer available for that punchoutGroupID
      */
@@ -180,7 +176,7 @@ class CustomerService
         if ($customer->count() > 0) {
             return $customer->getFirstItem();
         }
-            
+        
         return null;
     }
     
@@ -243,5 +239,26 @@ class CustomerService
             }
         }
         return [];
+    }
+    
+    
+    public function getDefaultCustomerAttributes(string $customerAttributes): array
+    {
+        $attributes = explode(',', str_replace('"', '', $customerAttributes));
+        $customerAttributeArray = [];
+        
+        foreach ($attributes as $attribute) {
+            // Split each attribute by colon
+            $pair = explode(':', $attribute, 2);
+            
+            // Trim any extra whitespace from keys and values
+            $key = trim($pair[0]);
+            $value = trim($pair[1]);
+            
+            // Add the key-value pair to the array
+            $customerAttributeArray[$key] = $value;
+        }
+
+        return $customerAttributeArray;
     }
 }
