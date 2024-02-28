@@ -157,7 +157,7 @@ class CustomerService
     /**
      * Returns the customers groupID
      */
-    public function getPunchoutGroupId(int $customerId) : int
+    public function getPunchoutGroupId(int $customerId) 
     {
         $customer = $this->customerCollection->create()
             ->addFieldToFilter('entity_id', $customerId)

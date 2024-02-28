@@ -15,7 +15,6 @@
     use Magento\Framework\Exception\NoSuchEntityException;
     use Develodesign\Punchout\Helper\PunchoutConfigHelper;
 
-
 class CxmlSetup extends Action implements \Magento\Framework\App\CsrfAwareActionInterface
 {
     /**
@@ -79,16 +78,16 @@ class CxmlSetup extends Action implements \Magento\Framework\App\CsrfAwareAction
         $this->eventServiceProvider = $eventServiceProvider;
         $this->driverInterface = $driverInterface;
         $this->punchoutConfigHelper = $punchoutConfigHelper;
-    }
-    public function execute()
+	}
+    
+	public function execute()
     {
         try {
             $xmlRawData = $this->driverInterface->fileGetContents('php://input');
-            if (!$xmlRawData) {
+	        if (!$xmlRawData) {
                 $this->eventServiceProvider->dispatchCxmlSetupRequestEvent(0, 0, 'No POST data included in request');
                 return $this->cxmlResponse->respondWithData(400, 'Post body is missing or XML appears invalid');
             }
-    
             $parsedXMLData = $this->cxmlService->parseXmlResponse($xmlRawData);
             $violations = $this->cxmlService->validateSetupRequest($parsedXMLData);
             if ($violations['error'] === true) {
@@ -103,7 +102,11 @@ class CxmlSetup extends Action implements \Magento\Framework\App\CsrfAwareAction
             $sharedSecret = $parsedXMLData->Header->Sender->Credential->SharedSecret;
             $dunsIdentity = $parsedXMLData->Header->Sender->Credential->Identity;
             $aribaNetworkId = $this->cxmlService->getAribaNetworkId($parsedXMLData);
-    
+
+    	    if(!$aribaNetworkId){ 
+                $aribaNetworkId = $dunsIdentity;
+            }
+            
             try{
                 $matchingPunchoutGroup = $this->punchoutGroupService->loadPunchOutGroupByCredentials(
                     $sharedSecret,
@@ -199,9 +202,8 @@ class CxmlSetup extends Action implements \Magento\Framework\App\CsrfAwareAction
     {
         return null;
     }
-    
     public function validateForCsrf(RequestInterface $request): ?bool
     {
-        return true;
+   return true;
     }
 }

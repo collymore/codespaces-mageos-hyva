@@ -116,9 +116,13 @@ class Cxml
     /**
      * @throws NoSuchEntityException
      */
-    private function getUnspscCode($sku) : string
-    {
-        return $this->productRepository->get($sku)->getUnspscCode();
+    private function getUnspscCode($sku) 
+    {   
+        if($this->productRepository->get($sku)){
+        	return $this->productRepository->get($sku)->getUnspscCode();
+	    }else{
+            return '';
+        }
     }
 
     public function getConfigHelper() : PunchoutConfigHelper
