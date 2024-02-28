@@ -42,6 +42,8 @@ interface PunchoutGroupInterface
     const CREATED_AT = 'created_at';
     
     const CXML_NODE_XPATH_CONFIG_EMAIL = 'cxml_node_xpath_config_email';
+    
+    const CUSTOMER_ATTRIBUTES = 'customer_attributes';
 
     /**
      * Get punchoutgroup_id
@@ -384,4 +386,15 @@ interface PunchoutGroupInterface
      * @return \Develodesign\Punchout\PunchoutGroup\Api\Data\PunchoutGroupInterface
      */
     public function setCxmlNodeXpathConfigEmail($cxmlNodeXpathConfigEmail);
+    
+    /**
+     * @param string $customerAttributes
+     *
+     * @return \Develodesign\Punchout\PunchoutGroup\Api\Data\PunchoutGroupInterface
+     */
+    public function setCustomerAttributes($customerAttributes);
+    
+    public function getCustomerAttributes();
+    
+    
 }

@@ -22,7 +22,8 @@
       "telephone": true,
       "cxml_node_xpath_config_email": true,
       "created_at": true,
-      "updated_at": true
+      "updated_at": true,
+      "customer_attributes": true
     },
     "index": {
       "DEVELODESIGN_PUNCHOUT_PUNCHOUTGROUP_GROUP_EMAIL": true,

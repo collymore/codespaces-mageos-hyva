@@ -53,6 +53,11 @@ class PunchoutConfigHelper extends AbstractHelper
         return $this->getConfiguredFlag('develodesign_punchout/customer/auto_create_user');
     }
 
+    
+    public function getDefaultCustomerAttributes()
+    {
+        return $this->getConfiguredValue('develodesign_punchout/customer/default_attributes');
+    }
     /**
      * Returns the Punchout Cart Button Label
      */
@@ -92,6 +97,7 @@ class PunchoutConfigHelper extends AbstractHelper
     {
         return $this->getConfiguredValue('develodesign_punchout/product/non_catalogue_sku');
     }
+
 
     /**
      * Returns the non-catalog product option for the Sku field
