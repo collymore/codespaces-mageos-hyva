@@ -2,9 +2,9 @@
 
 namespace Develodesign\Punchout\Helper;
 
-    use Magento\Framework\App\Config\ScopeConfigInterface;
-    use Magento\Framework\App\Helper\AbstractHelper;
-    use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Store\Model\StoreManagerInterface;
 
 class PunchoutConfigHelper extends AbstractHelper
 {
@@ -20,7 +20,7 @@ class PunchoutConfigHelper extends AbstractHelper
         $this->storeManager = $storeManager;
         parent::__construct($context);
     }
-    
+
     /**
      * Returns gloabl UOM value for default product attribute value
      */
@@ -37,14 +37,14 @@ class PunchoutConfigHelper extends AbstractHelper
         return $this->getConfiguredValue('develodesign_punchout/defaults/default_shipping');
     }
 
-     /**
+    /**
      * Returns the default Cxml Xpath selector for the incoming Email value
      */
     public function getDefaultCxmlNodeXpathConfigEmail()
     {
         return $this->getConfiguredValue('develodesign_punchout/defaults/cxml_node_xpath_config_email');
     }
-    
+
     /**
      * Returns if Punchout should Auto create customers
      */
@@ -52,12 +52,12 @@ class PunchoutConfigHelper extends AbstractHelper
     {
         return $this->getConfiguredFlag('develodesign_punchout/customer/auto_create_user');
     }
+
     
     public function getDefaultCustomerAttributes()
     {
         return $this->getConfiguredValue('develodesign_punchout/customer/default_attributes');
     }
-    
     /**
      * Returns the Punchout Cart Button Label
      */
@@ -75,29 +75,38 @@ class PunchoutConfigHelper extends AbstractHelper
     }
 
     /**
+     * Retrieve the checkout route that should be caught in the router
+     */
+    public function getRedirectCheckoutPath()
+    {
+        return $this->getConfiguredValue('develodesign_punchout/display/redirect_checkout_path');
+    }
+
+    /**
      * Returns if the non-catalog products feature should be used
      */
     public function getConfigLoadNonCatalogue()
     {
         return $this->getConfiguredFlag('develodesign_punchout/product/load_non_catalogue');
     }
-     
-     /**
-      * Returns the non-catalog Product Sku
-      */
+
+    /**
+     * Returns the non-catalog Product Sku
+     */
     public function getConfigNonCatalogueSKU()
     {
         return $this->getConfiguredValue('develodesign_punchout/product/non_catalogue_sku');
     }
-     
-     /**
-      * Returns the non-catalog product option for the Sku field
-      */
+
+
+    /**
+     * Returns the non-catalog product option for the Sku field
+     */
     public function getConfigSKUTitle()
     {
         return $this->getConfiguredValue('develodesign_punchout/product/customizable_option_sku');
     }
-    
+
     /**
      * Returns the non-catalog product option for the Name field
      */
@@ -105,7 +114,7 @@ class PunchoutConfigHelper extends AbstractHelper
     {
         return $this->getConfiguredValue('develodesign_punchout/product/customizable_option_name');
     }
-    
+
     /**
      * Returns the non-catalog product option for the Qty field
      */
@@ -121,7 +130,7 @@ class PunchoutConfigHelper extends AbstractHelper
     {
         return $this->getConfiguredFlag('develodesign_punchout/invoice/validate_invoice_qty');
     }
-    
+
     /**
      * Returns the store level config value
      */
@@ -129,7 +138,7 @@ class PunchoutConfigHelper extends AbstractHelper
     {
         return $this->scopeConfig->getValue($config_path, $scope);
     }
-    
+
     /**
      * Returns the store level flag value
      */

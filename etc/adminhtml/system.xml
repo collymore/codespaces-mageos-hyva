@@ -48,6 +48,10 @@
                 <field id="transfer_modal_content" translate="label" type="textarea" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Transfer Modal Content</label>
                 </field>
+                <field id="redirect_checkout_path" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Redirect Checkout Path</label>
+                    <comment>Enter the path of the checkout to be redirected back to the basket. Default is: /checkout/</comment>
+                </field>
             </group>
             <group id="customer" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1"
                    showInStore="1">
@@ -91,11 +95,10 @@
                     <comment>This is the customizable product option Quantity identifier/title </comment>
                 </field>
             </group>
-            <group id="invoice" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1"
-                    showInStore="1">
+            <group id="invoice" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Invoicing Behaviors</label>
                 <field id="validate_invoice_qty" translate="label" type="select" sortOrder="20" showInDefault="1"
-                        showInWebsite="1" showInStore="1">
+                       showInWebsite="1" showInStore="1">
                     <label>Validate Invoice Qty after Placing Order</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
