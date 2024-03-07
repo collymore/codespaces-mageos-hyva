@@ -49,7 +49,7 @@ class CustomerService
      * @var CollectionFactory
      */
     private $customerCollection;
-    
+
     private $customerRepository;
 
     public function __construct(
@@ -69,7 +69,7 @@ class CustomerService
         $this->customerCollection = $collectionFactory;
         $this->customerRepository = $customerRepository;
     }
-    
+
     /**
      * @throws NoSuchEntityException
      * @throws LocalizedException
@@ -126,7 +126,7 @@ class CustomerService
             'password' => $this->getRandomPassword(),
             'group_id' => $matchingPunchoutGroup->getMagentoCustomerGroup(),
             'punchout_group_id' => $matchingPunchoutGroup->getPunchoutgroupId()
-            
+
         ] + $attributes;
         return new DataObject(
             $customerProps
@@ -153,18 +153,18 @@ class CustomerService
     {
         return uniqid('M181#Ha73y' . rand(), false);
     }
-    
+
     /**
      * Returns the customers groupID
      */
-    public function getPunchoutGroupId(int $customerId) 
+    public function getPunchoutGroupId(int $customerId)
     {
         $customer = $this->customerCollection->create()
             ->addFieldToFilter('entity_id', $customerId)
             ->getFirstItem();
-        return $customer->getPunchoutGroup();
+        return $customer->getData('punchout_group');
     }
-    
+
     /**
      * Returns the first customer available for that punchoutGroupID
      */
@@ -176,10 +176,10 @@ class CustomerService
         if ($customer->count() > 0) {
             return $customer->getFirstItem();
         }
-        
+
         return null;
     }
-    
+
     /**
      * @throws NoSuchEntityException
      */
@@ -187,7 +187,7 @@ class CustomerService
     {
         return $this->storeManager->getStore();
     }
-    
+
     /**
      * Gets the customers Address formatted for Cxml
      * @return array
@@ -203,7 +203,7 @@ class CustomerService
             $queryName  = strtolower(trim($data['company']));
             $addressName =  strtolower(trim($address->getFirstname()));
             $matches = false;
-            
+
             if ($postCode === $queryPostCode) {
                 $matches = true;
             }
@@ -216,12 +216,12 @@ class CustomerService
             if ($postCode === $queryPostCode && $queryStreet === $street) {
                 $matches = true;
             }
-            
+
             if ($matches) {
                 $firstName = $customer->getFirstname();
                 $lastName = $customer->getLastname();
                 $email = $customer->getEmail();
-    
+
                 return [
                     'ext_address_id' => $address->getId(),
                     'firstname' => $firstName,
@@ -240,21 +240,21 @@ class CustomerService
         }
         return [];
     }
-    
-    
+
+
     public function getDefaultCustomerAttributes(string $customerAttributes): array
     {
         $attributes = explode(',', str_replace('"', '', $customerAttributes));
         $customerAttributeArray = [];
-        
+
         foreach ($attributes as $attribute) {
             // Split each attribute by colon
             $pair = explode(':', $attribute, 2);
-            
+
             // Trim any extra whitespace from keys and values
             $key = trim($pair[0]);
             $value = trim($pair[1]);
-            
+
             // Add the key-value pair to the array
             $customerAttributeArray[$key] = $value;
         }

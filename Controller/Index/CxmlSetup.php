@@ -1,7 +1,7 @@
 <?php
-    
+
     namespace Develodesign\Punchout\Controller\Index;
-    
+
     use Develodesign\Punchout\Event\EventServiceProvider;
     use Develodesign\Punchout\Response\CxmlResponse;
     use Develodesign\Punchout\Service\CustomerService;
@@ -11,37 +11,37 @@
     use Magento\Framework\App\Action\Action;
     use Magento\Framework\App\Request\InvalidRequestException;
     use Magento\Framework\App\RequestInterface;
-    use Magento\Framework\Filesystem\DriverInterface;
+//    use Magento\Framework\Filesystem\DriverInterface;
     use Magento\Framework\Exception\NoSuchEntityException;
     use Develodesign\Punchout\Helper\PunchoutConfigHelper;
 
-class CxmlSetup extends Action implements \Magento\Framework\App\CsrfAwareActionInterface
+class CxmlSetup extends Action  implements \Magento\Framework\App\CsrfAwareActionInterface
 {
     /**
      * @var CxmlService
      */
     protected $cxmlService;
-    
+
     /**
      * @var CxmlResponse
      */
     protected $cxmlResponse;
-    
+
     /**
      * @var PunchoutGroupService
      */
     protected $punchoutGroupService;
-    
+
     /**
      * @var CustomerService
      */
     protected $customerService;
-    
+
     /**
      * @var SetupRequestService
      */
     protected $setupRequestService;
-    
+
     /**
      * @var EventServiceProvider
      */
@@ -57,7 +57,7 @@ class CxmlSetup extends Action implements \Magento\Framework\App\CsrfAwareAction
      */
     protected $punchoutConfigHelper;
 
-    
+
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         CxmlService $cxmlService,
@@ -66,7 +66,7 @@ class CxmlSetup extends Action implements \Magento\Framework\App\CsrfAwareAction
         CustomerService $customerService,
         SetupRequestService $setupRequestService,
         EventServiceProvider $eventServiceProvider,
-        DriverInterface $driverInterface,
+  //      DriverInterface $driverInterface,
         PunchoutConfigHelper $punchoutConfigHelper
     ) {
         parent::__construct($context);
@@ -76,15 +76,17 @@ class CxmlSetup extends Action implements \Magento\Framework\App\CsrfAwareAction
         $this->customerService = $customerService;
         $this->setupRequestService = $setupRequestService;
         $this->eventServiceProvider = $eventServiceProvider;
-        $this->driverInterface = $driverInterface;
+  //      $this->driverInterface = $driverInterface;
         $this->punchoutConfigHelper = $punchoutConfigHelper;
 	}
-    
+
 	public function execute()
     {
+
         try {
-            $xmlRawData = $this->driverInterface->fileGetContents('php://input');
-	        if (!$xmlRawData) {
+            $xmlRawData = $this->getRequest()->getContent(); //$this->driverInterface->fileGetContents('php://input');
+
+            if (!$xmlRawData) {
                 $this->eventServiceProvider->dispatchCxmlSetupRequestEvent(0, 0, 'No POST data included in request');
                 return $this->cxmlResponse->respondWithData(400, 'Post body is missing or XML appears invalid');
             }
@@ -96,17 +98,17 @@ class CxmlSetup extends Action implements \Magento\Framework\App\CsrfAwareAction
                     0,
                     "Validation Error : " . json_encode($violations)
                 );
-        
+
                 return $this->cxmlResponse->respondWithData(422, json_encode($violations));
             }
             $sharedSecret = $parsedXMLData->Header->Sender->Credential->SharedSecret;
             $dunsIdentity = $parsedXMLData->Header->Sender->Credential->Identity;
             $aribaNetworkId = $this->cxmlService->getAribaNetworkId($parsedXMLData);
 
-    	    if(!$aribaNetworkId){ 
+    	    if(!$aribaNetworkId){
                 $aribaNetworkId = $dunsIdentity;
             }
-            
+
             try{
                 $matchingPunchoutGroup = $this->punchoutGroupService->loadPunchOutGroupByCredentials(
                     $sharedSecret,
@@ -121,16 +123,16 @@ class CxmlSetup extends Action implements \Magento\Framework\App\CsrfAwareAction
             $extrinsicData = $this->cxmlService->getExtrinsicData(
                 $parsedXMLData->Request->PunchOutSetupRequest->Extrinsic
             );
-     
+
             if ($this->cxmlService->isCreate($parsedXMLData) === true) {
                 $xpathEmail = $matchingPunchoutGroup->getCxmlNodeXpathConfigEmail();
-            
+
                 if(!$xpathEmail){
                     $xpathEmail = $this->punchoutConfigHelper->getDefaultCxmlNodeXpathConfigEmail();
                 }
                 $xpathSelectorEmail = $this->cxmlService->getEmailByXPathConfig($xpathEmail,$parsedXMLData);
                 $useEmail = $this->cxmlService->validateEmail($xpathSelectorEmail);
-           
+
                 if (empty(trim($useEmail))) {
                     $useEmail = $this->cxmlService->createEmail(
                         $extrinsicData,
@@ -142,6 +144,7 @@ class CxmlSetup extends Action implements \Magento\Framework\App\CsrfAwareAction
                 try{
                     $matchingCustomer = $this->customerService->getCustomerByEmail($useEmail);
                 }catch(\Exception $e){
+                  
                     $nameData = $this->cxmlService->getFirstLastName($extrinsicData);
                     $customerAttributes = $matchingPunchoutGroup->getCustomerAttributes();
                     if(empty($customerAttributes)){
@@ -151,7 +154,7 @@ class CxmlSetup extends Action implements \Magento\Framework\App\CsrfAwareAction
                     if(!empty($customerAttributes)){
                         $defaultCustomerAttributes = $this->customerService->getDefaultCustomerAttributes($customerAttributes);
                     }
-                    
+
                     $customerDTO = $this->customerService->prepareCustomerData(
                         $matchingPunchoutGroup,
                         $useEmail,
@@ -161,7 +164,7 @@ class CxmlSetup extends Action implements \Magento\Framework\App\CsrfAwareAction
                     $matchingCustomer = $this->customerService->createCustomer($customerDTO);
                     $this->customerService->createCustomerAddress($matchingCustomer, $matchingPunchoutGroup);
                 }
-                
+
                 $setupRequestDTO = $this->setupRequestService->prepareSetupData(
                     $matchingCustomer->getId(),
                     $parsedXMLData
@@ -174,7 +177,7 @@ class CxmlSetup extends Action implements \Magento\Framework\App\CsrfAwareAction
                     $matchingPunchoutGroup->getPunchoutgroupId(),
                     $info
                 );
-        
+
                 return $this->cxmlResponse->punchoutUpResponse(
                     200,
                     $parsedXMLData->getAttribute('payloadID'),
@@ -191,19 +194,19 @@ class CxmlSetup extends Action implements \Magento\Framework\App\CsrfAwareAction
                     $exception->getFile()
                 )
             );
-    
+
             return $this->cxmlResponse->respondWithData(400, $exception->getMessage());
         }
-    
+
         return $this->cxmlResponse->respondSuccess();
     }
-    
+
     public function createCsrfValidationException(RequestInterface $request): ?InvalidRequestException
     {
         return null;
     }
     public function validateForCsrf(RequestInterface $request): ?bool
     {
-   return true;
+        return true;
     }
 }
