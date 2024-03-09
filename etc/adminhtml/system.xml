@@ -65,6 +65,11 @@
                     <label>Default Customer Attributes</label>
                     <comment>Comma seperated default customer attribute code/value pair. For example, "gender:M","taxvat:12374888NN","dob:1990-08-31".</comment>
                 </field>
+                <field id="reload_customer_section_onlogin" type="select" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+					<label>Reload Frontend Customer Data on Login</label>
+					<comment>Reload frontend customer data on login, fixes issues with customer data missing in some themes</comment>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
             </group>
             <group id="product" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1"
                    showInStore="1">
