@@ -131,6 +131,14 @@ class PunchoutConfigHelper extends AbstractHelper
         return $this->getConfiguredFlag('develodesign_punchout/invoice/validate_invoice_qty');
     }
 
+     /**
+     * Returns the config for if Invoice Qty should be validated
+     */
+    public function getAddReloadCustomerSectionScript(): bool
+    {
+        return $this->getConfiguredValue('develodesign_punchout/customer/reload_customer_section_onlogin');
+    }
+
     /**
      * Returns the store level config value
      */
