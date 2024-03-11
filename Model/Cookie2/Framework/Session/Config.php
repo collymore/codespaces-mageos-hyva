@@ -1,4 +1,5 @@
 <?php
+/* DEPRICATED */
 
 declare(strict_types=1);
 

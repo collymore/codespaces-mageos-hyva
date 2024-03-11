@@ -1,36 +1,49 @@
 <?php
-/* DEPRICATED */
+
+declare(strict_types=1);
 
 namespace Develodesign\Punchout\Model\Cookie2\Framework\Session;
 
-/**
- * Magento session configuration
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
-class Generic extends \Magento\Framework\Session\Generic
-{
+use Develodesign\Punchout\Helper\PunchoutSession;
+use Magento\Framework\Session\Generic;
+
+class GenericPlugin {
+
     /**
-     * Configure session handler and start session
-     *
-     * @throws \Magento\Framework\Exception\SessionException
-     * @return $this
-     */
-    public function start()
-    {
-        $this->updateCookieParams();
-        return parent::start();
+    * @var PunchoutSession
+    */
+    protected $helperPunchoutSession;
+
+    /**
+    * constructor
+    * @param PunchoutSession $helperPunchoutSession
+    */
+    public function __construct(
+        PunchoutSession $helperPunchoutSession
+    ) {
+        $this->helperPunchoutSession = $helperPunchoutSession;
     }
 
     /**
-     * Renew session id and update session cookie
-     *
-     * @return $this
+     * @param Generic $subject
+     * @param $result Generic
+     * @return $result Generic
      */
-    public function regenerateId()
+    public function afterStart(Generic $subject, $result)
+    { 
+        $this->updateCookieParams();
+        return $result;
+    }
+
+    /**
+     * @param Generic $subject
+     * @param $result Generic
+     * @return $result Generic
+     */
+    public function afterRegenerateId(Generic $subject, $result)
     {
         $this->updateCookieParams();
-        return parent::regenerateId();
+        return $result;
     }
 
     /**

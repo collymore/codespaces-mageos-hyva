@@ -162,7 +162,7 @@ class CustomerService
         $customer = $this->customerCollection->create()
             ->addFieldToFilter('entity_id', $customerId)
             ->getFirstItem();
-        return $customer->getData('punchout_group');
+        return $customer->getPunchoutGroup();
     }
 
     /**
