@@ -394,7 +394,6 @@ interface PunchoutGroupInterface
     public function setCustomerAttributes($customerAttributes);
 
     /**
-     *
      * @return string|null
      */
     public function getCustomerAttributes();
