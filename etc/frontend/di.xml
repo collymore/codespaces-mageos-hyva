@@ -26,9 +26,4 @@
     <preference for="Magento\Framework\Stdlib\Cookie\PublicCookieMetadata"    type="Develodesign\Punchout\Model\Cookie2\Stdlib\Cookie\PublicCookieMetadata" />
     <preference for="Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata" type="Develodesign\Punchout\Model\Cookie2\Stdlib\Cookie\SensitiveCookieMetadata" />
 
-    <!-- preference for="Magento\Framework\Session\Config" type="Develodesign\Punchout\Model\Cookie2\Framework\Session\Config" / -->
-    <!-- preference for="Magento\Framework\Session\SessionManagerInterface" type="Develodesign\Punchout\Model\Cookie2\Framework\Session\Generic" / -->
-
-    <!-- preference for="Magento\Framework\Stdlib\CookieManagerInterface" type="Develodesign\Punchout\Model\Cookie2\Stdlib\Cookie\PhpCookieManager" / -->
-
 </config>
