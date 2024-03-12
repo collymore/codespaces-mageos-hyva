@@ -1,0 +1,33 @@
+{
+    "name": "punchout-catalogs/magento2-cookie2",
+    "description": "PunchOut Cookie2 Extension",
+    "type": "magento2-module",
+    "version": "0.2.0",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "require": {
+        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0|~7.2.0|~7.3.0|~7.4.0|~8.0.0|~8.1.0",
+        "ext-json": "*",
+        "ext-simplexml": "*",
+        "ext-dom": "*",
+        "magento/framework": "100.1.*|101.0.*|102.0.*|103.0.*"
+    },
+    "authors": [
+        {
+            "name": "Anatolii Lehkyi",
+            "email": "tolik.legkyi@punchoutcatalogs.com",
+            "homepage": "http://www.PunchOutCatalogs.com",
+            "role": "Lead Engineer"
+        }
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Punchout\\Cookie2\\": ""
+        }
+    }
+}

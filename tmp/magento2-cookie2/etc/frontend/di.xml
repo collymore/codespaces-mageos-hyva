@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Framework\Session\Config" type="Punchout\Cookie2\Framework\Session\Config" />
+    <preference for="Magento\Framework\Session\SessionManagerInterface" type="Punchout\Cookie2\Framework\Session\Generic" />
+
+    <preference for="Magento\Framework\Stdlib\CookieManagerInterface" type="Punchout\Cookie2\Stdlib\Cookie\PhpCookieManager" />
+    <preference for="Magento\Framework\Stdlib\Cookie\CookieMetadata"  type="Punchout\Cookie2\Stdlib\Cookie\CookieMetadata" />
+    <preference for="Magento\Framework\Stdlib\Cookie\PublicCookieMetadata"    type="Punchout\Cookie2\Stdlib\Cookie\PublicCookieMetadata" />
+    <preference for="Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata" type="Punchout\Cookie2\Stdlib\Cookie\SensitiveCookieMetadata" />
+</config>
