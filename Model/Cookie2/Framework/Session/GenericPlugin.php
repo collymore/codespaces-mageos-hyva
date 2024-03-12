@@ -30,7 +30,7 @@ class GenericPlugin {
      * @return $result Generic
      */
     public function afterStart(Generic $subject, $result)
-    { 
+    {
         $this->updateCookieParams();
         return $result;
     }
@@ -85,6 +85,7 @@ class GenericPlugin {
     protected function updateCookieParamsWithoutOptions()
     {
         $params = session_get_cookie_params();
+        var_dump( $params );
 
         if (!empty($params['secure']) && !empty($params['path'])
             && (strpos($params['path'], 'SameSite') !== false)

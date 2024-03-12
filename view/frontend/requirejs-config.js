@@ -1,5 +1,5 @@
 var config = {
     paths: {
-        'jquery/jquery-storageapi': 'Punchout_Cookie2/js/jquery.storageapi.extended'
+        'jquery/jquery-storageapi': 'Develodesign_Punchout/js/jquery.storageapi.extended'
     }
 };

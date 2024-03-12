@@ -1,6 +1,5 @@
 <?php
 
-/* DEPRICATED ??? */
 namespace Develodesign\Punchout\Model\Cookie2\Stdlib\Cookie;
 
 use Magento\Framework\Stdlib\Cookie\CookieMetadata as BaseCookieMetadata;
