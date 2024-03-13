@@ -53,7 +53,7 @@ class PunchoutConfigHelper extends AbstractHelper
         return $this->getConfiguredFlag('develodesign_punchout/customer/auto_create_user');
     }
 
-    
+
     public function getDefaultCustomerAttributes()
     {
         return $this->getConfiguredValue('develodesign_punchout/customer/default_attributes');
@@ -140,6 +140,17 @@ class PunchoutConfigHelper extends AbstractHelper
     }
 
     /**
+    * Returns array of allowed iframes
+    */
+    public function getAllowedIframes()
+    {
+        $values = $this->getConfiguredValue('develodesign_punchout/defaults/iframe_allowed');
+        $values = str_replace(' ', "\n", $values);
+        $values = explode("\n", $values);
+        return array_map('trim', $values);
+    }
+
+    /**
      * Returns the store level config value
      */
     public function getConfiguredValue($config_path, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT)
@@ -154,5 +165,4 @@ class PunchoutConfigHelper extends AbstractHelper
     {
         return $this->scopeConfig->isSetFlag($config_path, $scope);
     }
-
 }

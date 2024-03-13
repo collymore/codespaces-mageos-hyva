@@ -11,4 +11,8 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\Framework\App\Response\Http">
+        <plugin name="develodesign_punchout_response_header_modify" type="Develodesign\Punchout\Model\Response\HttpPlugin" sortOrder="1000"/>
+    </type>
 </config>
