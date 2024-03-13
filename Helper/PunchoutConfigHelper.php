@@ -95,7 +95,7 @@ class PunchoutConfigHelper extends AbstractHelper
      */
     public function getDefaultUnspsc()
     {
-        return $this->getConfiguredFlag('develodesign_punchout/product/default_unspsc');
+        return $this->getConfiguredValue('develodesign_punchout/product/default_unspsc');
     }
 
     /**
