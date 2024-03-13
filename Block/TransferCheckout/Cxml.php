@@ -65,7 +65,10 @@ class Cxml
             //remove double and single quotes from product names as it's breaking punchout
             $name = str_replace("'", "", $item->getName());
             $name = str_replace('"', "", $name);
-            $unspsc = $this->getUnspscCode($item->getSku());
+            $unspsc = trim($this->getUnspscCode($item->getSku()));
+	    if(!$unspsc){
+		$unspsc = $this->configHelper->getDefaultUnspsc();
+	    }
             $itemCode .= sprintf(
                 '<ItemIn quantity="%s">
                         <ItemID>
