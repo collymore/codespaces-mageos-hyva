@@ -74,6 +74,10 @@
             <group id="product" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1"
                    showInStore="1">
                 <label>Product Behaviors</label>
+	    	<field id="default_unspsc" type="text" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+				<label>default_unspsc</label>
+				<comment>The UNSPC Number to send when not available on the product attribute unspsc</comment>
+		</field>
                 <field id="load_non_catalogue" translate="label" type="select" sortOrder="20" showInDefault="1"
                        showInWebsite="1" showInStore="1">
                     <label>Load Non-Catalog Products</label>

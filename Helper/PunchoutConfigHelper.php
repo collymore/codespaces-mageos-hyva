@@ -91,6 +91,14 @@ class PunchoutConfigHelper extends AbstractHelper
     }
 
     /**
+     * Returns the default_unspsc config value
+     */
+    public function getDefaultUnspsc()
+    {
+        return $this->getConfiguredFlag('develodesign_punchout/product/default_unspsc');
+    }
+
+    /**
      * Returns the non-catalog Product Sku
      */
     public function getConfigNonCatalogueSKU()
