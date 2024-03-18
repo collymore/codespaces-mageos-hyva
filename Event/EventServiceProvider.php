@@ -1,17 +1,17 @@
 <?php
-    
+
 namespace Develodesign\Punchout\Event;
 
 use Magento\Framework\Event\ManagerInterface as EventManager;
 
 class EventServiceProvider
 {
-    
+
     /**
      * @var EventManager
      */
     protected $eventManager;
-    
+
     /*
      * @param EventManager $eventManager
      */
@@ -19,7 +19,7 @@ class EventServiceProvider
     {
         $this->eventManager = $eventManager;
     }
-    
+
     public function dispatchCxmlSetupRequestEvent(int $customerId, int $punchoutgroupId, string $info): void
     {
          $this->eventManager->dispatch(
@@ -33,8 +33,8 @@ class EventServiceProvider
                  ]
          );
     }
-        
-    public function dispatchLoginProxyRequestEvent(int $customerId, int $punchoutgroupId, string $info): void
+
+    public function dispatchLoginProxyRequestEvent(int $customerId = 0, int $punchoutgroupId = 0, string $info = ''): void
     {
         $this->eventManager->dispatch(
             'login_proxy_request_event',
@@ -47,7 +47,7 @@ class EventServiceProvider
                 ]
         );
     }
-    
+
     public function dispatchOciSetupRequestEvent(int $customerId, int $punchoutgroupId, string $info): void
     {
         $this->eventManager->dispatch(
@@ -61,7 +61,7 @@ class EventServiceProvider
                 ]
         );
     }
-    
+
     public function dispatchCxmlOrderRequestEvent(int $customerId, int $punchoutgroupId, string $info): void
     {
         $this->eventManager->dispatch(
@@ -75,7 +75,7 @@ class EventServiceProvider
                 ]
         );
     }
-        
+
     public function dispatchExceptionPunchoutRequestEvent(string $eventType, string $action, string $info): void
     {
         $this->eventManager->dispatch(
