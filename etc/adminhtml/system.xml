@@ -2,13 +2,13 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <tab id="develodesign" translate="label" sortOrder="20">
-            <label>Punchout Settings</label>
+        <tab id="develo_extensions" translate="label" sortOrder="20">
+            <label>Develo Extensions</label>
         </tab>
         <section id="develodesign_punchout" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1"
                  showInStore="1">
             <label>Punchout</label>
-            <tab>develodesign</tab>
+            <tab>develo_extensions</tab>
             <resource>Develodesign_Punchout::punchout_config</resource>
             <group id="defaults" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1"
                    showInStore="1">
@@ -39,6 +39,12 @@
                     <label>Default Email Cxml Xpath Selector</label>
                     <comment>The default Xml Xpath selector for the customer email from the incoming Cxml document.</comment>
                 </field>
+
+                <field id="iframe_allowed" translate="label comment" type="textarea" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Allowed Frame Ancestors</label>
+                    <comment>List of values separated by a new line</comment>
+                </field>
+
             </group>
             <group id="display" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" >
                 <label>Display Settings</label>
