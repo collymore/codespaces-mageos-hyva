@@ -2,13 +2,13 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <tab id="develodesign" translate="label" sortOrder="20">
-            <label>Punchout Settings</label>
+        <tab id="develo_extensions" translate="label" sortOrder="20">
+            <label>Develo Extensions</label>
         </tab>
         <section id="develodesign_punchout" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1"
                  showInStore="1">
             <label>Punchout</label>
-            <tab>develodesign</tab>
+            <tab>develo_extensions</tab>
             <resource>Develodesign_Punchout::punchout_config</resource>
             <group id="defaults" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1"
                    showInStore="1">
@@ -39,6 +39,12 @@
                     <label>Default Email Cxml Xpath Selector</label>
                     <comment>The default Xml Xpath selector for the customer email from the incoming Cxml document.</comment>
                 </field>
+
+                <field id="iframe_allowed" translate="label comment" type="textarea" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Allowed Frame Ancestors</label>
+                    <comment>List of values separated by a new line</comment>
+                </field>
+
             </group>
             <group id="display" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" >
                 <label>Display Settings</label>
@@ -65,10 +71,19 @@
                     <label>Default Customer Attributes</label>
                     <comment>Comma seperated default customer attribute code/value pair. For example, "gender:M","taxvat:12374888NN","dob:1990-08-31".</comment>
                 </field>
+                <field id="reload_customer_section_onlogin" type="select" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+					<label>Reload Frontend Customer Data on Login</label>
+					<comment>Reload frontend customer data on login, fixes issues with customer data missing in some themes</comment>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
             </group>
             <group id="product" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1"
                    showInStore="1">
                 <label>Product Behaviors</label>
+	    	<field id="default_unspsc" type="text" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+				<label>default_unspsc</label>
+				<comment>The UNSPC Number to send when not available on the product attribute unspsc</comment>
+		</field>
                 <field id="load_non_catalogue" translate="label" type="select" sortOrder="20" showInDefault="1"
                        showInWebsite="1" showInStore="1">
                     <label>Load Non-Catalog Products</label>

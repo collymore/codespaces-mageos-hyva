@@ -390,11 +390,12 @@ interface PunchoutGroupInterface
     /**
      * @param string $customerAttributes
      *
-     * @return \Develodesign\Punchout\PunchoutGroup\Api\Data\PunchoutGroupInterface
      */
     public function setCustomerAttributes($customerAttributes);
-    
+
+    /**
+     * @return string|null
+     */
     public function getCustomerAttributes();
-    
     
 }

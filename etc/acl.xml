@@ -1,24 +1,32 @@
 <?xml version="1.0" ?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
-	<acl>
-		<resources>
-			<resource id="Magento_Backend::admin">
-				<resource id="Develodesign_Punchout::PunchoutGroup" title="PunchoutGroups" sortOrder="10">
-					<resource id="Develodesign_Punchout::PunchoutGroup_save" title="Save PunchoutGroup" sortOrder="10"/>
-					<resource id="Develodesign_Punchout::PunchoutGroup_delete" title="Delete PunchoutGroup" sortOrder="20"/>
-					<resource id="Develodesign_Punchout::PunchoutGroup_update" title="Update PunchoutGroup" sortOrder="30"/>
-					<resource id="Develodesign_Punchout::PunchoutGroup_view" title="View PunchoutGroup" sortOrder="40"/>
-				</resource>
-				<resource id="Develodesign_Punchout::PunchoutGroupLogin" title="PunchoutGroups Login" sortOrder="20">
-					<resource id="Develodesign_Punchout::PunchoutGroupLogin_view" title="View PunchoutGroups to Login" sortOrder="40"/>
-				</resource>
-				<resource id="Develodesign_Punchout::ActivityEventLog" title="Punchout Activity Log" sortOrder="60">
-					<resource id="Develodesign_Punchout::ActivityEventLog_save" title="Save ActivityEventLog" sortOrder="70"/>
-					<resource id="Develodesign_Punchout::ActivityEventLog_delete" title="Delete ActivityEventLog" sortOrder="80"/>
-					<resource id="Develodesign_Punchout::ActivityEventLog_update" title="Update ActivityEventLog" sortOrder="90"/>
-					<resource id="Develodesign_Punchout::ActivityEventLog_view" title="View ActivityEventLog" sortOrder="100"/>
-				</resource>
-			</resource>
-		</resources>
-	</acl>
+		<acl>
+				<resources>
+						<resource id="Magento_Backend::admin">
+								<resource id="Develodesign_Punchout::PunchoutGroup" title="PunchoutGroups" sortOrder="10">
+										<resource id="Develodesign_Punchout::PunchoutGroup_save" title="Save PunchoutGroup" sortOrder="10"/>
+										<resource id="Develodesign_Punchout::PunchoutGroup_delete" title="Delete PunchoutGroup" sortOrder="20"/>
+										<resource id="Develodesign_Punchout::PunchoutGroup_update" title="Update PunchoutGroup" sortOrder="30"/>
+										<resource id="Develodesign_Punchout::PunchoutGroup_view" title="View PunchoutGroup" sortOrder="40"/>
+								</resource>
+								<resource id="Develodesign_Punchout::PunchoutGroupLogin" title="PunchoutGroups Login" sortOrder="20">
+										<resource id="Develodesign_Punchout::PunchoutGroupLogin_view" title="View PunchoutGroups to Login" sortOrder="40"/>
+								</resource>
+								<resource id="Develodesign_Punchout::ActivityEventLog" title="Punchout Activity Log" sortOrder="60">
+										<resource id="Develodesign_Punchout::ActivityEventLog_save" title="Save ActivityEventLog" sortOrder="70"/>
+										<resource id="Develodesign_Punchout::ActivityEventLog_delete" title="Delete ActivityEventLog" sortOrder="80"/>
+										<resource id="Develodesign_Punchout::ActivityEventLog_update" title="Update ActivityEventLog" sortOrder="90"/>
+										<resource id="Develodesign_Punchout::ActivityEventLog_view" title="View ActivityEventLog" sortOrder="100"/>
+								</resource>
+
+								<resource id="Magento_Backend::stores">
+										<resource id="Magento_Backend::stores_settings">
+												<resource id="Magento_Config::config">
+														<resource id="Develodesign_Punchout::punchout_config" title="Develodesign_Designer configuration" />
+												</resource>
+										</resource>
+								</resource>
+						</resource>
+				</resources>
+		</acl>
 </config>

@@ -53,7 +53,7 @@ class PunchoutConfigHelper extends AbstractHelper
         return $this->getConfiguredFlag('develodesign_punchout/customer/auto_create_user');
     }
 
-    
+
     public function getDefaultCustomerAttributes()
     {
         return $this->getConfiguredValue('develodesign_punchout/customer/default_attributes');
@@ -88,6 +88,14 @@ class PunchoutConfigHelper extends AbstractHelper
     public function getConfigLoadNonCatalogue()
     {
         return $this->getConfiguredFlag('develodesign_punchout/product/load_non_catalogue');
+    }
+
+    /**
+     * Returns the default_unspsc config value
+     */
+    public function getDefaultUnspsc()
+    {
+        return $this->getConfiguredValue('develodesign_punchout/product/default_unspsc');
     }
 
     /**
@@ -131,6 +139,25 @@ class PunchoutConfigHelper extends AbstractHelper
         return $this->getConfiguredFlag('develodesign_punchout/invoice/validate_invoice_qty');
     }
 
+     /**
+     * Returns the config for if Invoice Qty should be validated
+     */
+    public function getAddReloadCustomerSectionScript(): bool
+    {
+        return $this->getConfiguredValue('develodesign_punchout/customer/reload_customer_section_onlogin');
+    }
+
+    /**
+    * Returns array of allowed iframes
+    */
+    public function getAllowedIframes()
+    {
+        $values = $this->getConfiguredValue('develodesign_punchout/defaults/iframe_allowed');
+        $values = str_replace(' ', "\n", $values);
+        $values = explode("\n", $values);
+        return array_map('trim', $values);
+    }
+
     /**
      * Returns the store level config value
      */
@@ -146,5 +173,4 @@ class PunchoutConfigHelper extends AbstractHelper
     {
         return $this->scopeConfig->isSetFlag($config_path, $scope);
     }
-
 }

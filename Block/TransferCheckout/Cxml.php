@@ -1,12 +1,12 @@
 <?php
     
-    namespace Develodesign\Punchout\Block\TransferCheckout;
-    
-    use Develodesign\Punchout\Response\CxmlResponse;
-    use Develodesign\Punchout\Service\CxmlService;
-    use Magento\Catalog\Model\ProductRepository;
-    use Magento\Framework\Exception\NoSuchEntityException;
-    use Develodesign\Punchout\Helper\PunchoutConfigHelper;
+namespace Develodesign\Punchout\Block\TransferCheckout;
+
+use Develodesign\Punchout\Response\CxmlResponse;
+use Develodesign\Punchout\Service\CxmlService;
+use Magento\Catalog\Model\ProductRepository;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Develodesign\Punchout\Helper\PunchoutConfigHelper;
 
 class Cxml
 {
@@ -54,6 +54,9 @@ class Cxml
      */
     private function getCXMLItems($items, $uom): string
     {
+	$objectManager = \Magento\Framework\App\ObjectManager::getInstance();       
+	$storeManager = $objectManager->get('Magento\Store\Model\StoreManagerInterface');
+	$defaultCurrencyCode = $storeManager->getStore()->getCurrentCurrencyCode();
         $itemCode = '';
         foreach ($items as $item) {
             if ($item->getParentItemId()) {
@@ -62,7 +65,10 @@ class Cxml
             //remove double and single quotes from product names as it's breaking punchout
             $name = str_replace("'", "", $item->getName());
             $name = str_replace('"', "", $name);
-            $unspsc = $this->getUnspscCode($item->getSku());
+            $unspsc = trim($this->getUnspscCode($item->getSku()));
+	    if(!$unspsc){
+		$unspsc = $this->configHelper->getDefaultUnspsc();
+	    }
             $itemCode .= sprintf(
                 '<ItemIn quantity="%s">
                         <ItemID>
@@ -71,7 +77,7 @@ class Cxml
                         </ItemID>
                         <ItemDetail>
                             <UnitPrice>
-                                <Money currency="GBP">%s</Money>
+                                <Money currency="%s">%s</Money>
                             </UnitPrice>
                             <Description xml:lang="en"><![CDATA[%s]]></Description>
                             <UnitOfMeasure>%s</UnitOfMeasure>
@@ -82,6 +88,7 @@ class Cxml
                 $item->getQty(),
                 $item->getSku(),
                 $item->getId(),
+		$defaultCurrencyCode,
                 $item->getPrice(),
                 $name,
                 $uom,

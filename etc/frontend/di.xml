@@ -11,7 +11,6 @@
             </argument>
         </arguments>
     </type>
-
     <!-- override cookie samesite -->
     <type name="Magento\Framework\Session\Config">
         <plugin name="develo_punchout_override_session_config"
@@ -25,5 +24,7 @@
     <preference for="Magento\Framework\Stdlib\Cookie\CookieMetadata"  type="Develodesign\Punchout\Model\Cookie2\Stdlib\Cookie\CookieMetadata" />
     <preference for="Magento\Framework\Stdlib\Cookie\PublicCookieMetadata"    type="Develodesign\Punchout\Model\Cookie2\Stdlib\Cookie\PublicCookieMetadata" />
     <preference for="Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata" type="Develodesign\Punchout\Model\Cookie2\Stdlib\Cookie\SensitiveCookieMetadata" />
-
+    <type name="Magento\Framework\App\Response\Http">
+        <plugin name="develodesign_punchout_response_header_modify" type="Develodesign\Punchout\Model\Response\HttpPlugin" sortOrder="1000"/>
+    </type>
 </config>

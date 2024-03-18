@@ -1,0 +1,16 @@
+<?php
+/**
+ * @var $block \Develodesign\Punchout\Block\CustomerRefresh
+ */
+?>
+<?php if( $block->getAddReloadCustomerSectionScript() ): ?>
+	<script type="text/javascript">
+		require([
+		'Magento_Customer/js/customer-data'
+		], function (customerData) {            
+			var sections = ['cart','customer'];            
+			customerData.invalidate(sections);            
+			customerData.reload(sections, true);        
+		});
+	</script>
+<?php endif; ?>
