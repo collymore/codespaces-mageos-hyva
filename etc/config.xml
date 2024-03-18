@@ -8,6 +8,22 @@
                 <uom>EA</uom>
                 <default_shipping><![CDATA[freeshipping_freeshipping]]></default_shipping>
                 <cxml_node_xpath_config_email><![CDATA[/cXML/Request/PunchOutSetupRequest/Extrinsic[@name="UserEmail"]]]></cxml_node_xpath_config_email>
+
+                <iframe_allowed>https://service.ariba.com
+https://service-2.ariba.com
+https://certservice.ariba.com
+https://certservice-2.ariba.com
+https://s1.ariba.com
+https://s2.ariba.com
+https://usertest.sciquest.com
+https://uitweb.sciquest.com
+https://neo.sciquest.com
+https://solutions.sciquest.com
+https://cloud.punchoutexpress.com
+https://dev.cloud.punchoutexpress.com
+https://cloud.pexlocal.com
+https://cloud.mpexlocal.com</iframe_allowed>
+
             </defaults>
             <display>
                 <transfer_button_label><![CDATA[Transfer Basket Items With Punchout]]></transfer_button_label>
@@ -16,7 +32,7 @@
             </display>
             <customer>
                 <auto_create_user>1</auto_create_user>
-                <reload_customer_section_onlogin>1</reload_customer_section_onlogin>
+                <reload_customer_section_onlogin>0</reload_customer_section_onlogin>
             </customer>
             <product>
                 <load_non_catalogue>0</load_non_catalogue>
