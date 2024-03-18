@@ -32,7 +32,7 @@ https://cloud.mpexlocal.com</iframe_allowed>
             </display>
             <customer>
                 <auto_create_user>1</auto_create_user>
-                <reload_customer_section_onlogin>1</reload_customer_section_onlogin>
+                <reload_customer_section_onlogin>0</reload_customer_section_onlogin>
             </customer>
             <product>
                 <load_non_catalogue>0</load_non_catalogue>
