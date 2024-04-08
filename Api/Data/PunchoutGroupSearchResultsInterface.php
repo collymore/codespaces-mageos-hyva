@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Develodesign\Punchout\Api\Data;
 
+use Develodesign\Punchout\Api\Data\PunchoutGroupInterface;
+
 interface PunchoutGroupSearchResultsInterface extends \Magento\Framework\Api\SearchResultsInterface
 {
 
