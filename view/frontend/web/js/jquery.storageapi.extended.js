@@ -1,11 +1,12 @@
 define([
     'jquery',
     'jquery/jquery.cookie',
-    'js-storage/storage-wrapper',
+    'jquery/jquery.storageapi.min',
     'mage/cookies'
     //'Magento_Cookie/js/jquery.storageapi.extended',
 ], function ($) {
     'use strict';
+
     //almost fully-duplicated (with changes) part of code from 2.4.3 for
     //CE/EE below 2.4.3
     /**
