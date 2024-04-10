@@ -18,8 +18,8 @@ interface PunchoutGroupRepositoryInterface
 
     /**
      * Save PunchoutGroup
-     * @param PunchoutGroupInterface $punchoutGroup
-     * @return PunchoutGroupInterface
+     * @param Develodesign\Punchout\Api\Data\PunchoutGroupInterface $punchoutGroup
+     * @return Develodesign\Punchout\Api\Data\PunchoutGroupInterface
      * @throws LocalizedException
      */
     public function save(
@@ -29,7 +29,7 @@ interface PunchoutGroupRepositoryInterface
     /**
      * Retrieve PunchoutGroup
      * @param string $punchoutgroupId
-     * @return PunchoutGroupInterface
+     * @return Develodesign\Punchout\Api\Data\PunchoutGroupInterface
      * @throws LocalizedException
      */
     public function get($punchoutgroupId);
@@ -39,7 +39,7 @@ interface PunchoutGroupRepositoryInterface
      *
      * @param SearchCriteriaInterface $searchCriteria
      *
-     * @return PunchoutGroupSearchResultsInterface
+     * @return Develodesign\Punchout\Api\Data\PunchoutGroupSearchResultsInterface
      * @throws LocalizedException
      */
     public function getList(
