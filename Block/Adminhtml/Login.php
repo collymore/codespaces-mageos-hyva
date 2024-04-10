@@ -76,7 +76,7 @@ class Login extends \Magento\Framework\View\Element\Template
     /**
      * @param $groupId
      *
-     * @return PunchoutGroupInterface|false
+     * @return Develodesign\Punchout\Api\Data\PunchoutGroupInterface|false
      */
     public function getPunchoutGroup($groupId)
     {
