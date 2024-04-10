@@ -15,14 +15,14 @@ interface PunchoutGroupSearchResultsInterface extends \Magento\Framework\Api\Sea
     /**
      * Get PunchoutGroup list.
      *
-     * @return PunchoutGroupInterface[]
+     * @return Develodesign\Punchout\Api\Data\PunchoutGroupInterface[]
      */
     public function getItems();
 
     /**
      * Set group_name list.
      *
-     * @param PunchoutGroupInterface[] $items
+     * @param Develodesign\Punchout\Api\Data\PunchoutGroupInterface[] $items
      *
      * @return $this
      */
