@@ -46,6 +46,14 @@ class PunchoutConfigHelper extends AbstractHelper
     }
 
     /**
+     * Returns the default Cxml Xpath selector for the incoming Email value
+     */
+    public function getDefaultDunsNumber()
+    {
+        return $this->getConfiguredValue('develodesign_punchout/defaults/self_dun_identity');
+    }
+
+    /**
      * Returns if Punchout should Auto create customers
      */
     public function getConfigAutoCreate()
