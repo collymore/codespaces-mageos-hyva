@@ -81,7 +81,7 @@ class CxmlResponse
                         <Header>
                             <From>
                                 <Credential domain="DUNS">
-                                    <Identity></Identity>
+                                    <Identity>%s</Identity>
                                 </Credential>
                             </From>
                             <To>
@@ -106,6 +106,7 @@ class CxmlResponse
                                 </PunchOutOrderMessageHeader>',
             $cxmlSessionData['payloadId'],
             $this->getTimeStamp(),
+            $punchoutOrder['punchoutgroup_duns'] ?? $cxmlSessionData['sender_identity'],
             $punchoutOrder['punchoutgroup_duns'] ?? $cxmlSessionData['sender_identity'],
             $cxmlSessionData['sender_identity'],
             $cxmlSessionData['buyer_cookie'],
