@@ -2,19 +2,27 @@
 
 namespace Develodesign\Punchout\Response;
 
-    use Magento\Framework\Controller\Result\Raw;
-    use Magento\Framework\Controller\Result\RawFactory;
+use Magento\Framework\Controller\Result\Raw;
+use Magento\Framework\Controller\Result\RawFactory;
+use Develodesign\Punchout\Helper\PunchoutConfigHelper;
 
 class CxmlResponse
 {
+    /**
+     * @var PunchoutConfigHelper
+     */
+    protected $configHelper;
+    
     /**
      * @var RawFactory
      */
     protected $resultRawFactory;
     public function __construct(
-        RawFactory $rawFactory
+        RawFactory $rawFactory,
+        PunchoutConfigHelper $configHelper
     ) {
         $this->resultRawFactory = $rawFactory;
+        $this->configHelper = $configHelper;
     }
 
     public function respondSuccess(): Raw
@@ -106,7 +114,7 @@ class CxmlResponse
                                 </PunchOutOrderMessageHeader>',
             $cxmlSessionData['payloadId'],
             $this->getTimeStamp(),
-            $punchoutOrder['punchoutgroup_duns'] ?? $cxmlSessionData['sender_identity'],
+            $this->configHelper->getDefaultDunsNumber() ?? '',
             $punchoutOrder['punchoutgroup_duns'] ?? $cxmlSessionData['sender_identity'],
             $cxmlSessionData['sender_identity'],
             $cxmlSessionData['buyer_cookie'],
