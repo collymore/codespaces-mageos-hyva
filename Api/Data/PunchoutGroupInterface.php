@@ -44,6 +44,12 @@ interface PunchoutGroupInterface
     const CXML_NODE_XPATH_CONFIG_EMAIL = 'cxml_node_xpath_config_email';
     
     const CUSTOMER_ATTRIBUTES = 'customer_attributes';
+    
+    const CXML_NODE_TAX_PER_ITEM = 'cxml_node_tax_per_item';
+    
+    const CXML_NODE_TAX_MESSAGE_HEADER = 'cxml_node_tax_message_header';
+    
+    const CXML_FROM_DUNS_IDENTITY ='cxml_from_duns_identity';
 
     /**
      * Get punchoutgroup_id
@@ -57,7 +63,7 @@ interface PunchoutGroupInterface
      *
      * @param string $punchoutgroupId
      *
-     * @return \Develodesign\Punchout\PunchoutGroup\Api\Data\PunchoutGroupInterface
+     * @return $this
      */
     public function setPunchoutgroupId($punchoutgroupId);
 
@@ -73,7 +79,7 @@ interface PunchoutGroupInterface
      *
      * @param string $groupName
      *
-     * @return \Develodesign\Punchout\PunchoutGroup\Api\Data\PunchoutGroupInterface
+     * @return $this
      */
     public function setGroupName($groupName);
 
@@ -89,7 +95,7 @@ interface PunchoutGroupInterface
      *
      * @param string $status
      *
-     * @return \Develodesign\Punchout\PunchoutGroup\Api\Data\PunchoutGroupInterface
+     * @return $this
      */
     public function setStatus($status);
 
@@ -105,7 +111,7 @@ interface PunchoutGroupInterface
      *
      * @param string $groupEmail
      *
-     * @return \Develodesign\Punchout\PunchoutGroup\Api\Data\PunchoutGroupInterface
+     * @return $this
      */
     public function setGroupEmail($groupEmail);
 
@@ -117,8 +123,10 @@ interface PunchoutGroupInterface
 
     /**
      * Set is_parent
+     *
      * @param string $isParent
-     * @return \Develodesign\Punchout\PunchoutGroup\Api\Data\PunchoutGroupInterface
+     *
+     * @return $this
      */
     public function setIsParent($isParent);
 
@@ -134,7 +142,7 @@ interface PunchoutGroupInterface
      *
      * @param string $sharedSecret
      *
-     * @return \Develodesign\Punchout\PunchoutGroup\Api\Data\PunchoutGroupInterface
+     * @return $this
      */
     public function setSharedSecret($sharedSecret);
 
@@ -150,7 +158,7 @@ interface PunchoutGroupInterface
      *
      * @param string $dunsIdentity
      *
-     * @return \Develodesign\Punchout\PunchoutGroup\Api\Data\PunchoutGroupInterface
+     * @return $this
      */
     public function setDunsIdentity($dunsIdentity);
 
@@ -166,7 +174,7 @@ interface PunchoutGroupInterface
      *
      * @param string $aribaNetworkId
      *
-     * @return \Develodesign\Punchout\PunchoutGroup\Api\Data\PunchoutGroupInterface
+     * @return $this
      */
     public function setAribaNetworkId($aribaNetworkId);
 
@@ -182,7 +190,7 @@ interface PunchoutGroupInterface
      *
      * @param string $businessUnit
      *
-     * @return \Develodesign\Punchout\PunchoutGroup\Api\Data\PunchoutGroupInterface
+     * @return $this
      */
     public function setBusinessUnit($businessUnit);
 
@@ -198,7 +206,7 @@ interface PunchoutGroupInterface
      *
      * @param string $ociUsername
      *
-     * @return \Develodesign\Punchout\PunchoutGroup\Api\Data\PunchoutGroupInterface
+     * @return $this
      */
     public function setOciUsername($ociUsername);
 
@@ -214,7 +222,7 @@ interface PunchoutGroupInterface
      *
      * @param string $ociPassword
      *
-     * @return \Develodesign\Punchout\PunchoutGroup\Api\Data\PunchoutGroupInterface
+     * @return $this
      */
     public function setOciPassword($ociPassword);
 
@@ -230,7 +238,7 @@ interface PunchoutGroupInterface
      *
      * @param string $parentPunchoutGroup
      *
-     * @return \Develodesign\Punchout\PunchoutGroup\Api\Data\PunchoutGroupInterface
+     * @return $this
      */
     public function setParentPunchoutGroup($parentPunchoutGroup);
     
@@ -242,8 +250,10 @@ interface PunchoutGroupInterface
     
     /**
      * Set magento_customer_group
+     *
      * @param string $magentoCustomerGroup
-     * @return \Develodesign\Punchout\PunchoutGroup\Api\Data\PunchoutGroupInterface
+     *
+     * @return $this
      */
     public function setMagentoCustomerGroup($magentoCustomerGroup);
 
@@ -259,7 +269,7 @@ interface PunchoutGroupInterface
      *
      * @param string $street
      *
-     * @return \Develodesign\Punchout\PunchoutGroup\Api\Data\PunchoutGroupInterface
+     * @return $this
      */
     public function setStreet($street);
 
@@ -275,7 +285,7 @@ interface PunchoutGroupInterface
      *
      * @param string $city
      *
-     * @return \Develodesign\Punchout\PunchoutGroup\Api\Data\PunchoutGroupInterface
+     * @return $this
      */
     public function setCity($city);
 
@@ -291,7 +301,7 @@ interface PunchoutGroupInterface
      *
      * @param string $countryId
      *
-     * @return \Develodesign\Punchout\PunchoutGroup\Api\Data\PunchoutGroupInterface
+     * @return $this
      */
     public function setCountryId($countryId);
 
@@ -307,7 +317,7 @@ interface PunchoutGroupInterface
      *
      * @param string $region
      *
-     * @return \Develodesign\Punchout\PunchoutGroup\Api\Data\PunchoutGroupInterface
+     * @return $this
      */
     public function setRegion($region);
 
@@ -323,7 +333,7 @@ interface PunchoutGroupInterface
      *
      * @param string $postcode
      *
-     * @return \Develodesign\Punchout\PunchoutGroup\Api\Data\PunchoutGroupInterface
+     * @return $this
      */
     public function setPostcode($postcode);
 
@@ -339,7 +349,7 @@ interface PunchoutGroupInterface
      *
      * @param string $telephone
      *
-     * @return \Develodesign\Punchout\PunchoutGroup\Api\Data\PunchoutGroupInterface
+     * @return $this
      */
     public function setTelephone($telephone);
 
@@ -355,7 +365,7 @@ interface PunchoutGroupInterface
      *
      * @param string $createdAt
      *
-     * @return \Develodesign\Punchout\PunchoutGroup\Api\Data\PunchoutGroupInterface
+     * @return $this
      */
     public function setCreatedAt($createdAt);
 
@@ -371,7 +381,7 @@ interface PunchoutGroupInterface
      *
      * @param string $updatedAt
      *
-     * @return \Develodesign\Punchout\PunchoutGroup\Api\Data\PunchoutGroupInterface
+     * @return $this
      */
     public function setUpdatedAt($updatedAt);
     
@@ -383,7 +393,7 @@ interface PunchoutGroupInterface
     /**
      * @param string $cxmlNodeXpathConfigEmail
      *
-     * @return \Develodesign\Punchout\PunchoutGroup\Api\Data\PunchoutGroupInterface
+     * @return $this
      */
     public function setCxmlNodeXpathConfigEmail($cxmlNodeXpathConfigEmail);
     
@@ -397,5 +407,41 @@ interface PunchoutGroupInterface
      * @return string|null
      */
     public function getCustomerAttributes();
+    
+    /**
+     * @return string|null
+     */
+    public function getCxmlNodeTaxPerItem();
+    
+    /**
+     * @param string $cxmlNodeTaxPerItem
+     *
+     * @return $this
+     */
+    public function setCxmlNodeTaxPerItem($cxmlNodeTaxPerItem);
+    
+    /**
+     * @return string|null
+     */
+    public function getCxmlNodeTaxMessageHeader();
+    
+    /**
+     * @param string $cxmlNodeTaxMessageHeader
+     *
+     * @return $this
+     */
+    public function setCxmlNodeTaxMessageHeader($cxmlNodeTaxMessageHeader);
+    
+    /**
+     * @return string|null
+     */
+    public function getCxmlFromDunsIdentity();
+    
+    /**
+     * @param string $cxmlFromDunsIdentity
+     *
+     * @return $this
+     */
+    public function setCxmlFromDunsIdentity($cxmlFromDunsIdentity);
     
 }

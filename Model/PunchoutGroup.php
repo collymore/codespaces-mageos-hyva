@@ -375,4 +375,34 @@ class PunchoutGroup extends AbstractModel implements PunchoutGroupInterface
     {
         return $this->setData(self::CUSTOMER_ATTRIBUTES, $customerAttributes);
     }
+    
+    public function getCxmlNodeTaxPerItem()
+    {
+        return $this->getData(self::CXML_NODE_TAX_PER_ITEM);
+    }
+    
+    public function setCxmlNodeTaxPerItem($cxmlNodeTaxPerItem)
+    {
+        return $this->setData(self::CXML_NODE_TAX_PER_ITEM, $cxmlNodeTaxPerItem);
+    }
+    
+    public function getCxmlNodeTaxMessageHeader()
+    {
+        return $this->getData(self::CXML_NODE_TAX_MESSAGE_HEADER);
+    }
+    
+    public function setCxmlNodeTaxMessageHeader($cxmlNodeTaxMessageHeader)
+    {
+        return $this->setData(self::CXML_NODE_TAX_MESSAGE_HEADER, $cxmlNodeTaxMessageHeader);
+    }
+    
+    public function getCxmlFromDunsIdentity()
+    {
+        return $this->getData(self::CXML_FROM_DUNS_IDENTITY);
+    }
+    
+    public function setCxmlFromDunsIdentity($cxmlFromDunsIdentity)
+    {
+        return $this->setData(self::CXML_FROM_DUNS_IDENTITY, $cxmlFromDunsIdentity);
+    }
 }

@@ -27,7 +27,7 @@ interface PunchoutSetupRequestInterface
     /**
      * Set setup_id
      * @param string $setupId
-     * @return \Develodesign\Punchout\PunchoutSetupRequest\Api\Data\PunchoutSetupRequestInterface
+     * @return $this
      */
     public function setSetupId($setupId);
     
@@ -53,7 +53,7 @@ interface PunchoutSetupRequestInterface
     /**
      * Set payload_id
      * @param string $payloadId
-     * @return \Develodesign\Punchout\PunchoutSetupRequest\Api\Data\PunchoutSetupRequestInterface
+     * @return $this
      */
     public function setPayloadId($payloadId);
     
@@ -66,7 +66,7 @@ interface PunchoutSetupRequestInterface
     /**
      * Set sender_identity
      * @param string $senderIdentity
-     * @return \Develodesign\Punchout\PunchoutSetupRequest\Api\Data\PunchoutSetupRequestInterface
+     * @return $this
      */
     public function setSenderIdentity($senderIdentity);
     
@@ -79,7 +79,7 @@ interface PunchoutSetupRequestInterface
     /**
      * Set return_url
      * @param string $returnUrl
-     * @return \Develodesign\Punchout\PunchoutSetupRequest\Api\Data\PunchoutSetupRequestInterface
+     * @return $this
      */
     public function setReturnUrl($returnUrl);
     
@@ -92,7 +92,7 @@ interface PunchoutSetupRequestInterface
     /**
      * Set buyer_cookie
      * @param string $buyerCookie
-     * @return \Develodesign\Punchout\PunchoutSetupRequest\Api\Data\PunchoutSetupRequestInterface
+     * @return $this
      */
     public function setBuyerCookie($buyerCookie);
     
@@ -105,7 +105,7 @@ interface PunchoutSetupRequestInterface
     /**
      * Set access_token
      * @param string $accessToken
-     * @return \Develodesign\Punchout\PunchoutSetupRequest\Api\Data\PunchoutSetupRequestInterface
+     * @return $this
      */
     public function setAccessToken($accessToken);
     
@@ -118,7 +118,7 @@ interface PunchoutSetupRequestInterface
     /**
      * Set expiry_date
      * @param string $expiryDate
-     * @return \Develodesign\Punchout\PunchoutSetupRequest\Api\Data\PunchoutSetupRequestInterface
+     * @return $this
      */
     public function setExpiryDate($expiryDate);
     
@@ -131,7 +131,7 @@ interface PunchoutSetupRequestInterface
     /**
      * Set po_number
      * @param string $poNumber
-     * @return \Develodesign\Punchout\PunchoutSetupRequest\Api\Data\PunchoutSetupRequestInterface
+     * @return $this
      */
     public function setPoNumber($poNumber);
     
@@ -144,7 +144,7 @@ interface PunchoutSetupRequestInterface
     /**
      * Set order_status
      * @param string $orderStatus
-     * @return \Develodesign\Punchout\PunchoutSetupRequest\Api\Data\PunchoutSetupRequestInterface
+     * @return $this
      */
     public function setOrderStatus($orderStatus);
 }
