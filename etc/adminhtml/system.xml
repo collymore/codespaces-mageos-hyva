@@ -40,6 +40,12 @@
                     <comment>The default Xml Xpath selector for the customer email from the incoming Cxml document.</comment>
                 </field>
 
+                <field id="duns_identity_source" translate="label" type="select" sortOrder="28" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>DUNS Identity Source</label>
+                    <source_model>Develodesign\Punchout\Model\Config\Source\CxmlDunsIdentitySource</source_model>
+                    <comment>/cXML/Header/From/Credential/Identity, /cXML/Header/Sender/Credential/Identity, or both</comment>
+                </field>
+
                 <field id="iframe_allowed" translate="label comment" type="textarea" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Allowed Frame Ancestors</label>
                     <comment>List of values separated by a new line</comment>

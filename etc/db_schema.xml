@@ -30,7 +30,6 @@
 		<column name="customer_attributes" nullable="true" xsi:type="text" comment="Default Customer Attributes"/>
 		<column name="cxml_node_tax_per_item" nullable="true" xsi:type="smallint" default="0" comment="Tax per line item"/>
 		<column name="cxml_node_tax_message_header" nullable="true" xsi:type="smallint" default="0" comment="Tax in Message Header"/>
-		<column name="cxml_from_duns_identity" nullable="true" xsi:type="varchar" default="/cxml/Header/From/Credential/Identity"  comment="Sender Header Credentials Duns Identity"/>
 		<column name="created_at" nullable="false" xsi:type="timestamp" comment="Punchout Group Created at" default="CURRENT_TIMESTAMP"/>
 		<index referenceId="DEVELODESIGN_PUNCHOUT_PUNCHOUTGROUP_CREATED_AT" indexType="btree">
 			<column name="created_at"/>

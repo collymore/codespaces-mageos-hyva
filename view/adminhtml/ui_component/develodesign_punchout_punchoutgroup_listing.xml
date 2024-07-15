@@ -350,18 +350,6 @@
 				</editor>
 			</settings>
 		</column>
-		<column name="cxml_from_duns_identity" sortOrder="105">
-			<settings>
-				<filter>text</filter>
-				<label translate="true">Cxml From DUNs Credential</label>
-				<editor>
-					<editorType>text</editorType>
-					<validation>
-						<rule name="required-entry" xsi:type="boolean">false</rule>
-					</validation>
-				</editor>
-			</settings>
-		</column>
 		<actionsColumn name="actions" class="Develodesign\Punchout\Ui\Component\Listing\Column\PunchoutGroupActions" sortOrder="199">
 			<settings>
 				<indexField>punchoutgroup_id</indexField>

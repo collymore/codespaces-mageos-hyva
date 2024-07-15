@@ -49,7 +49,7 @@ interface PunchoutGroupInterface
     
     const CXML_NODE_TAX_MESSAGE_HEADER = 'cxml_node_tax_message_header';
     
-    const CXML_FROM_DUNS_IDENTITY ='cxml_from_duns_identity';
+  
 
     /**
      * Get punchoutgroup_id
@@ -432,16 +432,6 @@ interface PunchoutGroupInterface
      */
     public function setCxmlNodeTaxMessageHeader($cxmlNodeTaxMessageHeader);
     
-    /**
-     * @return string|null
-     */
-    public function getCxmlFromDunsIdentity();
-    
-    /**
-     * @param string $cxmlFromDunsIdentity
-     *
-     * @return $this
-     */
-    public function setCxmlFromDunsIdentity($cxmlFromDunsIdentity);
+   
     
 }

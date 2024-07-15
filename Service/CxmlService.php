@@ -299,4 +299,25 @@ class CxmlService
         }
         return (string)$xpathSelector[0];
     }
+    
+    public function getDunsIdentity(string $dunsIdentityConfig,SimpleXMLElement $cxml): string
+    {
+        $dunsIdentity = '';
+        switch ($dunsIdentityConfig) {
+            case 'sender':
+                $dunsIdentity = (string)$cxml->Header->Sender->Credential->Identity;
+                break;
+            case 'from':
+                $dunsIdentity = (string)$cxml->Header->From->Credential->Identity;
+                break;
+            case 'both':
+                $dunsIdentity = (string)$cxml->Header->From->Credential->Identity;
+                if (empty($dunsIdentity)) {
+                    $dunsIdentity = (string)$cxml->Header->Sender->Credential->Identity;
+                }
+                break;
+                
+        }
+        return $dunsIdentity;
+    }
 }

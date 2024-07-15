@@ -442,21 +442,6 @@
 					</select>
 				</formElements>
 			</field>
-			<field name="cxml_from_duns_identity" formElement="input" sortOrder="79">
-				<argument name="data" xsi:type="array">
-					<item name="config" xsi:type="array">
-						<item name="source" xsi:type="string">PunchoutGroup</item>
-					</item>
-				</argument>
-				<settings>
-					<dataType>text</dataType>
-					<label translate="true">Cxml From DUNs Credential</label>
-					<dataScope>cxml_from_duns_identity</dataScope>
-					<validation>
-						<rule name="required-entry" xsi:type="boolean">false</rule>
-					</validation>
-				</settings>
-			</field>
 
 		</fieldset>
 	</fieldset>
