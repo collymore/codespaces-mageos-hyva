@@ -61,8 +61,6 @@ class PunchoutConfigHelper extends AbstractHelper
         return $this->getConfiguredValue(self::CONFIG_PATH .'defaults/duns_identity_source');
     }
     
-    
-    
 
     /**
      * Returns if Punchout should Auto create customers
@@ -191,5 +189,10 @@ class PunchoutConfigHelper extends AbstractHelper
     public function getConfiguredFlag($config_path, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT): bool
     {
         return $this->scopeConfig->isSetFlag($config_path, $scope);
+    }
+    
+    public function getDefaultCurrencyCode(): ?string
+    {
+        return $this->storeManager->getStore()->getCurrentCurrencyCode();
     }
 }
