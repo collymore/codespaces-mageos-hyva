@@ -109,8 +109,10 @@ class TransferCheckoutButton extends Link
                 // add the config key 'cxml_node_tax_per_item' to the punchoutOrder array
                 $punchoutOrder['cxml_node_tax_per_item'] = $punchoutGroup->getCxmlNodeTaxPerItem();
             }
-            if((int)$punchoutGroup->getCxmlFromDunsIdentity() === 1) {
-                $punchoutOrder['cxml_node_tax_message_header'] = $punchoutGroup->getCxmlFromDunsIdentity();
+            if((int)$punchoutGroup->getCxmlNodeTaxMessageHeader() === 1) {
+                $totals = $quote->getTotals();
+                $tax = isset($totals['tax']) ? $totals['tax']->getValue() : 0;
+                $punchoutOrder['cxml_node_tax_message_header'] = $tax;
             }
             return $this->cxmlBlock->getCxmlForm($cxmlSessionData, $punchoutOrder, $quote, $uom);
         } catch (\Exception $e) {
