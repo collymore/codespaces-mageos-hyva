@@ -125,7 +125,7 @@ class CustomerService
             'email' => $email,
             'password' => $this->getRandomPassword(),
             'group_id' => $matchingPunchoutGroup->getMagentoCustomerGroup(),
-            'punchout_group_id' => $matchingPunchoutGroup->getPunchoutgroupId()
+            'punchout_group' => $matchingPunchoutGroup->getPunchoutgroupId()
 
         ] + $attributes;
         return new DataObject(
