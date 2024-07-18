@@ -100,21 +100,8 @@ class TransferCheckoutButton extends Link
             $customer = $this->sessionService->getCustomerSession();
             $punchoutGroupId = $this->customerService->getPunchoutGroupId($customer->getCustomerId());
             $punchoutGroup = $this->punchoutGroupService->loadPunchOutGroupById($punchoutGroupId);
-            $punchoutOrder = [
-                'grand_total'   => $quote->getGrandTotal(),
-                'punchoutgroup_duns'   => $punchoutGroup->getDunsIdentity()
-            ];
-            // add tax information if the punchoutGroup getCxmlNodeTaxPerItem is set to 'true'
-            if ((int)$punchoutGroup->getCxmlNodeTaxPerItem() === 1) {
-                // add the config key 'cxml_node_tax_per_item' to the punchoutOrder array
-                $punchoutOrder['cxml_node_tax_per_item'] = $punchoutGroup->getCxmlNodeTaxPerItem();
-            }
-            if((int)$punchoutGroup->getCxmlNodeTaxMessageHeader() === 1) {
-                $totals = $quote->getTotals();
-                $tax = isset($totals['tax']) ? $totals['tax']->getValue() : 0;
-                $punchoutOrder['cxml_node_tax_message_header'] = $tax;
-            }
-            return $this->cxmlBlock->getCxmlForm($cxmlSessionData, $punchoutOrder, $quote, $uom);
+            $config = $this->punchoutGroupService->getPunchoutGroupConfig($punchoutGroup, $quote);
+            return $this->cxmlBlock->getCxmlForm($cxmlSessionData, $config, $quote, $uom);
         } catch (\Exception $e) {
             return $e->getMessage();
         }

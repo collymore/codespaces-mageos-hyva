@@ -84,6 +84,8 @@ class CxmlResponse
     {
         $defaultCurrencyCode = $this->configHelper->getDefaultCurrencyCode();
         $totalTax = $punchoutOrder['cxml_node_tax_message_header'] ?? 0.0;
+        $shippingCost = $punchoutOrder['cxml_node_shipping_cost_message_header'] ?? 0.0;
+        $shippingDescription = $punchoutOrder['cxml_node_shipping_method'] ?? '';
         $taxDescription = 'Sales Tax';
         return sprintf(
             '<?xml version="1.0" encoding="UTF-8"?>
@@ -115,6 +117,7 @@ class CxmlResponse
                                         <Money currency="%s">%s</Money>
                                     </Total>
                                     %s
+                                    %s
                                 </PunchOutOrderMessageHeader>',
             $cxmlSessionData['payloadId'],
             $this->getTimeStamp(),
@@ -124,7 +127,10 @@ class CxmlResponse
             $cxmlSessionData['buyer_cookie'],
             $defaultCurrencyCode,
             $punchoutOrder['grand_total'],
-            $totalTax > 0 ? sprintf('<Tax><Money currency="%s">%s</Money><Description>%s</Description></Tax>', $defaultCurrencyCode, number_format($totalTax, 2), $taxDescription) : ''
+            $totalTax > 0 ? sprintf('<Tax><Money currency="%s">%s</Money><Description>%s</Description></Tax>',
+                $defaultCurrencyCode, number_format($totalTax, 2), $taxDescription) : '',
+            $shippingCost > 0 ? sprintf('<Shipping><Money currency="%s">%s</Money><Description xml:lang="en-US">%s</Description></Shipping>',
+                $defaultCurrencyCode, number_format($shippingCost, 2), $shippingDescription) : ''
         
         );
     }
