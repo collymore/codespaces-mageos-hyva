@@ -25,7 +25,8 @@
             "updated_at": true,
             "customer_attributes": true,
             "cxml_node_tax_per_item": true,
-            "cxml_node_tax_message_header": true
+            "cxml_node_tax_message_header": true,
+            "cxml_node_shipping_message_header": true
         },
         "index": {
             "DEVELODESIGN_PUNCHOUT_PUNCHOUTGROUP_GROUP_EMAIL": true,

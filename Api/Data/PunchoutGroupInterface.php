@@ -49,6 +49,8 @@ interface PunchoutGroupInterface
     
     const CXML_NODE_TAX_MESSAGE_HEADER = 'cxml_node_tax_message_header';
     
+    const CXML_NODE_SHIPPING_MESSAGE_HEADER = 'cxml_node_shipping_message_header';
+    
   
 
     /**
@@ -431,6 +433,19 @@ interface PunchoutGroupInterface
      * @return $this
      */
     public function setCxmlNodeTaxMessageHeader($cxmlNodeTaxMessageHeader);
+    
+    
+    /**
+     * @return string|null
+     */
+    public function getCxmlNodeShippingMessageHeader();
+    
+    /**
+     * @param string $cxmlNodeShippingMessageHeader
+     *
+     * @return $this
+     */
+    public function setCxmlNodeShippingMessageHeader($cxmlNodeShippingMessageHeader);
     
    
     
