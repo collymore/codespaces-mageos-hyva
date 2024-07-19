@@ -1,9 +1,11 @@
 define([
     'jquery',
-    'js-storage/storage-wrapper',
+    'jquery/jquery.cookie',
+    'jquery/jquery.storageapi.min',
     'mage/cookies'
 ], function ($) {
     'use strict';
+
     //almost fully-duplicated (with changes) part of code from 2.4.3 for
     //CE/EE below 2.4.3
     /**
