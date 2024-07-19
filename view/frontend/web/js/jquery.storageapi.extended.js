@@ -1,6 +1,5 @@
 define([
     'jquery',
-    'jquery/jquery.cookie',
     'js-storage/storage-wrapper',
     'mage/cookies'
 ], function ($) {
