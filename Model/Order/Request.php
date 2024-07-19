@@ -1,5 +1,5 @@
 <?php
-    
+
 namespace Develodesign\Punchout\Model\Order;
 
 use Develodesign\Punchout\Event\EventServiceProvider;
@@ -157,6 +157,11 @@ class Request extends DataObject
         /** @var Cxml $document */
         $document = $this->document;
         $sourceXML = $document->getCxml();
+        $this->eventServiceProvider->dispatchCxmlOrderRequestEvent(
+            0, // 0 as no customer is loaded at this point
+            0,
+            'Incoming Order Request'. $sourceXML->asXML()
+        );
         $poNumber = (string)$sourceXML->Request->OrderRequest->OrderRequestHeader['orderID'];
         $dunsIdentity = (string)$sourceXML->Header->Sender->Credential->Identity;
         

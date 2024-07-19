@@ -28,6 +28,9 @@
 		<column name="telephone" nullable="true" xsi:type="varchar" comment="Telephone" length="255"/>
 		<column name="cxml_node_xpath_config_email" nullable="true" xsi:type="varchar" comment="Use XPath to select the Email from incoming cxml data" length="255"/>
 		<column name="customer_attributes" nullable="true" xsi:type="text" comment="Default Customer Attributes"/>
+		<column name="cxml_node_tax_per_item" nullable="true" xsi:type="smallint" default="0" comment="Tax per line item"/>
+		<column name="cxml_node_tax_message_header" nullable="true" xsi:type="smallint" default="0" comment="Tax in PunchOutOrderMessageHeader"/>
+		<column name="cxml_node_shipping_message_header" nullable="true" xsi:type="smallint" default="0" comment="Shipping Information in PunchOutOrderMessageHeader"/>
 		<column name="created_at" nullable="false" xsi:type="timestamp" comment="Punchout Group Created at" default="CURRENT_TIMESTAMP"/>
 		<index referenceId="DEVELODESIGN_PUNCHOUT_PUNCHOUTGROUP_CREATED_AT" indexType="btree">
 			<column name="created_at"/>

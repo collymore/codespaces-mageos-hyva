@@ -1,82 +1,85 @@
 {
-  "develodesign_punchout_punchoutgroup": {
-    "column": {
-      "punchoutgroup_id": true,
-      "group_name": true,
-      "status": true,
-      "is_parent": true,
-      "group_email": true,
-      "shared_secret": true,
-      "duns_identity": true,
-      "ariba_network_id": true,
-      "business_unit": true,
-      "oci_username": true,
-      "oci_password": true,
-      "parent_punchout_group": true,
-      "magento_customer_group": true,
-      "street": true,
-      "city": true,
-      "country_id": true,
-      "region": true,
-      "postcode": true,
-      "telephone": true,
-      "cxml_node_xpath_config_email": true,
-      "created_at": true,
-      "updated_at": true,
-      "customer_attributes": true
+    "develodesign_punchout_punchoutgroup": {
+        "column": {
+            "punchoutgroup_id": true,
+            "group_name": true,
+            "status": true,
+            "is_parent": true,
+            "group_email": true,
+            "shared_secret": true,
+            "duns_identity": true,
+            "ariba_network_id": true,
+            "business_unit": true,
+            "oci_username": true,
+            "oci_password": true,
+            "parent_punchout_group": true,
+            "magento_customer_group": true,
+            "street": true,
+            "city": true,
+            "country_id": true,
+            "region": true,
+            "postcode": true,
+            "telephone": true,
+            "cxml_node_xpath_config_email": true,
+            "created_at": true,
+            "updated_at": true,
+            "customer_attributes": true,
+            "cxml_node_tax_per_item": true,
+            "cxml_node_tax_message_header": true,
+            "cxml_node_shipping_message_header": true
+        },
+        "index": {
+            "DEVELODESIGN_PUNCHOUT_PUNCHOUTGROUP_GROUP_EMAIL": true,
+            "DEVELODESIGN_PUNCHOUT_PUNCHOUTGROUP_CREATED_AT": true,
+            "DEVELODESIGN_PUNCHOUT_PUNCHOUTGROUP_UPDATED_AT": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
     },
-    "index": {
-      "DEVELODESIGN_PUNCHOUT_PUNCHOUTGROUP_GROUP_EMAIL": true,
-      "DEVELODESIGN_PUNCHOUT_PUNCHOUTGROUP_CREATED_AT": true,
-      "DEVELODESIGN_PUNCHOUT_PUNCHOUTGROUP_UPDATED_AT": true
+    "customer_entity": {
+        "column": {
+            "punchout_group": true
+        }
     },
-    "constraint": {
-      "PRIMARY": true
+    "develodesign_punchout_punchoutsetuprequest": {
+        "column": {
+            "setup_id": true,
+            "customer_id": true,
+            "payload_id": true,
+            "sender_identity": true,
+            "return_url": true,
+            "buyer_cookie": true,
+            "access_token": true,
+            "expiry_date": true,
+            "po_number": true,
+            "order_status": true
+        },
+        "index": {
+            "DEVELODESIGN_PUNCHOUT_PUNCHOUTSETUPREQUEST_CUSTOMER_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "develodesign_logactivity": {
+        "column": {
+            "log_id": true,
+            "event_type": true,
+            "action": true,
+            "user_id": true,
+            "ip": true,
+            "punchoutgroup_id": true,
+            "info": true,
+            "error_message": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "index": {
+            "DEVELODESIGN_LOGACTIVITY_USER_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
     }
-  },
-  "customer_entity": {
-    "column": {
-      "punchout_group": true
-    }
-  },
-  "develodesign_punchout_punchoutsetuprequest": {
-    "column": {
-      "setup_id": true,
-      "customer_id": true,
-      "payload_id": true,
-      "sender_identity": true,
-      "return_url": true,
-      "buyer_cookie": true,
-      "access_token": true,
-      "expiry_date": true,
-      "po_number": true,
-      "order_status": true
-    },
-    "index": {
-      "DEVELODESIGN_PUNCHOUT_PUNCHOUTSETUPREQUEST_CUSTOMER_ID": true
-    },
-    "constraint": {
-      "PRIMARY": true
-    }
-  },
-  "develodesign_logactivity": {
-    "column": {
-      "log_id": true,
-      "event_type": true,
-      "action": true,
-      "user_id": true,
-      "ip": true,
-      "punchoutgroup_id": true,
-      "info": true,
-      "error_message": true,
-      "created_at": true,
-      "updated_at": true
-    },
-    "index": {
-      "DEVELODESIGN_LOGACTIVITY_USER_ID": true
-    },
-    "constraint": {
-      "PRIMARY": true
-    }
-  }
 }

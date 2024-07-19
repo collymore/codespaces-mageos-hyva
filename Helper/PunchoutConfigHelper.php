@@ -12,6 +12,8 @@ class PunchoutConfigHelper extends AbstractHelper
      * StoreManagerInterface
      */
     protected $storeManager;
+    
+    const CONFIG_PATH = 'develodesign_punchout/';
 
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -26,7 +28,7 @@ class PunchoutConfigHelper extends AbstractHelper
      */
     public function getConfigUOM()
     {
-        return $this->getConfiguredValue('develodesign_punchout/defaults/uom');
+        return $this->getConfiguredValue(self::CONFIG_PATH .'defaults/uom');
     }
 
     /**
@@ -34,7 +36,7 @@ class PunchoutConfigHelper extends AbstractHelper
      */
     public function getDefaultShippingMethod()
     {
-        return $this->getConfiguredValue('develodesign_punchout/defaults/default_shipping');
+        return $this->getConfiguredValue(self::CONFIG_PATH .'defaults/default_shipping');
     }
 
     /**
@@ -42,28 +44,43 @@ class PunchoutConfigHelper extends AbstractHelper
      */
     public function getDefaultCxmlNodeXpathConfigEmail()
     {
-        return $this->getConfiguredValue('develodesign_punchout/defaults/cxml_node_xpath_config_email');
+        return $this->getConfiguredValue(self::CONFIG_PATH .'defaults/cxml_node_xpath_config_email');
     }
+
+    /**
+     * Returns the default Cxml Xpath selector for the incoming Email value
+     */
+    public function getDefaultDunsNumber()
+    {
+        return $this->getConfiguredValue(self::CONFIG_PATH .'defaults/self_dun_identity');
+    }
+    
+    
+    public function getDefaultDunsIdentitySource()
+    {
+        return $this->getConfiguredValue(self::CONFIG_PATH .'defaults/duns_identity_source');
+    }
+    
 
     /**
      * Returns if Punchout should Auto create customers
      */
     public function getConfigAutoCreate()
     {
-        return $this->getConfiguredFlag('develodesign_punchout/customer/auto_create_user');
+        return $this->getConfiguredFlag(self::CONFIG_PATH .'customer/auto_create_user');
     }
 
 
     public function getDefaultCustomerAttributes()
     {
-        return $this->getConfiguredValue('develodesign_punchout/customer/default_attributes');
+        return $this->getConfiguredValue(self::CONFIG_PATH .'customer/default_attributes');
     }
     /**
      * Returns the Punchout Cart Button Label
      */
     public function getConfigTransferButtonLabel()
     {
-        return $this->getConfiguredValue('develodesign_punchout/display/transfer_button_label');
+        return $this->getConfiguredValue(self::CONFIG_PATH .'display/transfer_button_label');
     }
 
     /**
@@ -71,7 +88,7 @@ class PunchoutConfigHelper extends AbstractHelper
      */
     public function getTransferModalContent()
     {
-        return $this->getConfiguredValue('develodesign_punchout/display/transfer_modal_content');
+        return $this->getConfiguredValue(self::CONFIG_PATH .'display/transfer_modal_content');
     }
 
     /**
@@ -79,7 +96,7 @@ class PunchoutConfigHelper extends AbstractHelper
      */
     public function getRedirectCheckoutPath()
     {
-        return $this->getConfiguredValue('develodesign_punchout/display/redirect_checkout_path');
+        return $this->getConfiguredValue(self::CONFIG_PATH .'display/redirect_checkout_path');
     }
 
     /**
@@ -87,7 +104,7 @@ class PunchoutConfigHelper extends AbstractHelper
      */
     public function getConfigLoadNonCatalogue()
     {
-        return $this->getConfiguredFlag('develodesign_punchout/product/load_non_catalogue');
+        return $this->getConfiguredFlag(self::CONFIG_PATH .'product/load_non_catalogue');
     }
 
     /**
@@ -95,7 +112,7 @@ class PunchoutConfigHelper extends AbstractHelper
      */
     public function getDefaultUnspsc()
     {
-        return $this->getConfiguredValue('develodesign_punchout/product/default_unspsc');
+        return $this->getConfiguredValue(self::CONFIG_PATH .'product/default_unspsc');
     }
 
     /**
@@ -103,7 +120,7 @@ class PunchoutConfigHelper extends AbstractHelper
      */
     public function getConfigNonCatalogueSKU()
     {
-        return $this->getConfiguredValue('develodesign_punchout/product/non_catalogue_sku');
+        return $this->getConfiguredValue(self::CONFIG_PATH .'product/non_catalogue_sku');
     }
 
 
@@ -112,7 +129,7 @@ class PunchoutConfigHelper extends AbstractHelper
      */
     public function getConfigSKUTitle()
     {
-        return $this->getConfiguredValue('develodesign_punchout/product/customizable_option_sku');
+        return $this->getConfiguredValue(self::CONFIG_PATH .'product/customizable_option_sku');
     }
 
     /**
@@ -120,7 +137,7 @@ class PunchoutConfigHelper extends AbstractHelper
      */
     public function getConfigNameTitle()
     {
-        return $this->getConfiguredValue('develodesign_punchout/product/customizable_option_name');
+        return $this->getConfiguredValue(self::CONFIG_PATH .'product/customizable_option_name');
     }
 
     /**
@@ -128,7 +145,7 @@ class PunchoutConfigHelper extends AbstractHelper
      */
     public function getConfigQtyTitle()
     {
-        return $this->getConfiguredValue('develodesign_punchout/product/customizable_option_qty');
+        return $this->getConfiguredValue(self::CONFIG_PATH .'product/customizable_option_qty');
     }
 
     /**
@@ -136,7 +153,7 @@ class PunchoutConfigHelper extends AbstractHelper
      */
     public function getValidateInvoiceQty(): bool
     {
-        return $this->getConfiguredFlag('develodesign_punchout/invoice/validate_invoice_qty');
+        return $this->getConfiguredFlag(self::CONFIG_PATH .'invoice/validate_invoice_qty');
     }
 
      /**
@@ -144,7 +161,7 @@ class PunchoutConfigHelper extends AbstractHelper
      */
     public function getAddReloadCustomerSectionScript(): bool
     {
-        return $this->getConfiguredValue('develodesign_punchout/customer/reload_customer_section_onlogin');
+        return $this->getConfiguredValue(self::CONFIG_PATH .'customer/reload_customer_section_onlogin');
     }
 
     /**
@@ -152,7 +169,7 @@ class PunchoutConfigHelper extends AbstractHelper
     */
     public function getAllowedIframes()
     {
-        $values = $this->getConfiguredValue('develodesign_punchout/defaults/iframe_allowed');
+        $values = $this->getConfiguredValue(self::CONFIG_PATH .'defaults/iframe_allowed');
         $values = str_replace(' ', "\n", $values);
         $values = explode("\n", $values);
         return array_map('trim', $values);
@@ -172,5 +189,10 @@ class PunchoutConfigHelper extends AbstractHelper
     public function getConfiguredFlag($config_path, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT): bool
     {
         return $this->scopeConfig->isSetFlag($config_path, $scope);
+    }
+    
+    public function getDefaultCurrencyCode(): ?string
+    {
+        return $this->storeManager->getStore()->getCurrentCurrencyCode();
     }
 }

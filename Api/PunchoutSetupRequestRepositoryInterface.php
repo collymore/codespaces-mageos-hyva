@@ -2,18 +2,22 @@
 
 namespace Develodesign\Punchout\Api;
 
+use Develodesign\Punchout\Api\Data\PunchoutSetupRequestInterface;
+use Develodesign\Punchout\Api\Data\PunchoutSetupRequestSearchResultsInterface;
+use Magento\Framework\Exception\LocalizedException;
+
 interface PunchoutSetupRequestRepositoryInterface
 {
     /**
      * Save PunchoutSetupRequest
      *
-     * @param \Develodesign\Punchout\Api\Data\PunchoutSetupRequestInterface $punchoutSetupRequest
+     * @param PunchoutSetupRequestInterface $punchoutSetupRequest
      *
-     * @return \Develodesign\Punchout\Api\Data\PunchoutSetupRequestInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return PunchoutSetupRequestInterface
+     * @throws LocalizedException
      */
     public function save(
-        \Develodesign\Punchout\Api\Data\PunchoutSetupRequestInterface $punchoutSetupRequest
+        PunchoutSetupRequestInterface $punchoutSetupRequest
     );
 
     /**
@@ -21,16 +25,16 @@ interface PunchoutSetupRequestRepositoryInterface
      *
      * @param string $setupId
      *
-     * @return \Develodesign\Punchout\Api\Data\PunchoutSetupRequestInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return PunchoutSetupRequestInterface
+     * @throws LocalizedException
      */
     public function get($setupId);
 
     /**
      * Retrieve PunchoutSetupRequest matching the specified criteria.
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
-     * @return \Develodesign\Punchout\Api\Data\PunchoutSetupRequestSearchResultsInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return PunchoutSetupRequestSearchResultsInterface
+     * @throws LocalizedException
      */
     public function getList(
         \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
@@ -39,13 +43,13 @@ interface PunchoutSetupRequestRepositoryInterface
     /**
      * Delete PunchoutSetupRequest
      *
-     * @param \Develodesign\Punchout\Api\Data\PunchoutSetupRequestInterface $punchoutSetupRequest
+     * @param PunchoutSetupRequestInterface $punchoutSetupRequest
      *
      * @return bool true on success
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function delete(
-        \Develodesign\Punchout\Api\Data\PunchoutSetupRequestInterface $punchoutSetupRequest
+        PunchoutSetupRequestInterface $punchoutSetupRequest
     );
 
     /**
@@ -53,7 +57,7 @@ interface PunchoutSetupRequestRepositoryInterface
      * @param string $setupId
      * @return bool true on success
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function deleteById($setupId);
 }

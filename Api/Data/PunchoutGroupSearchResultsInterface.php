@@ -7,22 +7,22 @@ declare(strict_types=1);
 
 namespace Develodesign\Punchout\Api\Data;
 
-use Develodesign\Punchout\Api\Data\PunchoutGroupInterface;
+use Magento\Framework\Api\SearchResultsInterface;
 
-interface PunchoutGroupSearchResultsInterface extends \Magento\Framework\Api\SearchResultsInterface
+interface PunchoutGroupSearchResultsInterface extends SearchResultsInterface
 {
 
     /**
      * Get PunchoutGroup list.
      *
-     * @return Develodesign\Punchout\Api\Data\PunchoutGroupInterface[]
+     * @return PunchoutGroupInterface[]
      */
     public function getItems();
 
     /**
      * Set group_name list.
      *
-     * @param Develodesign\Punchout\Api\Data\PunchoutGroupInterface[] $items
+     * @param PunchoutGroupInterface[] $items
      *
      * @return $this
      */

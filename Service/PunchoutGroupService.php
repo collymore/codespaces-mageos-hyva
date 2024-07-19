@@ -3,9 +3,9 @@
 namespace Develodesign\Punchout\Service;
 
 use Develodesign\Punchout\Model\ResourceModel\PunchoutGroup\CollectionFactory;
-use Magento\Framework\DataObject;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Develodesign\Punchout\Model\PunchoutGroup;
+use Magento\Quote\Model\Quote;
 
 class PunchoutGroupService
 {
@@ -89,7 +89,7 @@ class PunchoutGroupService
         }
         return $punchoutGroup->getFirstItem();
     }
-        
+    
     /**
      * Loads a punchout group by punchoutgroup_id
      * @return ?PunchoutGroup
@@ -102,5 +102,41 @@ class PunchoutGroupService
             return $punchoutGroup->getFirstItem();
         }
         return null;
+    }
+    
+    /**
+     * Get Punchout Group configuration
+     * @param PunchoutGroup $punchoutGroup
+     * @param Quote $quote
+     * @return array
+     */
+    public function getPunchoutGroupConfig(PunchoutGroup $punchoutGroup, Quote $quote): array
+    {
+        $config = [
+            'grand_total' => $quote->getGrandTotal(),
+            'punchoutgroup_duns' => $punchoutGroup->getDunsIdentity()
+        ];
+        
+        // Add tax per item to the config array
+        if ((int)$punchoutGroup->getCxmlNodeTaxPerItem() === 1) {
+            $config['cxml_node_tax_per_item'] = $punchoutGroup->getCxmlNodeTaxPerItem();
+        }
+        
+        // Add tax information to the config array
+        if ((int)$punchoutGroup->getCxmlNodeTaxMessageHeader() === 1) {
+            $totals = $quote->getTotals();
+            $tax = isset($totals['tax']) ? $totals['tax']->getValue() : 0;
+            $config['cxml_node_tax_message_header'] = $tax;
+        }
+        
+        // Add shipping cost to the config array
+        if ((int)$punchoutGroup->getCxmlNodeShippingMessageHeader() === 1) {
+            $shippingCost = $quote->getShippingAddress()->getShippingAmount();
+            $shippingMethod = $quote->getShippingAddress()->getShippingMethod();
+            $config['cxml_node_shipping_message_header'] = $shippingCost;
+            $config['cxml_node_shipping_method'] = $shippingMethod;
+        }
+        
+        return $config;
     }
 }

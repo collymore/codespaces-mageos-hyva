@@ -326,7 +326,31 @@
 				</editor>
 			</settings>
 		</column>
-		<actionsColumn name="actions" class="Develodesign\Punchout\Ui\Component\Listing\Column\PunchoutGroupActions" sortOrder="99">
+		<column name="cxml_node_tax_per_item" sortOrder="95">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">Tax per Line Item</label>
+				<editor>
+					<editorType>text</editorType>
+					<validation>
+						<rule name="required-entry" xsi:type="boolean">false</rule>
+					</validation>
+				</editor>
+			</settings>
+		</column>
+		<column name="cxml_node_tax_message_header" sortOrder="100">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">Tax in Message Header</label>
+				<editor>
+					<editorType>text</editorType>
+					<validation>
+						<rule name="required-entry" xsi:type="boolean">false</rule>
+					</validation>
+				</editor>
+			</settings>
+		</column>
+		<actionsColumn name="actions" class="Develodesign\Punchout\Ui\Component\Listing\Column\PunchoutGroupActions" sortOrder="199">
 			<settings>
 				<indexField>punchoutgroup_id</indexField>
 				<resizeEnabled>false</resizeEnabled>

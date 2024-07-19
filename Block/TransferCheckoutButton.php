@@ -36,11 +36,11 @@ class TransferCheckoutButton extends Link
      * @var PunchoutGroupService
      */
     protected $punchoutGroupService;
-        
+    
     protected $customerService;
-        
+    
     protected $cxmlBlock;
-        
+    
     protected $ociBlock;
     
     public function __construct(
@@ -72,7 +72,7 @@ class TransferCheckoutButton extends Link
      */
     protected function _prepareLayout()
     {
-           
+        
         /**
          *  Render template based on punchout session type i.e oci, cxml || default
          */
@@ -100,11 +100,8 @@ class TransferCheckoutButton extends Link
             $customer = $this->sessionService->getCustomerSession();
             $punchoutGroupId = $this->customerService->getPunchoutGroupId($customer->getCustomerId());
             $punchoutGroup = $this->punchoutGroupService->loadPunchOutGroupById($punchoutGroupId);
-            $punchoutOrder = [
-                'grand_total'   => $quote->getGrandTotal(),
-                'punchoutgroup_duns'   => $punchoutGroup->getDunsIdentity()
-            ];
-            return $this->cxmlBlock->getCxmlForm($cxmlSessionData, $punchoutOrder, $quote, $uom);
+            $config = $this->punchoutGroupService->getPunchoutGroupConfig($punchoutGroup, $quote);
+            return $this->cxmlBlock->getCxmlForm($cxmlSessionData, $config, $quote, $uom);
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -125,7 +122,7 @@ class TransferCheckoutButton extends Link
     {
         return $this->cxmlBlock->getSubmitButton($this->punchoutConfigHelper->getConfigTransferButtonLabel());
     }
-        
+    
     public function generateOciCheckoutForm()
     {
         $ociSessionData  = $this->sessionService->getPunchoutSessionData('oci');
@@ -133,7 +130,7 @@ class TransferCheckoutButton extends Link
         $punchoutGroupId = $this->customerService->getPunchoutGroupId($customer->getCustomerId());
         return $this->ociBlock->getOCIForm($ociSessionData, $this->cart->getItems(), $punchoutGroupId);
     }
-        
+    
     public function generateOCISubmitButton(): string
     {
         return $this->ociBlock->getOciButton($this->punchoutConfigHelper->getConfigTransferButtonLabel());

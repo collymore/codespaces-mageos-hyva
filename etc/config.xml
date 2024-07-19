@@ -8,7 +8,7 @@
                 <uom>EA</uom>
                 <default_shipping><![CDATA[freeshipping_freeshipping]]></default_shipping>
                 <cxml_node_xpath_config_email><![CDATA[/cXML/Request/PunchOutSetupRequest/Extrinsic[@name="UserEmail"]]]></cxml_node_xpath_config_email>
-
+                <duns_identity_source><![CDATA[both]]></duns_identity_source>
                 <iframe_allowed>https://service.ariba.com
 https://service-2.ariba.com
 https://certservice.ariba.com

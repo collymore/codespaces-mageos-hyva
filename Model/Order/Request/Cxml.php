@@ -1,5 +1,5 @@
 <?php
-    
+
 namespace Develodesign\Punchout\Model\Order\Request;
 
 use Develodesign\Punchout\Exceptions\CxmlDocumentLoadingException;
@@ -12,7 +12,7 @@ use Develodesign\Punchout\Model\PunchoutGroup;
 class Cxml extends AbstractRequest
 {
     protected $items;
-        
+    
     protected $cxml;
     
     /**
@@ -62,13 +62,21 @@ class Cxml extends AbstractRequest
             return $punchoutGroup;
         }
         $sharedSecret = (string)$this->cxml->Header->Sender->Credential->SharedSecret;
-        $dunsIdentity = (string)$this->cxml->Header->Sender->Credential->Identity;
+        $dunsIdentityConfig  = $this->punchoutConfigHelper->getDefaultDunsIdentitySource();
+        $dunsIdentity = $this->cxmlService->getDunsIdentity($dunsIdentityConfig, $this->cxml);
         $aribaNetworkId = $this->cxmlService->getAribaNetworkId($this->cxml);
-            
+        
         if (!$aribaNetworkId) {
             $matchingResult = $this->punchoutGroupService->loadPunchOutGroupBySecretDuns($sharedSecret, $dunsIdentity);
             if ($matchingResult->getPunchoutgroupId()) {
                 $punchoutGroup = $matchingResult;
+            } elseif ($dunsIdentityConfig === 'both') {
+                // Fallback to Sender Credential if From Credential is invalid or not found
+                $dunsIdentity = (string)$this->cxml->Header->Sender->Credential->Identity;
+                $matchingResult = $this->punchoutGroupService->loadPunchOutGroupBySecretDuns($sharedSecret, $dunsIdentity);
+                if ($matchingResult->getPunchoutgroupId()) {
+                    $punchoutGroup = $matchingResult;
+                }
             }
         }
         if ($aribaNetworkId) {
@@ -95,7 +103,7 @@ class Cxml extends AbstractRequest
                 )
             );
         }
-            
+        
         return $punchoutGroup;
     }
     
@@ -129,7 +137,7 @@ class Cxml extends AbstractRequest
             foreach ($itemOuts as $itemOut) {
                 $distribution = [];
                 $extrinsic = [];
-                   
+                
                 if (isset($itemOut->ItemDetail->Extrinsic)) {
                     $extrinsic = [$this->cxmlService->getItemOutExtrinsic((array)$itemOut->ItemDetail->Extrinsic)];
                 }
@@ -154,7 +162,7 @@ class Cxml extends AbstractRequest
                     $optionalSupplierPartAuxId = (string) $itemOut->ItemID->SupplierPartAuxiliaryID;
                 }
                 $sku = (string)$itemOut->ItemID->SupplierPartID;
-                    
+                
                 $item  = [
                     'quantity' => (string)$itemOut->attributes()->quantity,
                     'line_number' => (string)$itemOut->attributes()->lineNumber,
