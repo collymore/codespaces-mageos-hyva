@@ -158,8 +158,8 @@ class Request extends DataObject
         $document = $this->document;
         $sourceXML = $document->getCxml();
         $this->eventServiceProvider->dispatchCxmlOrderRequestEvent(
-            $this->getCustomer()->getId(),
-            $this->getPunchoutGroup()->getPunchoutgroupId(),
+            0, // 0 as no customer is loaded at this point
+            0,
             'Incoming Order Request'. $sourceXML->asXML()
         );
         $poNumber = (string)$sourceXML->Request->OrderRequest->OrderRequestHeader['orderID'];
