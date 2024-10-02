@@ -73,7 +73,10 @@ class GenericPlugin {
         $params['secure'] = true;
         $params['samesite'] = 'None';
 
-        session_set_cookie_params($params);
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            session_set_cookie_params($params);
+        }
+    
         return $this;
     }
 
