@@ -191,6 +191,14 @@ class Request extends DataObject
             if (!isset($billingAddressData['firstname']) || !$billingAddressData['firstname']) {
                 $billingAddressData['firstname'] = $customer->getFirstname();
             }
+    
+            if (!isset($billingAddressData['region']) || !$billingAddressData['region']) {
+                $billingAddressData['region'] = ".";
+            }
+            if (!isset($shippingAddressData['region']) || !$shippingAddressData['region']) {
+                $shippingAddressData['region'] = ".";
+            }
+    
             $purchaseOrderNo = $this->getDocument()->getPoNumber();
             $result['poNumber'] = $purchaseOrderNo;
             $shippingMethodCode = $this->getDocument()->getShippingCode();
