@@ -3,12 +3,34 @@
 namespace Develodesign\Punchout\Service;
 
 use Develodesign\Punchout\Exceptions\CxmlDocumentLoadingException;
+use Develodesign\Punchout\Model\PunchoutGroup;
 use Magento\Framework\Simplexml\Element;
 use RuntimeException;
 use SimpleXMLElement;
+use \Magento\Directory\Model\Region;
+use \Magento\Directory\Helper\Data as DirectoryHelper;
 
 class CxmlService
 {
+
+    /**
+     * @var Region $region
+     */
+    private $region;
+
+    /**
+     *  @var DirectoryHelper $directoryHelper
+     */
+    private $directoryHelper;
+
+    public function __construct(
+        \Magento\Directory\Model\Region $region,
+        DirectoryHelper $directoryHelper
+    ){
+        $this->region = $region;
+        $this->directoryHelper = $directoryHelper;
+    }
+    
     /**
      * Parse request body to Xml string
      */
@@ -217,6 +239,19 @@ class CxmlService
         
         $countryId = (string)$address->PostalAddress->Country->attributes()->isoCountryCode;
         $region = '';
+
+        $regionCode = (string)$address->PostalAddress->State;
+        $regionId = $this->region->loadByCode($regionCode, $countryId)->getId();
+        if($regionId){
+            $region = $regionId;
+        }
+
+        if(!$region && $this->directoryHelper->isRegionRequired($countryId)){
+            throw new RuntimeException(sprintf(
+                "A Valid Region is required for %s Addresses, %s is invalid",
+                [$countryId,$regionCode]
+            ));
+        }
        
         $street = [];
         foreach ($address->PostalAddress->Street as $line) {
