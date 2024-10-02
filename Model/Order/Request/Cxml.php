@@ -47,8 +47,20 @@ class Cxml extends AbstractRequest
         if (null !== $customer) {
             return $customer;
         }
-        $customerEmail = (string)$this->cxml->Request->OrderRequest->OrderRequestHeader->Contact->Email;
-        return $this->customerService->getCustomerByEmail($customerEmail);
+	$customerEmail = '';
+	$parsedXMLData = $this->cxml->Request->OrderRequest;
+        $punchoutGroup = $this->getPunchoutGroup();
+        $xpathSelector = $punchoutGroup->getCxmlNodeXpathConfigEmail();
+	if($xpathSelector){
+            $xpathEmail = $parsedXMLData->xpath($xpathSelector);
+	    if($xpathEmail){
+                $customerEmail = (string)$xpathEmail[0];
+            }
+	}
+	if(!$customerEmail){
+	    $customerEmail = (string)$this->cxml->Request->OrderRequest->OrderRequestHeader->Contact->Email;
+        }
+	return $this->customerService->getCustomerByEmail($customerEmail);
     }
     
     /**

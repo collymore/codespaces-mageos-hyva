@@ -30,7 +30,7 @@ class CxmlService
         $this->region = $region;
         $this->directoryHelper = $directoryHelper;
     }
-    
+
     /**
      * Parse request body to Xml string
      */
@@ -149,40 +149,114 @@ class CxmlService
      * Create usable email from punchout group domain and cxml data
      * @throws \Zend_Validate_Exception
      */
-    public function createEmail($extrinsicData, $cxmlData, $punchoutGroupEmail): string
+    public function createEmail($extrinsicData, $cxmlData, PunchoutGroup $punchoutGroup): string
     {
+        // Get the punchout group email domain
+        $punchoutGroupEmail = $punchoutGroup->getGroupEmail();
         $domain = substr($punchoutGroupEmail, strpos($punchoutGroupEmail, '@') + 1);
-        if (isset($extrinsicData['FirstName'], $extrinsicData['LastName'])) {
-            $name = sprintf('%s_%s@', $extrinsicData['FirstName'], $extrinsicData['LastName']);
-        } elseif (isset($extrinsicData['UniqueName'])) {
-            $name = $extrinsicData['UniqueName'];
-        } elseif (isset($cxmlData->Request->PunchOutSetupRequest->Contact->Name)) {
-            $name = (string)$cxmlData->Request->PunchOutSetupRequest->Contact->Name;
-        } else {
-            $name = uniqid('', false);
+        
+        // Fetch first and last name using the getFirstLastName method
+        $nameData = $this->getFirstLastName($extrinsicData, $punchoutGroup, $cxmlData);
+        $firstName = $nameData['first_name'];
+        $lastName = $nameData['last_name'];
+        
+        // Check if the name is 'Punchout User', we don't want to use this for the email
+        if ($firstName !== 'Punchout' || $lastName !== 'User') {
+            $name = sprintf('%s_%s@', $firstName, $lastName);
+            return $this->generateEmail($name, $domain);
         }
+        
+        // Fallback to UniqueName if 'Punchout User' is not valid
+        if (isset($extrinsicData['UniqueName'])) {
+            $name = $extrinsicData['UniqueName'];
+            return $this->generateEmail($name, $domain);
+        }
+        
+        // Fallback to Contact Name from cXML data
+        if (isset($cxmlData->Request->PunchOutSetupRequest->Contact->Name) && !empty($cxmlData->Request->PunchOutSetupRequest->Contact->Name)) {
+            $name = (string)$cxmlData->Request->PunchOutSetupRequest->Contact->Name;
+            return $this->generateEmail($name, $domain);
+        }
+        
+        // Final fallback to a unique ID
+        $name = uniqid('', false);
+        return $this->generateEmail($name, $domain);
+    }
+    
+    private function generateEmail($name, $domain): string
+    {
         $email = sprintf('%s%s', $name, $domain);
+        
+        // Validate the generated email address
         if (\Zend_Validate::is($email, 'EmailAddress')) {
             return $email;
         }
-        return  sprintf('%s_%s', $name, $punchoutGroupEmail);
+        
+        // Return a fallback email format if validation fails
+        return sprintf('%s_%s', $name, $domain);
     }
     
     /**
      * Get First and Last Names from posted extrinsic Data or fallback to default
      */
-    public function getFirstLastName($extrinsicData)
+    public function getFirstLastName($extrinsicData,PunchoutGroup $punchoutGroup, SimpleXMLElement $parsedXMLData): array
     {
-        $data = [];
-        if (isset($extrinsicData['FirstName'], $extrinsicData['LastName'])) {
-            $data['first_name'] = $extrinsicData['FirstName'];
-            $data['last_name'] = $extrinsicData['LastName'];
-        } else {
-            $data['first_name'] = 'Punchout';
-            $data['last_name'] =  'User';
+        // Fetch XPath configurations from PunchoutGroup
+        $firstNameXPath = $punchoutGroup->getCxmlNodeXpathConfigUserFirstname();
+        $lastNameXPath = $punchoutGroup->getCxmlNodeXpathConfigUserLastname();
+        $nameFormat = $punchoutGroup->getCxmlNodeUserNameConfigFormat();
+        
+        // Extract the actual attribute names from the XPath
+        $firstName = $firstNameXPath?$this->getValueByXPathConfig($firstNameXPath, $parsedXMLData):'';
+        $lastName = $lastNameXPath?$this->getValueByXPathConfig($lastNameXPath, $parsedXMLData):'';
+  
+        if ($nameFormat === 'Single' && $firstName) {
+            // Handle combined first and last name in the 'Single' format
+            $userParts = explode(' ', $firstName);
+            return [
+                'first_name' => array_shift($userParts),
+                'last_name' => implode(' ', $userParts),
+            ];
         }
-        return $data;
+        
+        if ($nameFormat === 'Both' && $firstName && $lastName) {
+            // Handle separate first and last name in the 'Both' format
+            return [
+                'first_name' => $firstName,
+                'last_name' => $lastName,
+            ];
+        }
+        
+        // 2. Fall back to the default 'FirstName' and 'LastName' in extrinsicData
+        if (isset($extrinsicData['FirstName'], $extrinsicData['LastName'])) {
+            if ($nameFormat === 'Single'){
+                $userParts = explode(' ', $extrinsicData['FirstName']);
+                $extrinsicData['FirstName'] = array_shift($userParts);
+                $extrinsicData['LastName'] = implode(' ', $userParts);
+            }
+            return [
+                'first_name' => $extrinsicData['FirstName'],
+                'last_name' => $extrinsicData['LastName'],
+            ];
+        }
+        
+        // 3. Final fallback: Default values
+        return [
+            'first_name' => 'Punchout',
+            'last_name' => 'User',
+        ];
     }
+    
+    private function extractNameFromXPath(string $xpath): string
+    {
+        // Regex to match the 'name' attribute in the XPath
+        if (preg_match("/@name='([^']+)'/", $xpath, $matches)) {
+            return $matches[1]; // Return the extracted name
+        }
+        
+        return $xpath; // Return the original string if no match is found
+    }
+    
     
     /**
      * ParseOrderRequest from string to SimpleXMLElement
@@ -252,7 +326,7 @@ class CxmlService
                 [$countryId,$regionCode]
             ));
         }
-       
+        
         $street = [];
         foreach ($address->PostalAddress->Street as $line) {
             if (trim((string)$line) !== '') {
@@ -325,9 +399,16 @@ class CxmlService
         }
         return $result;
     }
-    
-    public function getEmailByXPathConfig($cxmlNodeXpathConfig, SimpleXMLElement $parsedXMLData): string
+
+    /**
+     * Gets a value by Xpath from the XML doc
+     */
+    public function getValueByXPathConfig($cxmlNodeXpathConfig, SimpleXMLElement $parsedXMLData): string
     {
+        if(!trim($cxmlNodeXpathConfig)){
+            return '';
+        }
+
         $xpathSelector = $parsedXMLData->xpath($cxmlNodeXpathConfig);
         if(!$xpathSelector){
             return 'none';
