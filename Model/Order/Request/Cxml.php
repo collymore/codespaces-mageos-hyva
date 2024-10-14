@@ -58,6 +58,12 @@ class Cxml extends AbstractRequest
             }
 	}
 	if(!$customerEmail){
+	    $xpathEmail = $parsedXMLData->xpath("//Extrinsic[@name='Purchaser Email Address']");
+	    if($xpathEmail){
+		$customerEmail = (string)$xpathEmail[0];
+	    }   
+        }
+	if(!$customerEmail){
 	    $customerEmail = (string)$this->cxml->Request->OrderRequest->OrderRequestHeader->Contact->Email;
         }
 	return $this->customerService->getCustomerByEmail($customerEmail);
