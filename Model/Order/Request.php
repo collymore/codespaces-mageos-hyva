@@ -202,6 +202,12 @@ class Request extends DataObject
             $purchaseOrderNo = $this->getDocument()->getPoNumber();
             $result['poNumber'] = $purchaseOrderNo;
             $shippingMethodCode = $this->getDocument()->getShippingCode();
+
+            $exclusionArray = ["ceuta","las palmas","melilla","santa cruz de tenerife"];
+            if( in_array(strtolower($shippingAddressData['regionName']), $exclusionArray) ){
+               $shippingMethodCode = "tablerate_bestway";
+            }
+            
             $quote = $this->createOrderService->getCart();
             $quote->assignCustomer($customer);
             $quote->setStoreId($store->getId());
