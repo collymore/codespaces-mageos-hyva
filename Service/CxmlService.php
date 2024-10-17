@@ -403,7 +403,7 @@ class CxmlService
     /**
      * Gets a value by Xpath from the XML doc
      */
-    public function getEmailByXPathConfig($cxmlNodeXpathConfig, SimpleXMLElement $parsedXMLData): string
+    public function getValueByXPathConfig($cxmlNodeXpathConfig, SimpleXMLElement $parsedXMLData): string
     {
         if(!trim($cxmlNodeXpathConfig)){
             return '';
