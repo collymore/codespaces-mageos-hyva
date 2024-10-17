@@ -130,7 +130,7 @@ class CxmlSetup extends Action  implements \Magento\Framework\App\CsrfAwareActio
                 if(!$xpathEmail){
                     $xpathEmail = $this->punchoutConfigHelper->getDefaultCxmlNodeXpathConfigEmail();
                 }
-                $xpathSelectorEmail = $this->cxmlService->getEmailByXPathConfig($xpathEmail,$parsedXMLData);
+                $xpathSelectorEmail = $this->cxmlService->getValueByXPathConfig($xpathEmail,$parsedXMLData);
                 $useEmail = $this->cxmlService->validateEmail($xpathSelectorEmail);
 
                 if (empty(trim($useEmail))) {
