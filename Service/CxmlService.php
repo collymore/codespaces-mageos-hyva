@@ -313,11 +313,13 @@ class CxmlService
         
         $countryId = (string)$address->PostalAddress->Country->attributes()->isoCountryCode;
         $region = '';
+        $regionName = '';
 
         $regionCode = (string)$address->PostalAddress->State;
         $regionId = $this->region->loadByCode($regionCode, $countryId)->getId();
         if($regionId){
             $region = $regionId;
+            $regionName = $regionCode;
         }
 
         if(!$region && $this->directoryHelper->isRegionRequired($countryId)){
@@ -351,6 +353,7 @@ class CxmlService
             'city' => (string)$address->PostalAddress->City,
             'postcode' => (string)$address->PostalAddress->PostalCode,
             'region' => $region,
+            'regionName' => $regionName,
             'country_id' => $countryId,
             'email' => (string)$address->Email,
             'telephone' => $tel
