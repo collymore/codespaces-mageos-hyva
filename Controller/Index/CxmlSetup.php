@@ -137,7 +137,7 @@ class CxmlSetup extends Action  implements \Magento\Framework\App\CsrfAwareActio
                     $useEmail = $this->cxmlService->createEmail(
                         $extrinsicData,
                         $parsedXMLData,
-                        $matchingPunchoutGroup->getGroupEmail()
+                        $matchingPunchoutGroup
                     );
                 }
 
