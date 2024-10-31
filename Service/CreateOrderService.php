@@ -197,6 +197,11 @@ class CreateOrderService
         $quoteItem->setCustomPrice($item->getUnitPrice());
         $quoteItem->setOriginalCustomPrice($item->getUnitPrice());
         $quoteItem->setQty($qty);
+        if(!$quoteItem->getQty()){
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __("Product '{$product->getSku()}' is not in stock")
+            );
+        }
         $quoteItem->setSku($product->getSku());
         return $quoteItem;
     }
