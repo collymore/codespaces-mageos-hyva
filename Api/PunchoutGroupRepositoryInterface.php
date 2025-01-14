@@ -39,7 +39,7 @@ interface PunchoutGroupRepositoryInterface
      *
      * @param SearchCriteriaInterface $searchCriteria
      *
-     * @return PunchoutGroupSearchResultsInterface
+     * @return \Develodesign\Punchout\Api\Data\PunchoutGroupSearchResultsInterface
      * @throws LocalizedException
      */
     public function getList(
