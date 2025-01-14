@@ -18,18 +18,18 @@ interface PunchoutGroupRepositoryInterface
 
     /**
      * Save PunchoutGroup
-     * @param PunchoutGroupInterface $punchoutGroup
-     * @return PunchoutGroupInterface
+     * @param \Develodesign\Punchout\Api\Data\PunchoutGroupInterface $punchoutGroup
+     * @return \Develodesign\Punchout\Api\Data\PunchoutGroupInterface
      * @throws LocalizedException
      */
     public function save(
-        PunchoutGroupInterface $punchoutGroup
+        \Develodesign\Punchout\Api\Data\PunchoutGroupInterface $punchoutGroup
     );
 
     /**
      * Retrieve PunchoutGroup
      * @param string $punchoutgroupId
-     * @return PunchoutGroupInterface
+     * @return \Develodesign\Punchout\Api\Data\PunchoutGroupInterface
      * @throws LocalizedException
      */
     public function get($punchoutgroupId);
@@ -48,12 +48,12 @@ interface PunchoutGroupRepositoryInterface
 
     /**
      * Delete PunchoutGroup
-     * @param PunchoutGroupInterface $punchoutGroup
+     * @param \Develodesign\Punchout\Api\Data\PunchoutGroupInterface $punchoutGroup
      * @return bool true on success
      * @throws LocalizedException
      */
     public function delete(
-        PunchoutGroupInterface $punchoutGroup
+        \Develodesign\Punchout\Api\Data\PunchoutGroupInterface $punchoutGroup
     );
 
     /**
