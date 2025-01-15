@@ -65,18 +65,20 @@ class GenericPlugin {
      */
     protected function updateCookieParamsWithOptions()
     {
-        $params = session_get_cookie_params();
-        if (!empty($params['secure']) && !empty($params['samesite']) && (strtolower($params['samesite']) === 'none')) {
-            return $this;
-        }
-
-        $params['secure'] = true;
-        $params['samesite'] = 'None';
-
-        if (session_status() === PHP_SESSION_ACTIVE) {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            $params = session_get_cookie_params();
+    
+            if (!empty($params['secure']) && !empty($params['samesite']) && (strtolower($params['samesite']) === 'none')) {
+                return $this;
+            }
+    
+            $params['secure'] = true;
+            $params['samesite'] = 'None';
+    
             session_set_cookie_params($params);
         }
     
+        // Return the current instance
         return $this;
     }
 
