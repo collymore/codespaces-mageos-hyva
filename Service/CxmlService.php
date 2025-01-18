@@ -299,8 +299,8 @@ class CxmlService
         $extAddressId = (string)$address->attributes()->addressID;
         $deliverName = [];
         $argsName = (string)$address->Name;
-        if (isset($address->PostalAddress->DeliverTo)) {
-            foreach ($address->PostalAddress->DeliverTo as $deliverTo) {
+        if (isset($address->PostalAddress->ShipTo)) {
+            foreach ($address->PostalAddress->ShipTo as $deliverTo) {
                 if (trim((string)$deliverTo) !== '') {
                     $deliverName[] = (string)$deliverTo;
                 }
