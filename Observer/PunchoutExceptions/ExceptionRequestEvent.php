@@ -42,17 +42,18 @@ class ExceptionRequestEvent extends BasePunchoutRequestEvent implements Observer
     public function execute(Observer $observer): void
     {
         $activityEvent = $this->activityEventLogFactory->create();
-        $customerId = $this->sessionService->getCustomerSession()->getCustomerId();
-        if ($customerId) {
+        $customerId = $this->sessionService->getCustomerSession()->getCustomerId()??0;
+        $punchoutGroupId = 0;
+        if($customerId){
             $punchoutGroupId = $this->customerService->getPunchoutGroupId($customerId);
-             $activityEvent->setData([
+        }
+        $activityEvent->setData([
                 'event_type'       => $observer->getEvent()->getEventType(),
                 'action'           => $observer->getEvent()->getAction(),
                 'user_id'          => $customerId,
                 'punchoutgroup_id' => $punchoutGroupId,
                 'info'             => $observer->getEvent()->getInfo(),
                 'ip'          => $this->remote->getRemoteAddress()
-             ])->save();
-        }
+            ])->save();
     }
 }
