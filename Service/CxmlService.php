@@ -306,7 +306,7 @@ class CxmlService
                 }
             }
             if ($deliverName) {
-                $argsName = implode(',', $deliverName);
+                $argsName = implode(', ', $deliverName);
             }
         }
         $nameData = $this->getDefaultFirstLastName($argsName);
