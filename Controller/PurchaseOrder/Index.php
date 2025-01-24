@@ -69,7 +69,7 @@ class Index extends Action implements CsrfAwareActionInterface
                     $exception->getFile()
                 )
             );
-             return $this->cxmlResponse->respondWithData(500, $exception->getMessage());
+             return $this->cxmlResponse->respondWithData(200, $exception->getMessage());
         }
             return $this->cxmlResponse->respondWithData(200, $result['message']);
     }
