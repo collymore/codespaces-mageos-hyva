@@ -203,11 +203,10 @@ class CustomerService
             $queryName  = strtolower(trim($data['company']));
             $addressFirstName =  strtolower(trim($address->getFirstname()));
             $dataFirstName =  strtolower(trim($data['firstname']));
-            $customerFirstName = strtolower(trim($customer->getFirstname());
             
             $matches = false;
             
-            if ($postCode === $queryPostCode && $queryStreet === $street && $queryName === $addressName && $dataFirstName == $customerFirstName) {
+            if ($postCode === $queryPostCode && $queryStreet === $street && $queryName === $addressName && $dataFirstName === $addressFirstName) {
                 $matches = true;
             }
 
