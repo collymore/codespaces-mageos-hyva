@@ -40,13 +40,13 @@ class CxmlResponse
         return $result;
     }
 
-    public function respondWithData($statusCode, $message): Raw
+    public function respondWithData($statusCode, $message, $payloadId =''): Raw
     {
         $result = $this->resultRawFactory->create();
         $result->setHeader('Content-Type', 'text/xml');
         $result->setContents('<?xml version="1.0" encoding="UTF-8"?>
                      <!DOCTYPE cXML SYSTEM "http://xml.cxml.org/schemas/cXML/1.2.055/cXML.dtd">
-                        <cXML version="1.2.055"  xml:lang="en" timestamp="' . $this->getTimeStamp() . '">
+                        <cXML version="1.2.055"  xml:lang="en" timestamp="' . $this->getTimeStamp() . '" payloadID="'.$payloadId.'">
                           <Response>
                             <Status code="' . $statusCode . '" text="' . $message . '" />
                           </Response>

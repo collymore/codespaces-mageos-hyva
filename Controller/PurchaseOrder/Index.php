@@ -69,9 +69,9 @@ class Index extends Action implements CsrfAwareActionInterface
                     $exception->getFile()
                 )
             );
-             return $this->cxmlResponse->respondWithData(200, $exception->getMessage());
+             return $this->cxmlResponse->respondWithData(200, $exception->getMessage(), (string)$orderRequest->getDocument()->getCxml()['payloadID']);
         }
-            return $this->cxmlResponse->respondWithData(200, $result['message']);
+            return $this->cxmlResponse->respondWithData(200, $result['message'], (string)$orderRequest->getDocument()->getCxml()['payloadID']);
     }
     
     public function createCsrfValidationException(RequestInterface $request): ?InvalidRequestException
