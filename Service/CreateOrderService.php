@@ -124,7 +124,8 @@ class CreateOrderService
             $qty = (int)filter_var($item->getQuantity(), FILTER_SANITIZE_NUMBER_INT);
 
             $product = $this->getProductByIdOrSku($productId, $sku, $store->getId());
-            $price = (float)str_replace(',', '', $item->getUnitPrice()) * $qty;
+            $floatPrice = (float)str_replace(',', '', $item->getUnitPrice());
+            $price = $floatPrice * $qty;
             
             if ($product && $product->getId()) {
                 $quoteItem = $this->setUpQuoteItem($product, $qty, $item);
