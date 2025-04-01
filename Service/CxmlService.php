@@ -12,17 +12,22 @@ use \Magento\Directory\Helper\Data as DirectoryHelper;
 
 class CxmlService
 {
-
     /**
-     * @var Region $region
+     * @var Region
      */
     private $region;
-
+    
     /**
-     *  @var DirectoryHelper $directoryHelper
+     * @var DirectoryHelper
      */
     private $directoryHelper;
-
+    
+    /**
+     * CxmlService constructor.
+     * 
+     * @param Region $region
+     * @param DirectoryHelper $directoryHelper
+     */
     public function __construct(
         \Magento\Directory\Model\Region $region,
         DirectoryHelper $directoryHelper
@@ -30,7 +35,6 @@ class CxmlService
         $this->region = $region;
         $this->directoryHelper = $directoryHelper;
     }
-
     /**
      * Parse request body to Xml string
      */
@@ -297,36 +301,54 @@ class CxmlService
     public function parseAddress($address) : array
     {
         $extAddressId = (string)$address->attributes()->addressID;
-        $deliverName = [];
-        $argsName = (string)$address->Name;
-        if (isset($address->PostalAddress->ShipTo)) {
-            foreach ($address->PostalAddress->ShipTo as $deliverTo) {
-                if (trim((string)$deliverTo) !== '') {
-                    $deliverName[] = (string)$deliverTo;
+        
+        // Default values for first and last name
+        $firstName = 'Punchout';
+        $lastName = 'User';
+        $company = '';
+        
+        // Check if DeliverTo elements exist and get the first one for name parsing
+        if (isset($address->PostalAddress->DeliverTo) && count($address->PostalAddress->DeliverTo) > 0) {
+            $deliverTo = (string)$address->PostalAddress->DeliverTo[0];
+            
+            // If DeliverTo is not empty, parse it for first and last name
+            if (!empty(trim($deliverTo))) {
+                // Split the name into first and last name parts
+                $nameParts = explode(' ', trim($deliverTo));
+                
+                if (count($nameParts) >= 2) {
+                    $firstName = $nameParts[0];
+                    $lastName = implode(' ', array_slice($nameParts, 1));
+                } else {
+                    $firstName = $deliverTo;
                 }
             }
-            if ($deliverName) {
-                $argsName = implode(', ', $deliverName);
-            }
-        }
-        $nameData = $this->getDefaultFirstLastName($argsName);
+            
+            // If there's a second DeliverTo element, use it for the company name
+            if (count($address->PostalAddress->DeliverTo) > 1) {
+                $company = (string)$address->PostalAddress->DeliverTo[1];
+            } 
+        } 
         
         $countryId = (string)$address->PostalAddress->Country->attributes()->isoCountryCode;
-        $region = '';
-        $regionName = '';
-
-        $regionCode = (string)$address->PostalAddress->State;
-        $regionId = $this->region->loadByCode($regionCode, $countryId)->getId();
-        if($regionId){
-            $region = $regionId;
-            $regionName = $regionCode;
-        }
-
-        if(!$region && $this->directoryHelper->isRegionRequired($countryId)){
-            throw new RuntimeException(sprintf(
-                "A Valid Region is required for %s Addresses, %s is invalid",
-                [$countryId,$regionCode]
-            ));
+        
+        // Process region/state information
+        $regionId = '';
+        $regionCode = '';
+        
+        if (isset($address->PostalAddress->State)) {
+            $stateValue = (string)$address->PostalAddress->State;
+            if (!empty($stateValue)) {
+                // Try looking up by code
+                $regionData = $this->region->loadByCode($stateValue, $countryId);
+                if ($regionData->getId()) {
+                    $regionCode = $regionData->getCode();
+                    $regionId = $regionData->getId();
+                } else {
+                    // If region is not found, just use the provided value
+                    $regionId = $stateValue;
+                }
+            }
         }
         
         $street = [];
@@ -346,14 +368,14 @@ class CxmlService
         
         return  [
             'ext_address_id' => $extAddressId,
-            'firstname' => $nameData[0],
-            'lastname' => $nameData[1],
-            'company' => (string)$address->Name,
+            'firstname' => $firstName,
+            'lastname' => $lastName,
+            'company' => $company,
             'street' => $street,
             'city' => (string)$address->PostalAddress->City,
             'postcode' => (string)$address->PostalAddress->PostalCode,
-            'region' => $region,
-            'regionName' => $regionName,
+            'region' => $regionId,
+            'regionName' => $regionCode,
             'country_id' => $countryId,
             'email' => (string)$address->Email,
             'telephone' => $tel
