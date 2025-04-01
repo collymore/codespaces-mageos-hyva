@@ -198,7 +198,7 @@ class Request extends DataObject
             if (!isset($shippingAddressData['region']) || !$shippingAddressData['region']) {
                 $shippingAddressData['region'] = ".";
             }
-    
+
             $purchaseOrderNo = $this->getDocument()->getPoNumber();
             $result['poNumber'] = $purchaseOrderNo;
             $shippingMethodCode = $this->getDocument()->getShippingCode();
@@ -207,7 +207,6 @@ class Request extends DataObject
             if( in_array(strtolower($shippingAddressData['regionName']), $exclusionArray) ){
                $shippingMethodCode = "tablerate_bestway";
             }
-            
             $quote = $this->createOrderService->getCart();
             $quote->assignCustomer($customer);
             $quote->setStoreId($store->getId());
@@ -220,19 +219,31 @@ class Request extends DataObject
                 $quote->addItem($quoteItem);
             }
             if ($quote->getAllVisibleItems()) {
+                $quote->getBillingAddress()->unsetData();
                 $quote->getBillingAddress()->addData($billingAddressData);
                 $quote->getBillingAddress()->setCustomerAddressId('');
                 $existAddress = $this->customerService->getExistingCustomerAddress($shippingAddressData, $customer);
+          
                 if ($existAddress) {
                     $quote->getShippingAddress()->addData($existAddress);
                 } else {
-                    $quote->getShippingAddress()->addData($shippingAddressData);
-                    $quote->getShippingAddress()->setCustomerAddressId('');
+                    $quote->getShippingAddress()->unsetData();
+                    $quote->getShippingAddress()->addData($shippingAddressData);                    
                 }
                 $shippingAddress = $quote->getShippingAddress();
+
                 $shippingAddress->setCollectShippingRates(true)
                     ->collectShippingRates()
                     ->setShippingMethod($shippingMethodCode);
+                
+                // Apply free shipping if enabled in the PunchoutGroup
+                if ($this->getPunchoutGroup()->getFreeShipping()) {
+                    $shippingAddress->setShippingAmount(0);
+                    $shippingAddress->setBaseShippingAmount(0);
+                    $shippingAddress->setShippingDiscountAmount(0);
+                    $shippingAddress->setBaseShippingDiscountAmount(0);
+                }
+                
                 if ($this->createOrderService->isPaymentAvailable($store->getId(), $quote) === true) {
                     $quote->setInventoryProcessed(false);
                     $quote->save();

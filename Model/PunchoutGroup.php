@@ -406,4 +406,14 @@ class PunchoutGroup extends AbstractModel implements PunchoutGroupInterface
         return $this->setData(self::CXML_NODE_SHIPPING_MESSAGE_HEADER, $cxmlNodeShippingMessageHeader);
     }
     
+    public function getFreeShipping()
+    {
+        return $this->getData(self::FREE_SHIPPING);
+    }
+    
+    public function setFreeShipping($freeShipping)
+    {
+        return $this->setData(self::FREE_SHIPPING, $freeShipping);
+    }
+    
 }

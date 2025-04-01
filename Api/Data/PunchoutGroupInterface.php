@@ -51,6 +51,7 @@ interface PunchoutGroupInterface
     
     const CXML_NODE_SHIPPING_MESSAGE_HEADER = 'cxml_node_shipping_message_header';
     
+    const FREE_SHIPPING = 'free_shipping';
   
 
     /**
@@ -447,6 +448,17 @@ interface PunchoutGroupInterface
      */
     public function setCxmlNodeShippingMessageHeader($cxmlNodeShippingMessageHeader);
     
+    /**
+     * @return string|null
+     */
+    public function getFreeShipping();
+    
+    /**
+     * @param string $freeShipping
+     *
+     * @return \Develodesign\Punchout\Api\Data\PunchoutGroupInterface
+     */
+    public function setFreeShipping($freeShipping);
    
     
 }
