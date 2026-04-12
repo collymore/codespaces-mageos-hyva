@@ -78,6 +78,7 @@ class Cxml
             }
             $taxAmount = $this->getItemTaxAmount($punchoutOrder, $item->getSku());
             
+            $unitPrice = $item->getCustomPrice() ?? $item->getPrice();
             $itemCode .= sprintf(
                 '<ItemIn quantity="%s">
                         <ItemID>
@@ -99,7 +100,7 @@ class Cxml
                 $item->getSku(),
                 $item->getId(),
                 $defaultCurrencyCode,
-                $item->getPrice(),
+                number_format((float)$unitPrice, 2, '.', ''),
                 $name,
                 $uom,
                 $unspsc,

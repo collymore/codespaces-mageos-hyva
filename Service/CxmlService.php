@@ -142,7 +142,7 @@ class CxmlService
             if ($email === 'none') {
                 return $userEmail;
             }
-            if(\Zend_Validate::is($email, 'EmailAddress')){
+            if((new \Laminas\Validator\EmailAddress())->isValid($email)){
                 $userEmail = $email;
             }
         }
@@ -192,7 +192,7 @@ class CxmlService
         $email = sprintf('%s%s', $name, $domain);
         
         // Validate the generated email address
-        if (\Zend_Validate::is($email, 'EmailAddress')) {
+        if ((new \Laminas\Validator\EmailAddress())->isValid($email)) {
             return $email;
         }
         
@@ -243,8 +243,24 @@ class CxmlService
                 'last_name' => $extrinsicData['LastName'],
             ];
         }
-        
-        // 3. Final fallback: Default values
+
+        // 3. Fall back to Contact Name from cXML data
+        $contactName = '';
+        if (isset($parsedXMLData->Request->PunchOutSetupRequest->Contact->Name)) {
+            $contactName = trim((string)$parsedXMLData->Request->PunchOutSetupRequest->Contact->Name);
+        }
+        if (!$contactName && isset($parsedXMLData->Request->OrderRequest->OrderRequestHeader->Contact->Name)) {
+            $contactName = trim((string)$parsedXMLData->Request->OrderRequest->OrderRequestHeader->Contact->Name);
+        }
+        if ($contactName) {
+            $userParts = explode(' ', $contactName);
+            return [
+                'first_name' => array_shift($userParts),
+                'last_name' => implode(' ', $userParts) ?: $contactName,
+            ];
+        }
+
+        // 4. Final fallback: Default values
         return [
             'first_name' => 'Punchout',
             'last_name' => 'User',
@@ -402,22 +418,14 @@ class CxmlService
     /**
      *  Get Item out data from Extrinsic xml
      */
-    public function getItemOutExtrinsic(array $extrinsic, bool $nonDefault = false) : array
+    public function getItemOutExtrinsic($extrinsic, bool $nonDefault = false) : array
     {
         $result = [];
         foreach ($extrinsic as $ext) {
-            if(isset($ext['name'])){
-                $key = strtolower(trim((string)$ext['name']));
-            }else{
-                $key = strtolower(trim((string)$ext));
-            }
-
-            if(is_array($ext)){
-                $ext = array_shift($ext);
-            }
+            $key = strtolower(trim((string)$ext['name']));
             $value = (string)$ext;
             if ($nonDefault) {
-                $result[$key] = "{$key}: " .$value;
+                $result[$key] = "{$key}: " . $value;
             } else {
                 $result[$key] = $value;
             }

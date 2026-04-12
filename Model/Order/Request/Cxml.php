@@ -157,7 +157,7 @@ class Cxml extends AbstractRequest
                 $extrinsic = [];
                 
                 if (isset($itemOut->ItemDetail->Extrinsic)) {
-                    $extrinsic = [$this->cxmlService->getItemOutExtrinsic((array)$itemOut->ItemDetail->Extrinsic)];
+                    $extrinsic = [$this->cxmlService->getItemOutExtrinsic($itemOut->ItemDetail->Extrinsic)];
                 }
                 if (isset(
                     $itemOut->Distribution,
