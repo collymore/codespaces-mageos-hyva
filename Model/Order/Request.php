@@ -195,8 +195,14 @@ class Request extends DataObject
             if (!isset($billingAddressData['region']) || !$billingAddressData['region']) {
                 $billingAddressData['region'] = ".";
             }
+            if (!isset($billingAddressData['region_id']) || !$billingAddressData['region_id']) {
+                $billingAddressData['region_id'] = 0;
+            }
             if (!isset($shippingAddressData['region']) || !$shippingAddressData['region']) {
                 $shippingAddressData['region'] = ".";
+            }
+            if (!isset($shippingAddressData['region_id']) || !$shippingAddressData['region_id']) {
+                $shippingAddressData['region_id'] = 0;
             }
 
             $purchaseOrderNo = $this->getDocument()->getPoNumber();

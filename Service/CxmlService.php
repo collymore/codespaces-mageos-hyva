@@ -232,16 +232,24 @@ class CxmlService
         }
         
         // 2. Fall back to the default 'FirstName' and 'LastName' in extrinsicData
-        if (isset($extrinsicData['FirstName'], $extrinsicData['LastName'])) {
+        // Support both "FirstName"/"LastName" and "First Name"/"Last Name" formats
+        $extFirstName = $extrinsicData['FirstName'] ?? $extrinsicData['First Name'] ?? null;
+        $extLastName = $extrinsicData['LastName'] ?? $extrinsicData['Last Name'] ?? null;
+        if ($extFirstName) {
             if ($nameFormat === 'Single'){
-                $userParts = explode(' ', $extrinsicData['FirstName']);
-                $extrinsicData['FirstName'] = array_shift($userParts);
-                $extrinsicData['LastName'] = implode(' ', $userParts);
+                $userParts = explode(' ', $extFirstName);
+                $extFirstName = array_shift($userParts);
+                $splitLastName = implode(' ', $userParts);
+                if ($splitLastName) {
+                    $extLastName = $splitLastName;
+                }
             }
-            return [
-                'first_name' => $extrinsicData['FirstName'],
-                'last_name' => $extrinsicData['LastName'],
-            ];
+            if ($extFirstName && $extLastName) {
+                return [
+                    'first_name' => $extFirstName,
+                    'last_name' => $extLastName,
+                ];
+            }
         }
 
         // 3. Fall back to Contact Name from cXML data
@@ -390,7 +398,8 @@ class CxmlService
             'street' => $street,
             'city' => (string)$address->PostalAddress->City,
             'postcode' => (string)$address->PostalAddress->PostalCode,
-            'region' => $regionId,
+            'region' => $regionCode ?: $regionId,
+            'region_id' => is_numeric($regionId) ? (int)$regionId : 0,
             'regionName' => $regionCode,
             'country_id' => $countryId,
             'email' => (string)$address->Email,

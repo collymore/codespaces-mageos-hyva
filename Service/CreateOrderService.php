@@ -124,7 +124,7 @@ class CreateOrderService
             $qty = (int)filter_var($item->getQuantity(), FILTER_SANITIZE_NUMBER_INT);
 
             $product = $this->getProductByIdOrSku($productId, $sku, $store->getId());
-            $floatPrice = (float)str_replace(',', '', $item->getUnitPrice());
+            $floatPrice = (float)$this->parseEuropeanPrice($item->getUnitPrice());
             $price = $floatPrice * $qty;
             
             if ($product && $product->getId()) {
@@ -195,8 +195,9 @@ class CreateOrderService
     {
         $quoteItem = $this->quoteItemFactory->create();
         $quoteItem->setProduct($product);
-        $quoteItem->setCustomPrice($item->getUnitPrice());
-        $quoteItem->setOriginalCustomPrice($item->getUnitPrice());
+        $parsedPrice = $this->parseEuropeanPrice($item->getUnitPrice());
+        $quoteItem->setCustomPrice($parsedPrice);
+        $quoteItem->setOriginalCustomPrice($parsedPrice);
         $quoteItem->setQty($qty);
         if(!$quoteItem->getQty()){
             throw new \Magento\Framework\Exception\LocalizedException(
@@ -230,6 +231,25 @@ class CreateOrderService
         return $optionValues;
     }
     
+    /**
+     * Parse price string handling both US (1,995.00) and European (1.995,00) formats
+     */
+    private function parseEuropeanPrice(string $price): float
+    {
+        $price = trim($price);
+        $lastComma = strrpos($price, ',');
+        $lastDot = strrpos($price, '.');
+        if ($lastComma !== false && ($lastDot === false || $lastComma > $lastDot)) {
+            // European: dots are thousands, comma is decimal
+            $price = str_replace('.', '', $price);
+            $price = str_replace(',', '.', $price);
+        } else {
+            // US/standard: commas are thousands
+            $price = str_replace(',', '', $price);
+        }
+        return (float)$price;
+    }
+
     /**
      * @throws LocalizedException
      */
