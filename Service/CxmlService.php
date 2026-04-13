@@ -334,12 +334,12 @@ class CxmlService
         // Check if DeliverTo elements exist and get the first one for name parsing
         if (isset($address->PostalAddress->DeliverTo) && count($address->PostalAddress->DeliverTo) > 0) {
             $deliverTo = (string)$address->PostalAddress->DeliverTo[0];
-            
+
             // If DeliverTo is not empty, parse it for first and last name
             if (!empty(trim($deliverTo))) {
                 // Split the name into first and last name parts
                 $nameParts = explode(' ', trim($deliverTo));
-                
+
                 if (count($nameParts) >= 2) {
                     $firstName = $nameParts[0];
                     $lastName = implode(' ', array_slice($nameParts, 1));
@@ -347,12 +347,29 @@ class CxmlService
                     $firstName = $deliverTo;
                 }
             }
-            
+
             // If there's a second DeliverTo element, use it for the company name
             if (count($address->PostalAddress->DeliverTo) > 1) {
                 $company = (string)$address->PostalAddress->DeliverTo[1];
-            } 
-        } 
+            }
+        }
+
+        // Fallback: use Address/Name element as company when no DeliverTo provides it
+        if (empty($company) && isset($address->Name) && !empty(trim((string)$address->Name))) {
+            $company = (string)$address->Name;
+        }
+
+        // Fallback: if still no person name, derive from company name
+        if ($firstName === 'Punchout' && $lastName === 'User' && !empty($company)) {
+            $nameParts = explode(' ', trim($company));
+            if (count($nameParts) >= 2) {
+                $firstName = $nameParts[0];
+                $lastName = implode(' ', array_slice($nameParts, 1));
+            } else {
+                $firstName = $company;
+                $lastName = $company;
+            }
+        }
         
         $countryId = (string)$address->PostalAddress->Country->attributes()->isoCountryCode;
         
